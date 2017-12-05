@@ -49,7 +49,12 @@ public class LoginController {
 	@RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
 	public String login(Model model, HttpServletRequest request){		
 		String error = "";
-		String username = "";
+		String username = "";		
+		String referrer = request.getHeader("Referer");	
+		
+	    if(referrer!=null) {
+	        request.getSession().setAttribute("previous_page", referrer);
+	    }
 		
 		if(request.getParameter("username") != null) {
 			username = request.getParameter("username");

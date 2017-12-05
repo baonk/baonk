@@ -63,7 +63,7 @@ public class BaonkAuthenticationSuccessfulHandler implements AuthenticationSucce
 			url = (String)request.getSession().getAttribute("previous_page");
 		}	
     	
-		if (url != null) {
+		if (url != null && !url.equals("")) {
 			response.sendRedirect(url);  
 		}
 		else {
