@@ -12,11 +12,14 @@ import java.util.List;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -47,14 +50,18 @@ public class LoginController {
 	private final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
 	@RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
-	public String login(Model model, HttpServletRequest request){		
+	public String login(Model model, HttpServletRequest request, HttpSession session){		
 		String error = "";
 		String username = "";		
-		String referrer = request.getHeader("Referer");	
 		
-	    if(referrer!=null) {
-	        request.getSession().setAttribute("previous_page", referrer);
-	    }
+		if(session != null) {
+			SavedRequest savedRequest = (SavedRequest) session.getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+	        if (savedRequest != null) {
+	           String redirectUrl = savedRequest.getRedirectUrl();
+	           session.setAttribute("prior_url", redirectUrl);
+	           logger.debug("Check Prior url: " + redirectUrl);
+	        }
+		}
 		
 		if(request.getParameter("username") != null) {
 			username = request.getParameter("username");

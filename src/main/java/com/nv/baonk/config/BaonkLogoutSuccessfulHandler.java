@@ -13,7 +13,8 @@ public class BaonkLogoutSuccessfulHandler implements LogoutSuccessHandler{
 	//private final Logger logger = LoggerFactory.getLogger(BaonkLogoutSuccessfulHandler.class);
 	
 	@Override
-	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {		
+	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+		request.getSession().setAttribute("previous_page", "");
 		response.sendRedirect("login");  		
 	}
 

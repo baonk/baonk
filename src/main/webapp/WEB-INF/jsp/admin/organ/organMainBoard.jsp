@@ -16,7 +16,7 @@
 		<iframe src="/admin/organLeft"  id="leftOrg"  name="leftOrg" class="ifrmLeft"></iframe>
 	</div>	
 	<div style="padding-left: 220px; display: block; height: 100%;">
-		<iframe src="/admin/organ/organRight" id="rightOrg" name="rightOrg" class="ifrmRight" ></iframe>
+		<iframe src="about:blank" id="rightOrg" name="rightOrg" class="ifrmRight" ></iframe>
 	</div>
 </body>
 </html>

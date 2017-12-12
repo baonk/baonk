@@ -21,7 +21,7 @@
 		<iframe src="/admin/topMenu"  id="adTopMenu"  name="adTopMenu" style="noresize; margin:0px 0px 0px 0px; padding:0px 0px 0px 0px; border:none; width:100%;"></iframe>
 	</div>	
 	<div class="panel panel-primary" style="padding: 0px 15px; height: 80%; border: none; margin-bottom: 0px;">
-		<iframe src="/admin/board" id="adBoard" name="adBoard" style="border: none; width:100%;"></iframe>
+		<iframe src="/admin/organization" id="adBoard" name="adBoard" style="border: none; width:100%;"></iframe>
 	</div>
 	<div id="footer">
 		&copy; Baonk 2017, Huong Ngai - Thach That - Ha Noi
