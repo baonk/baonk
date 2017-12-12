@@ -75,8 +75,7 @@
 		        }	         		       
 		    }
 			
-			function save_Click() {
-				console.log("Test image: " + imageFile + " || Test Image Name: " + document.getElementById("imagefile").value);
+			function save_Click() {				
 				if (!imageFile || !document.getElementById("imagefile").value) {
 					alert("No image is uploaded!");
 					return;

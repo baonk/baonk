@@ -20,7 +20,7 @@ import com.nv.baonk.vo.User;
 @Component
 public class BaonkAuthenticationSuccessfulHandler extends SimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 	private final Logger logger = LoggerFactory.getLogger(BaonkAuthenticationSuccessfulHandler.class);
-	public final Integer SESSION_TIMEOUT_IN_SECONDS = 60 * 1;
+	public final Integer SESSION_TIMEOUT_IN_SECONDS = 60 * 30;
 	
 	@Autowired
 	private SecurityConfigBaonk securityConfBaonk;

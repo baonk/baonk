@@ -365,7 +365,7 @@
 	
 	function addUser() {
 		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)){
-			alert("Please select an department!");
+			alert("Please select a department!");
 			return;
 		}
 		
@@ -374,3 +374,16 @@
 		
 		divPopUpShow(810, 400, "/admin/userRegistration?deptId=" + currentClickedDeptId + "&deptName=" + deptName);		
 	}
+	
+	
+	function displayUserInfo() {		
+		if (!currentClickedItem && !document.getElementById(currentClickedItem)){
+			alert("Please select a user!");
+			return;
+		}
+		
+		var currentUserId = currentClickedItem.split("-")[0];		
+		
+		divPopUpShow(810, 400, "/admin/userRegistration?userId=" + currentUserId);
+	}
+	

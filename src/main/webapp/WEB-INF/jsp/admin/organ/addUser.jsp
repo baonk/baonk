@@ -14,6 +14,8 @@
   		var deptId	  							 = "<c:out value='${deptID}'/>";
   		var deptName  							 = "<c:out value='${deptName}'/>";  
   		var personpicture_cross_dialogArguments  = new Array();
+  		var mode								 = "<c:out value='${mode}'/>";
+  		var birthDay							 = "<c:out value='${user.birthday}'/>";
   		
   		window.onload = function () {
   			document.getElementById("deptName").value  = deptName;  			
@@ -26,12 +28,16 @@
 			$("#txtBirthday").datepicker({
 		        changeMonth: true,
 		        changeYear: true,
-		        yearRange: sYear+":"+eYear, 	             
+		        yearRange: sYear + ":" + eYear, 	             
 		        showOn: "button",
 		        buttonImage: "/images/calendar-month.gif",
 		        buttonImageOnly: true
 		    });
-		    $("#txtBirthday").datepicker("option", "dateFormat", "yy-mm-dd");  			
+		    $("#txtBirthday").datepicker("option", "dateFormat", "yy-mm-dd");			
+			
+			if (mode != "add") {
+				$("#txtBirthday").datepicker("setDate", birthDay);
+			}
   		}  	
   		
   		function checkRequirement() {
@@ -64,7 +70,8 @@
 	        divPopUpHidden();
 
 	        if (ret) {	            
-	        	document.getElementById("userPhoto").src 		   = ret;	
+	        	document.getElementById("userPhoto").src 		   = ret;
+	        	document.getElementById("userImage").value		   = ret;        	
 	        	document.getElementById("userPhoto").style.display = "";
 	        }
   		}
@@ -131,12 +138,18 @@
 				    </div>
 				</div>			
 				
-				<div class="warningText"><span style="color:red">Warning: fields contained * are required!</span></div>
-				
-				<table class="tblUserInfo">
+				<div class="warningText"><span style="color:red">Warning: fields contained * are required!</span></div>							
+
+				<table class="tblUserInfo">				
 			        <tr>
-			            <td rowspan="5" style="width:119px; height:180px; text-align:center; min-width:119px; padding :0px;">
-			            	<img id="userPhoto" src="" style="height: 158px; width: 119px; display:none;">
+			            <td rowspan="5" style="width:119px; height:180px; text-align:center; min-width:119px; padding :0px;">	
+			            	<c:if test="${mode == 'add'}">
+			            		<img id="userPhoto" src="" style="height: 158px; width: 119px; display:none;">			            		
+			            	</c:if>
+			            	<c:if test="${mode != 'add'}">
+			            		<img id="userPhoto" src="${user.image != null ? user.image : '/images/defaultImg.jpg'}" style="height: 158px; width: 119px;">
+			            	</c:if>		            	
+			            			
 			                <b>User Photo</b> 
 			            </td>
 			            <th style="width: 71px; text-align:center">User ID<span style="color:red"> *</span></th>
@@ -253,7 +266,8 @@
 			                <form:input type="text" path="homeaddress" placeholder="Home Address" class="baonk-control-3 baonk" maxlength="250"/>
 			            </td>
 			        </tr>
-			    </table>   																
+			    </table>  
+			    <form:input type="text" path="image" style="display:none;" id="userImage"/>													
 			</form:form>			
 		</div>
 	</div>

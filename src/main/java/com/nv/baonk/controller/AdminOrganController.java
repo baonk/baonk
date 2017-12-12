@@ -226,14 +226,26 @@ public class AdminOrganController {
 	********************************************************************************************************************************/
 	
 	@RequestMapping(value="/admin/userRegistration", method = RequestMethod.GET)
-	public String registration(HttpServletRequest request, Model model){	
+	public String registration(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, Model model){	
 		logger.debug("----------------------Add user is running-----------------------!");
-		String deptId   = request.getParameter("deptId");
-		String deptName = request.getParameter("deptName");
-		User user = new User();
-		model.addAttribute("user", user);
-		model.addAttribute("deptID", deptId);
-		model.addAttribute("deptName", deptName);
+		User loginUser	= commonUtil.getUserInfo(loginCookie);
+		int tenantId    = loginUser.getTenantid();
+		String deptId   = request.getParameter("deptId")   != null ? request.getParameter("deptId")   : "";
+		String deptName = request.getParameter("deptName") != null ? request.getParameter("deptName") : "";
+		String userId   = request.getParameter("userId")   != null ? request.getParameter("userId")   : "";
+		
+		if (!deptId.equals("")) {
+			User user = new User();
+			model.addAttribute("user", user);
+			model.addAttribute("deptID", deptId);
+			model.addAttribute("deptName", deptName);
+			model.addAttribute("mode", "add");
+		}
+		else {
+			User vUser = userService.findUserByUseridAndTenantid(userId, tenantId);
+			model.addAttribute("user", vUser);
+			model.addAttribute("mode", "view");
+		}
 		
 		logger.debug("-----------------------Add user end-----------------------------!");
 		return "admin/organ/addUser";
