@@ -96,7 +96,7 @@
 			    			<a class="imgbtn" id="usermenu3"><span onClick="displayUserInfo()">User Information</span></a>
 			    			<a class="imgbtn"><span onClick="addUser()">Add User</span></a>
 			    			<a class="imgbtn" id="usermenu2"><span onClick="del_user()">Delete User</span></a>
-			    			<a class="imgbtn" id="usermenu1"><span onClick="mov_user()">Move User</span></a>
+			    			<a class="imgbtn" id="usermenu1"><span onClick="moveUser()">Move User</span></a>
 			    			<a class="imgbtn" id="userRetire"><span onClick="Retire_user()">Change Password</span></a>
 			    		</div>
 			    		<div id="deptOpt" style="display: none;">

@@ -63,6 +63,10 @@ public class AdminOrganController {
 		User user = commonUtil.getUserInfo(loginCookie);
 		Set<Role> roleList = user.getRoles();
 		int tenantId = user.getTenantid();
+		String userDeptId = user.getDepartmentid();
+		String userCompId = user.getCompanyid();
+		Department dept = deptService.findByDepartmentidAndTenantid(userDeptId, tenantId);
+		String[] deptPath = dept.getDepartmentpath().split("::");
 		
 		//Check user role
 		for (Role role: roleList) {
@@ -80,10 +84,17 @@ public class AdminOrganController {
 		List<SimpleDepartment> simpleCompanyList = deptService.getAllSimpleSubDepts("self", tenantId);
 		
 		for (SimpleDepartment company: simpleCompanyList) {
-			getAllSubDepts(company, tenantId, 1);
+			if (company.getCompanyid().equals(userCompId)) {
+				getAllSubDepts2(company, tenantId, deptPath, 1);
+			}
+			else {
+				getAllSubDepts(company, tenantId, 1);
+			}
 		}				
 		
 		model.addAttribute("listDepartment", om.writeValueAsString(simpleCompanyList));
+		
+		logger.debug("CHECKING: " + om.writeValueAsString(simpleCompanyList));
 		
 		return "/admin/organ/organRight";
 	}	
@@ -197,6 +208,38 @@ public class AdminOrganController {
 	}
 	
 	/*******************************************************************************************************************************
+	 ****	Mode: 0 + Get all sub department recursively.
+	 ****		  1	+ Get only sub department of current department
+	 ****			  then stop.
+	********************************************************************************************************************************/
+	
+	public void getAllSubDepts2(SimpleDepartment dept, int tenantId, String[] deptPath, int order) {
+		List<SimpleDepartment> listSubSimpleDepts = deptService.getAllSimpleSubDepts(dept.getDepartmentid(), tenantId);
+		
+		if (listSubSimpleDepts.size() > 0) {			
+			dept.setSubDept(listSubSimpleDepts);
+			dept.setHasSubDept(1);
+			
+			for (SimpleDepartment subdept: listSubSimpleDepts) {		
+				List<SimpleDepartment> subSimpleDepts = deptService.getAllSimpleSubDepts(subdept.getDepartmentid(), tenantId);
+				if (subSimpleDepts.size() > 0) {
+					subdept.setHasSubDept(1);		
+					if (subdept.getDepartmentid().equals(deptPath[order])) {
+						getAllSubDepts2(subdept, tenantId, deptPath, order + 1);
+					}
+				}
+				else {
+					subdept.setHasSubDept(0);
+				}						
+			}
+		}
+		else {
+			dept.setHasSubDept(0);			
+		}
+		
+	}
+	
+	/*******************************************************************************************************************************
 	 ****	 
 	 **** 	Map the organization management request of administrator privilege users.
 	 ****		 
@@ -249,6 +292,23 @@ public class AdminOrganController {
 		
 		logger.debug("-----------------------Add user end-----------------------------!");
 		return "admin/organ/addUser";
+	}	
+	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Map the move user request of administrator privilege users.
+	 ****		 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value="/admin/moveUser", method = RequestMethod.GET)
+	public String moveUser(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, Model model){	
+		logger.debug("----------------------Move user is running-----------------------!");
+		User loginUser	= commonUtil.getUserInfo(loginCookie);		
+		String userId   = request.getParameter("userId")   != null ? request.getParameter("userId")   : "";		
+		
+		
+		logger.debug("-----------------------Move user end-----------------------------!");
+		return "admin/organ/moveUser";
 	}	
 	
 	/*******************************************************************************************************************************

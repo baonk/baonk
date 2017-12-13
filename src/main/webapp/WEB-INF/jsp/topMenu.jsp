@@ -28,10 +28,10 @@
 
 <body>		
 	<div class="container" style="width: 100%;">
-		<div id ="topmenu" style="float: right; margin-top: 20px; clear: both; width: 280px;">
-			<div><span class="welcome">Welcome ${userName}</span></div>
+		<div id ="topmenu" style="float: right; margin-top: 20px; clear: both; width: auto;">
+			<div style="display:block; float:left;"><span class="welcome">Welcome ${userName}</span></div>
 			<c:if test="${role == 'ADMIN' }">
-				<div><span class="welcome" id="admin" onclick="adminPage();">Administrator</span></div>			
+				<div style="display:block; float:left;"><span class="welcome" id="admin" onclick="adminPage();">Administrator</span></div>			
 			</c:if>		
  			<c:if test="${role != 'ADMIN' }">
 				<script type="text/javascript">

@@ -387,3 +387,13 @@
 		divPopUpShow(810, 400, "/admin/userRegistration?userId=" + currentUserId);
 	}
 	
+	function moveUser() {
+		if (!currentClickedItem && !document.getElementById(currentClickedItem)){
+			alert("Please select a user!");
+			return;
+		}
+		
+		var currentUserId = currentClickedItem.split("-")[0];		
+		
+		divPopUpShow(810, 400, "/admin/moveUser?userId=" + currentUserId);
+	}
