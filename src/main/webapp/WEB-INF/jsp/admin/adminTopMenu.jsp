@@ -28,8 +28,8 @@
 
 <body>		
 	<div class="container">
-		<div id ="topmenu" style="float: right; margin-top: 20px; clear: both; width: 190px;">
-			<div><span class="welcome">Welcome ${userName}</span></div>
+		<div id ="topmenu" style="float: right; margin-top: 20px; clear: both; width: auto;">
+			<div style="display:block; float:left;><span class="welcome">Welcome ${userName}</span></div>
 			<div class ="logout" onclick="back();">Back</div>	
 		</div>	
 		<div class="panel-group" style="margin-top:40px; margin-bottom: 0px;">
