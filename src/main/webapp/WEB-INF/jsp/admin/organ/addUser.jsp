@@ -17,10 +17,7 @@
   		var mode								 = "<c:out value='${mode}'/>";
   		var birthDay							 = "<c:out value='${user.birthday}'/>";
   		
-  		window.onload = function () {
-  			document.getElementById("deptName").value  = deptName;  			
-  			document.getElementById("deptID").value    = deptId; 
-  			
+  		window.onload = function () { 						
   			var toYear  = new Date().getFullYear();
 			var sYear   = parseInt(toYear-70);
 			var eYear   = parseInt(toYear+10);
@@ -37,6 +34,14 @@
 			
 			if (mode != "add") {
 				$("#txtBirthday").datepicker("setDate", birthDay);
+				var deptId   = "<c:out value='${user.departmentid}'/>";
+				var deptName = "<c:out value='${user.departmentname}'/>";
+				document.getElementById("deptName").value  = deptName;  			
+	  			document.getElementById("deptID").value    = deptId; 
+			}
+			else {
+				document.getElementById("deptName").value  = deptName;  			
+	  			document.getElementById("deptID").value    = deptId; 
 			}
   		}  	
   		
@@ -87,11 +92,20 @@
   			document.getElementById("password").innerHTML   = "";
   			document.getElementById("username").innerHTML   = "";
   			document.getElementById("email").innerHTML 		= "";
-  			document.getElementById("birthday").innerHTML 		= "";
+  			document.getElementById("birthday").innerHTML 	= "";
   			
-  			var form = document.getElementById("formSubmit");
+  			var form = document.getElementById("formSubmit");  			
+  			var url  = null;
+  			
+  			if (mode != "add") {
+  				url = "/admin/updateUser";
+  			}
+  			else {
+  				url = "/admin/addUser";
+  			}
+  			
   			$.ajax({
-  		        url: "/admin/addUser",
+  		        url: url,
   		        type: 'POST',
   				dataType: "JSON",  				
   		        data: new FormData(form),
@@ -180,7 +194,15 @@
 			        <tr>
 			            <th style="width: 71px; text-align:center">Position</th>
 			            <td style="width: 220px;">
-			            	<form:input type="text" path="position" placeholder="Position" class="baonk-control-1 baonk" maxlength="50"/>
+			            	<%-- <form:input type="text" path="position" placeholder="Position" class="baonk-control-1 baonk" maxlength="50"/> --%>
+			            	<form:select path="position">
+			            		<form:option value="System Developer"></form:option>
+			            		<form:option value="Manager"></form:option>
+			            		<form:option value="Web Developer"></form:option>
+			            		<form:option value="Tester"></form:option>
+			            		<form:option value="Designer"></form:option>
+			            		<form:option value="Business"></form:option>
+			            	</form:select>
 							<form:errors path="position" cssClass="text-danger"/>			                
 			            </td>
 			            <th style="width: 71px; text-align:center">Other position</th>

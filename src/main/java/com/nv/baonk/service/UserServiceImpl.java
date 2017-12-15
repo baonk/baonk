@@ -62,4 +62,9 @@ public class UserServiceImpl implements UserService{
 	public List<User> findUsersInAdminMode(String deptID, int tenantId) {		
 		return userRepository.findUsersInAdminMode(deptID, tenantId);
 	}
+
+	@Override
+	public void updateUser(User user) {		
+		userRepository.save(user);
+	}
 }

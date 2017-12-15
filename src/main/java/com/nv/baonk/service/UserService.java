@@ -8,6 +8,7 @@ import com.nv.baonk.vo.User;
 public interface UserService {
 	public User findUserByUseridAndTenantid(String userId, int tenantId);
 	public void saveUser(User user);
+	public void updateUser(User user);
 	public int getTenantId(String serverName);
 	public List<Integer> getRoleId(String userID, int tenantID); 
 	public Role findByRoleid(int roleId);	

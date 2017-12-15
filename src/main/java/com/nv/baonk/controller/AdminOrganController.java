@@ -339,7 +339,7 @@ public class AdminOrganController {
 		Department newDept = deptService.findByDepartmentidAndTenantid(newDeptId, tenantId);
 		movedUser.setDepartmentid(newDept.getDepartmentid());
 		movedUser.setDepartmentname(newDept.getDepartmentname());		
-		userService.saveUser(movedUser);
+		userService.updateUser(movedUser);
 		
 		logger.debug("-----------------------Save moved User end-----------------------------!");
 		return "admin/organ/moveUser";
@@ -355,11 +355,6 @@ public class AdminOrganController {
 	@ResponseBody
 	public ValidateResponseObject createNewUser(HttpServletRequest request, @CookieValue("loginCookie")String loginCookie, @Valid User user, BindingResult bindingResult, Model model) throws JsonProcessingException {
 		logger.debug("-------------------createNewUser is running---------------------!");
-		
-		String referrer = request.getHeader("Referer");
-	    if(referrer!=null) {
-	        request.getSession().setAttribute("previous_page", referrer);
-	    }
 		
 		User currentUser = commonUtil.getUserInfo(loginCookie);
 		int tenantId = currentUser.getTenantid();		
@@ -402,6 +397,62 @@ public class AdminOrganController {
 			logger.debug("++++++++++++++++++User Infor End++++++++++++++++++++!");
 			
 			userService.saveUser(user);
+			response.setResult(1);					
+		}	
+		
+		return response;
+	}
+	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Receive update user information from user input form then save updated user information to database	 
+	 ****		 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value = "/admin/updateUser", method = RequestMethod.POST)
+	@ResponseBody
+	public ValidateResponseObject updateUser(HttpServletRequest request, @CookieValue("loginCookie")String loginCookie, @Valid User user, BindingResult bindingResult, Model model) throws JsonProcessingException {
+		logger.debug("-------------------createNewUser is running---------------------!");
+		
+		User currentUser = commonUtil.getUserInfo(loginCookie);
+		int tenantId = currentUser.getTenantid();		
+		ValidateResponseObject response = new ValidateResponseObject();
+		
+		User userExists = userService.findUserByUseridAndTenantid(user.getUserid(), tenantId);
+		
+		if (userExists == null) {		
+			logger.debug("Error: user not found!");
+			bindingResult.rejectValue("userid", "error.user", "User information not found in database");
+		}
+		
+		if (bindingResult.hasErrors()) {		
+			logger.debug("Binding result has Error!");
+			
+			//Get error message
+	         Map<String, String> errors = bindingResult.getFieldErrors().stream().collect(
+	        		 						  Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)
+	                 					  );
+	         
+	         response.setResult(0);
+	         response.setErrorMessages(errors);			
+		}
+		else {				
+			user.setTenantid(tenantId);
+			user.setCompanyid(userExists.getCompanyid());
+			user.setCompanyname(userExists.getCompanyname());
+			user.setRoles(userExists.getRoles());
+			
+			logger.debug("++++++++++++++++++Check User Infor++++++++++++++++++!");
+			logger.debug("-----------------	User ID				: " + user.getUserid());
+			logger.debug("-----------------	User Name			: " + user.getUsername());
+			logger.debug("-----------------	User Department Name: " + user.getDepartmentname());
+			logger.debug("----------------- User Department ID  : " + user.getDepartmentid());
+			logger.debug("----------------- User Company ID		: " + user.getCompanyid());
+			logger.debug("----------------- User Company Name   : " + user.getCompanyname());
+			logger.debug("----------------- User Tenant ID	    : " + user.getCompanyname());
+			logger.debug("++++++++++++++++++User Infor End++++++++++++++++++++!");
+			
+			userService.updateUser(user);
 			response.setResult(1);					
 		}	
 		
