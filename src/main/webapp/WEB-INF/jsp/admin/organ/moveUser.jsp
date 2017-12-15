@@ -4,26 +4,41 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title><spring:message code="ezOrgan.t248" /></title>
+		<title>Move User</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">		
+		<!-- <link rel="stylesheet" type="text/css" href="/css/registration.css" /> -->
+		<link rel="stylesheet" type="text/css" href="/css/general.css" />
+		<link rel="stylesheet" type="text/css" href="/css/popup.css" />	
 		<script	src="/js/jquery/jquery.min.js"></script>
 	    <script	src="/js/admin/organization/management.js"></script>
 	    <script	src="/js/popup.js"></script>	    
 		<script type="text/javascript" language="javascript">
-			var listDepts = ${listDepartment};
+			var listDepts  = ${listDepartment};
 			var arrSubDept = [];			
-			
-			window.onload = function () {
-				initData();
+
+			window.onload = function () {				
+				initData(0);
 			}
+			
+			function close_Click() {			    
+			    parent.divPopUpHidden();
+			}
+			
+			function ok_Click() {				
+				
+			}
+			
 	    </script>
 	</head>
 	<body class="popup">
-		<h1 id="subtitle">Employee moving</h1>		
-		<div id="deptView" class="divTable" style="overflow: auto;" ></div>
-		<div class="btnposition">
-		    <a id="btnSave" class="imgbtn" onClick="OK_Click()"><span><spring:message code='ezOrgan.t124' /></span></a>
-		    <a id="btnCancel"class="imgbtn" onClick="window.close()"><span><spring:message code='ezOrgan.t125' /></span></a>
-		</div>
+		<h1>Employee moving</h1>	
+				
+		<div id="deptView" class="divTable2" style="overflow: auto;" ></div>
+				
+		<div style="margin: 6px 0px 6px 130px; position:fixed; bottom: 0px; left: 0px;">
+		    <a id="btnSave" class="baonBttn2" onClick="ok_Click()"><span>OK</span></a>
+		    <a id="btnCancel"class="baonBttn2" onClick="close_Click()"><span>Cancel</span></a>
+		</div>	
+			
 	</body>
 </html>

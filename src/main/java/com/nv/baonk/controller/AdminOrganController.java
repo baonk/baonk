@@ -96,8 +96,6 @@ public class AdminOrganController {
 		model.addAttribute("userdeptID", userDeptId);
 		model.addAttribute("usercompID", userCompId);
 		
-		logger.debug("CHECKING: " + om.writeValueAsString(simpleCompanyList));
-		
 		return "/admin/organ/organRight";
 	}	
 	
@@ -299,15 +297,22 @@ public class AdminOrganController {
 	/*******************************************************************************************************************************
 	 ****	 
 	 **** 	Map the move user request of administrator privilege users.
-	 ****		 
+	 ****   	 
 	********************************************************************************************************************************/
 	
 	@RequestMapping(value="/admin/moveUser", method = RequestMethod.GET)
-	public String moveUser(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, Model model){	
+	public String moveUser(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, Model model) throws JsonProcessingException{	
 		logger.debug("----------------------Move user is running-----------------------!");
-		//User loginUser	= commonUtil.getUserInfo(loginCookie);		
-		//String userId   = request.getParameter("userId")   != null ? request.getParameter("userId")   : "";		
+		ObjectMapper om = new ObjectMapper();
+		User loginUser	= commonUtil.getUserInfo(loginCookie);		
+		int tenantId = loginUser.getTenantid();
+		String userId   = request.getParameter("userId")   != null ? request.getParameter("userId")   : "";
 		
+		User clickedUser = userService.findUserByUseridAndTenantid(userId, tenantId);		
+		SimpleDepartment dept = deptService.getSimpleDeptList(clickedUser.getCompanyid(), tenantId);
+		
+		getAllSubDepts(dept, tenantId, 1);
+		model.addAttribute("listDepartment", om.writeValueAsString(dept));
 		
 		logger.debug("-----------------------Move user end-----------------------------!");
 		return "admin/organ/moveUser";

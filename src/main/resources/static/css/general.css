@@ -266,11 +266,23 @@ table {
   	padding-left: 18px; 
 }
 
+#deptView span {
+	vertical-align:top;
+}
+
 .divTable {   
 	border: 1px solid #b6b6b6; height: 550px; width: 100%;
     font-family: Gulim, Verdana, Arial, Helvetica, sans-serif;
     font-size: 12px;
     background-color: #FFFFFF;
+}
+
+.divTable2 {   
+	border: 1px solid #b6b6b6; height: 315px; width: 390px;
+    font-family: Gulim, Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    background-color: #FFFFFF;
+    margin: 8px 4px 4px 4px;
 }
 
 .subMainTab {border-bottom: 1px solid #B6B6B6; vertical-align: middle; position: relative; height: 30px; background-color: #d9d9d9;}

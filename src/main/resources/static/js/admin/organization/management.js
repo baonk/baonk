@@ -1,38 +1,66 @@
 	var currentClickedDeptId = null;
 	var currentClickedItem = null;
-	function initData() {
+	
+	function initData(mode) {
 		var deptView = document.getElementById("deptView");
-		
-		for (var i = 0; i < listDepts.length; i++) {				
+		if (mode == 1) {
+			for (var i = 0; i < listDepts.length; i++) {				
+				var divEl = document.createElement("div");
+				var img1 = document.createElement("img");
+				img1.setAttribute("class", "deptOn");			
+				img1.onclick = function () {companyOnClick(this);}
+				var img2 = document.createElement("img");
+				img2.setAttribute("class", "companyImg");
+				img2.setAttribute("deptId", listDepts[i]["departmentid"]);
+				img2.onclick = function () {getDetailData(this);};
+				var span = document.createElement("span");
+				span.innerHTML = listDepts[i]["departmentname"];
+				span.setAttribute("deptId", listDepts[i]["departmentid"]);
+				span.setAttribute("style", "cursor: pointer;");
+				span.setAttribute("name", listDepts[i]["departmentid"]);
+				span.onclick = function () {getDetailData(this);};
+				
+				divEl.appendChild(img1);
+				divEl.appendChild(img2);
+				divEl.appendChild(span);
+				divEl.setAttribute("id", "company" + i);
+				divEl.setAttribute("order", i);
+				divEl.setAttribute("style", "padding-top: 5px; padding-left: 5px;");								
+				deptView.appendChild(divEl);		
+				displaySubDept(divEl, listDepts[i]["subDept"]);
+				
+				
+				if (listDepts[i]["departmentid"] == usercompID) {				
+					var userDeptElm = document.getElementsByName(userDeptID)[0];
+					getDetailData(userDeptElm);
+				}			
+			}
+		}
+		else {
 			var divEl = document.createElement("div");
 			var img1 = document.createElement("img");
 			img1.setAttribute("class", "deptOn");			
 			img1.onclick = function () {companyOnClick(this);}
 			var img2 = document.createElement("img");
 			img2.setAttribute("class", "companyImg");
-			img2.setAttribute("deptId", listDepts[i]["departmentid"]);
+			img2.setAttribute("deptId", listDepts["departmentid"]);
 			img2.onclick = function () {getDetailData(this);};
 			var span = document.createElement("span");
-			span.innerHTML = listDepts[i]["departmentname"];
-			span.setAttribute("deptId", listDepts[i]["departmentid"]);
+			span.innerHTML = listDepts["departmentname"];
+			span.setAttribute("deptId", listDepts["departmentid"]);
 			span.setAttribute("style", "cursor: pointer;");
-			span.setAttribute("name", listDepts[i]["departmentid"]);
+			span.setAttribute("name", listDepts["departmentid"]);
 			span.onclick = function () {getDetailData(this);};
 			
 			divEl.appendChild(img1);
 			divEl.appendChild(img2);
 			divEl.appendChild(span);
-			divEl.setAttribute("id", "company" + i);
-			divEl.setAttribute("order", i);
+			divEl.setAttribute("id", "company");
+			divEl.setAttribute("order", 0);
 			divEl.setAttribute("style", "padding-top: 5px; padding-left: 5px;");								
 			deptView.appendChild(divEl);		
-			displaySubDept(divEl, listDepts[i]["subDept"]);
-			
-			if (listDepts[i]["departmentid"] == usercompID) {				
-				var userDeptElm = document.getElementsByName(userDeptID)[0];
-				getDetailData(userDeptElm);
-			}
-		}
+			displaySubDept(divEl, listDepts["subDept"]);
+		} 
 	}
 	
 	function refreshView() {
@@ -413,5 +441,5 @@
 		
 		var currentUserId = currentClickedItem.split("-")[0];		
 		
-		divPopUpShow(810, 400, "/admin/moveUser?userId=" + currentUserId);
+		divPopUpShow(400, 400, "/admin/moveUser?userId=" + currentUserId);
 	}
