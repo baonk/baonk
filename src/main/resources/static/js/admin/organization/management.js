@@ -16,6 +16,7 @@
 			span.innerHTML = listDepts[i]["departmentname"];
 			span.setAttribute("deptId", listDepts[i]["departmentid"]);
 			span.setAttribute("style", "cursor: pointer;");
+			span.setAttribute("name", listDepts[i]["departmentid"]);
 			span.onclick = function () {getDetailData(this);};
 			
 			divEl.appendChild(img1);
@@ -26,6 +27,11 @@
 			divEl.setAttribute("style", "padding-top: 5px; padding-left: 5px;");								
 			deptView.appendChild(divEl);		
 			displaySubDept(divEl, listDepts[i]["subDept"]);
+			
+			if (listDepts[i]["departmentid"] == usercompID) {				
+				var userDeptElm = document.getElementsByName(userDeptID)[0];
+				getDetailData(userDeptElm);
+			}
 		}
 	}
 	
@@ -226,19 +232,7 @@
 		for (var i = 0; i < list.length; i++) {
 			var divEl = document.createElement("div");
 			
-			var img1 = document.createElement("img");
-			
-			if (list[i]["hasSubDept"] == 1) {
-				img1.setAttribute("class", "deptOff");	
-				img1.setAttribute("parent", pos);	
-				img1.setAttribute("deptId", list[i]["departmentid"]);
-				img1.setAttribute("id", list[i]["departmentid"] + "+" + pos);
-				img1.onclick = function () {deptOnClick(this);};
-			}
-			else {
-				img1.setAttribute("class", "deptNone");
-			}
-		
+			var img1 = document.createElement("img");			
 			var img2 = document.createElement("img");
 			img2.setAttribute("class", "deptImg");
 			img2.setAttribute("deptId", list[i]["departmentid"]);
@@ -247,13 +241,37 @@
 			span.innerHTML = list[i]["departmentname"];
 			span.setAttribute("style", "cursor: pointer;");
 			span.setAttribute("deptId", list[i]["departmentid"]);
+			span.setAttribute("name", list[i]["departmentid"]);
 			span.onclick = function () {getDetailData(this);};
 			
 			divEl.appendChild(img1);
 			divEl.appendChild(img2);
 			divEl.appendChild(span);					
 			divEl.setAttribute("style", "padding-top: 5px; padding-left: 15px;");	
-			insertAfter(divEl, mainEl);										
+			divEl.setAttribute("order", pos);
+			insertAfter(divEl, mainEl);		
+			
+			if (list[i]["hasSubDept"] == 1) {
+				//img1.setAttribute("class", "deptOff");	
+				img1.setAttribute("parent", pos);	
+				img1.setAttribute("deptId", list[i]["departmentid"]);
+				img1.setAttribute("id", list[i]["departmentid"] + "+" + pos);
+				img1.onclick = function () {deptOnClick(this);};
+				
+				if (list[i]["subDept"] != null && list[i]["subDept"] != "null") {
+					var uniqueId = img1.getAttribute("id");		
+					arrSubDept.push(uniqueId);
+					img1.setAttribute("class", "deptOn");
+					displaySubDept(divEl, list[i]["subDept"]);
+				}
+				else {
+					img1.setAttribute("class", "deptOff");
+				}
+				
+			}
+			else {
+				img1.setAttribute("class", "deptNone");
+			}
 		}					
 	}
 			

@@ -11,9 +11,11 @@
 	    <script	src="/js/admin/organization/management.js"></script>
 	    <script	src="/js/popup.js"></script>	    		
 		<script type="text/javascript">	
-			var listDepts = ${listDepartment};
+			var listDepts  = ${listDepartment};
+			var userDeptID = "<c:out value='${userdeptID}'/>";
+			var usercompID = "<c:out value='${usercompID}'/>";
 			var arrSubDept = [];
-			var value = "muser";
+			var value      = "muser";
 			
 			window.onload = function () {
 				initData();

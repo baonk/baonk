@@ -93,6 +93,8 @@ public class AdminOrganController {
 		}				
 		
 		model.addAttribute("listDepartment", om.writeValueAsString(simpleCompanyList));
+		model.addAttribute("userdeptID", userDeptId);
+		model.addAttribute("usercompID", userCompId);
 		
 		logger.debug("CHECKING: " + om.writeValueAsString(simpleCompanyList));
 		
@@ -303,8 +305,8 @@ public class AdminOrganController {
 	@RequestMapping(value="/admin/moveUser", method = RequestMethod.GET)
 	public String moveUser(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, Model model){	
 		logger.debug("----------------------Move user is running-----------------------!");
-		User loginUser	= commonUtil.getUserInfo(loginCookie);		
-		String userId   = request.getParameter("userId")   != null ? request.getParameter("userId")   : "";		
+		//User loginUser	= commonUtil.getUserInfo(loginCookie);		
+		//String userId   = request.getParameter("userId")   != null ? request.getParameter("userId")   : "";		
 		
 		
 		logger.debug("-----------------------Move user end-----------------------------!");
