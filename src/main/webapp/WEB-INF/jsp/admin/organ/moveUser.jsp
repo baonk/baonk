@@ -10,22 +10,46 @@
 		<link rel="stylesheet" type="text/css" href="/css/general.css" />
 		<link rel="stylesheet" type="text/css" href="/css/popup.css" />	
 		<script	src="/js/jquery/jquery.min.js"></script>
-	    <script	src="/js/admin/organization/management.js"></script>
+	    <script	src="/js/admin/organization/management2.js"></script>
 	    <script	src="/js/popup.js"></script>	    
 		<script type="text/javascript" language="javascript">
 			var listDepts  = ${listDepartment};
+			var usercompID = "<c:out value='${usercompID}'/>";
+			var userID = "<c:out value='${userID}'/>";
 			var arrSubDept = [];			
 
 			window.onload = function () {				
-				initData(0);
+				initData();
 			}
 			
 			function close_Click() {			    
 			    parent.divPopUpHidden();
 			}
 			
-			function ok_Click() {				
-				
+			function ok_Click() {		
+				if (!currentClickedDeptId || currentClickedDeptId == usercompID) {
+					alert("Please select a department!");
+					return;
+				}
+				else {
+	     			$.ajax({
+	     				url : '/admin/saveMovedUser',
+	     				method : 'POST',
+	     				dataType : 'text',
+	     				data : {
+	     					newDeptId : currentClickedDeptId,
+	     					userId : userID	     						
+	     				} ,
+		     			success : function(data, textStatus, jqXHR) {
+		     				alert('User has been moved');
+	  	  		          	parent.refreshView();
+	  	  		            parent.divPopUpHidden();
+	     				},
+	     				error : function(jqXHR, textStatus, errorThrown) {
+	                	    alert('Error : ' + jqXHR.status + ", " + textStatus);
+	     				}
+	     			});   
+				}
 			}
 			
 	    </script>

@@ -1,45 +1,32 @@
 	var currentClickedDeptId = null;
-	var currentClickedItem = null;
 	
-	function initData() {
+	function initData(mode) {
 		var deptView = document.getElementById("deptView");
+
+		var divEl = document.createElement("div");
+		var img1 = document.createElement("img");
+		img1.setAttribute("class", "deptOn");			
+		img1.onclick = function () {companyOnClick(this);}
+		var img2 = document.createElement("img");
+		img2.setAttribute("class", "companyImg");
+		img2.setAttribute("deptId", listDepts["departmentid"]);
+		img2.onclick = function () {getDetailData(this);};
+		var span = document.createElement("span");
+		span.innerHTML = listDepts["departmentname"];
+		span.setAttribute("deptId", listDepts["departmentid"]);
+		span.setAttribute("style", "cursor: pointer;");
+		span.setAttribute("name", listDepts["departmentid"]);
+		span.onclick = function () {getDetailData(this);};
 		
-		for (var i = 0; i < listDepts.length; i++) {				
-			var divEl = document.createElement("div");
-			var img1 = document.createElement("img");
-			img1.setAttribute("class", "deptOn");			
-			img1.onclick = function () {companyOnClick(this);}
-			var img2 = document.createElement("img");
-			img2.setAttribute("class", "companyImg");
-			img2.setAttribute("deptId", listDepts[i]["departmentid"]);
-			img2.onclick = function () {getDetailData(this);};
-			var span = document.createElement("span");
-			span.innerHTML = listDepts[i]["departmentname"];
-			span.setAttribute("deptId", listDepts[i]["departmentid"]);
-			span.setAttribute("style", "cursor: pointer;");
-			span.setAttribute("name", listDepts[i]["departmentid"]);
-			span.onclick = function () {getDetailData(this);};
-			
-			divEl.appendChild(img1);
-			divEl.appendChild(img2);
-			divEl.appendChild(span);
-			divEl.setAttribute("id", "company" + i);
-			divEl.setAttribute("order", i);
-			divEl.setAttribute("style", "padding-top: 5px; padding-left: 5px;");								
-			deptView.appendChild(divEl);		
-			displaySubDept(divEl, listDepts[i]["subDept"]);
-			
-			
-			if (listDepts[i]["departmentid"] == usercompID) {				
-				var userDeptElm = document.getElementsByName(userDeptID)[0];
-				getDetailData(userDeptElm);
-			}
-		}			
-	}
-	
-	function refreshView() {
-		var currentElement = document.getElementById(currentClickedDeptId);
-		currentElement.click();
+		divEl.appendChild(img1);
+		divEl.appendChild(img2);
+		divEl.appendChild(span);
+		divEl.setAttribute("id", "company");
+		divEl.setAttribute("order", 0);
+		divEl.setAttribute("style", "padding-top: 5px; padding-left: 5px;");								
+		deptView.appendChild(divEl);		
+		displaySubDept(divEl, listDepts["subDept"]);
+		
 	}
 	
 	function getDetailData(obj) {			
@@ -65,67 +52,8 @@
 			}
 		}
 		
-		$.ajax({			
-			type: "POST",
-			url: "/admin/organ/getDetailInfo",
-			data: {
-				"deptID"	: deptId,
-				"optionVal" : value
-			},
-			dataType: "JSON",
-			async: true,
-			success: function(result) {												
-				renderData(result);
-			},
-			error: function (xhr, status, e){
-				alert("Get data failed!");
-			}
-		});	
-		
-	}
+	}	
 	
-	function renderData(result) {
-		var detailDeptView = document.getElementById("detailDeptView");
-		
-		if (result["result"] == "Error") {			
-			deleteOldElement(detailDeptView, 4);			
-			document.getElementById("errorDiv").style.display = "block";
-		}
-		else {
-			document.getElementById("errorDiv").style.display = "none";
-			var len = result.length;			
-			deleteOldElement(detailDeptView, 4);
-			
-			switch (value) {
-				case "muser":
-						for (var i = 0; i < len; i++) {
-							addUserNode(result[i]["userid"], result[i]["username"], result[i]["departmentname"], result[i]["position"]);
-						}
-						break;
-				case "mdept":						
-						for (var i = 0; i < len; i++) {
-							addDeptNode(result[i]["departmentid"], result[i]["departmentname"], result[i]["companyname"]);
-						}
-						break;
-				case "mcomp":					
-						addCompNode(result["companyid"], result["companyname"]);						
-						break;
-			}
-		}
-	}
-	
-	function setItem(obj) {			
-		if (currentClickedItem != null) {
-			var previousItem = document.getElementById(currentClickedItem);
-			if (previousItem) {				
-				previousItem.setAttribute("class", "subDisplayTab");
-			}
-		}
-		
-		obj.setAttribute("class", "subDisplayTabSelect");
-		currentClickedItem = obj.getAttribute("id");	
-		
-	}
 	
 	function addCompNode(compId, companyName) {				
 		var detailDeptView = document.getElementById("detailDeptView");			
@@ -343,36 +271,8 @@
 		}	
 		
 		obj.setAttribute("class", "deptOn");						
-	}
+	}	
 	
-	function changeList(obj) {
-		value = obj.getAttribute("value");
-		
-		if (value == "muser") {
-			document.getElementById("userOpt").style.display = "block";
-			document.getElementById("deptOpt").style.display = "none";
-			document.getElementById("compOpt").style.display = "none";
-			document.getElementById("employeeList").style.display = "block";
-			document.getElementById("deptList").style.display = "none";
-			document.getElementById("companyList").style.display = "none";
-		}
-		else if (value == "mdept") {
-			document.getElementById("userOpt").style.display = "none";
-			document.getElementById("deptOpt").style.display = "block";
-			document.getElementById("compOpt").style.display = "none";
-			document.getElementById("employeeList").style.display = "none";
-			document.getElementById("deptList").style.display = "block";
-			document.getElementById("companyList").style.display = "none";
-		}
-		else {
-			document.getElementById("userOpt").style.display = "none";
-			document.getElementById("deptOpt").style.display = "none";
-			document.getElementById("compOpt").style.display = "block";
-			document.getElementById("employeeList").style.display = "none";
-			document.getElementById("deptList").style.display = "none";
-			document.getElementById("companyList").style.display = "block";
-		}
-	}
 	
 	function insertAfter(newNode, referenceNode) {
 		if (referenceNode.getAttribute("parent")) {
@@ -381,39 +281,4 @@
 		else {
 			referenceNode.appendChild(newNode);
 		}	   
-	}
-	
-	function addUser() {
-		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)){
-			alert("Please select a department!");
-			return;
-		}
-		
-		var currentDept = document.getElementById(currentClickedDeptId);
-		var deptName = currentDept.innerHTML;
-		
-		divPopUpShow(810, 400, "/admin/userRegistration?deptId=" + currentClickedDeptId + "&deptName=" + deptName);		
-	}
-	
-	
-	function displayUserInfo() {		
-		if (!currentClickedItem && !document.getElementById(currentClickedItem)){
-			alert("Please select a user!");
-			return;
-		}
-		
-		var currentUserId = currentClickedItem.split("-")[0];		
-		
-		divPopUpShow(810, 400, "/admin/userRegistration?userId=" + currentUserId);
-	}
-	
-	function moveUser() {
-		if (!currentClickedItem && !document.getElementById(currentClickedItem)){
-			alert("Please select a user!");
-			return;
-		}
-		
-		var currentUserId = currentClickedItem.split("-")[0];		
-		
-		divPopUpShow(400, 400, "/admin/moveUser?userId=" + currentUserId);
 	}

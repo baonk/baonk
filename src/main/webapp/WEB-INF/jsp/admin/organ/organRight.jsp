@@ -18,7 +18,7 @@
 			var value      = "muser";
 			
 			window.onload = function () {
-				initData(1);
+				initData();
 			}
 
 	    </script>

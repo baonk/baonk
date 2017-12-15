@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -313,8 +314,34 @@ public class AdminOrganController {
 		
 		getAllSubDepts(dept, tenantId, 1);
 		model.addAttribute("listDepartment", om.writeValueAsString(dept));
+		model.addAttribute("usercompID", clickedUser.getCompanyid());
+		model.addAttribute("userID", userId);		
 		
 		logger.debug("-----------------------Move user end-----------------------------!");
+		return "admin/organ/moveUser";
+	}	
+	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Map the save moved user request of administrator privilege users.
+	 ****   	 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value="/admin/saveMovedUser", method = RequestMethod.POST)
+	public String saveMovedUser(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException{	
+		logger.debug("----------------------Save moved user is running-----------------------!");	
+		User loginUser	= commonUtil.getUserInfo(loginCookie);		
+		int tenantId = loginUser.getTenantid();
+		String userId      = request.getParameter("userId")   	!= null ? request.getParameter("userId")      : "";
+		String newDeptId   = request.getParameter("newDeptId")  != null ? request.getParameter("newDeptId")   : "";
+		
+		User movedUser = userService.findUserByUseridAndTenantid(userId, tenantId);		
+		Department newDept = deptService.findByDepartmentidAndTenantid(newDeptId, tenantId);
+		movedUser.setDepartmentid(newDept.getDepartmentid());
+		movedUser.setDepartmentname(newDept.getDepartmentname());		
+		userService.saveUser(movedUser);
+		
+		logger.debug("-----------------------Save moved User end-----------------------------!");
 		return "admin/organ/moveUser";
 	}	
 	
