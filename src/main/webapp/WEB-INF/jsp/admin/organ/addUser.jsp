@@ -17,7 +17,10 @@
   		var mode								 = "<c:out value='${mode}'/>";
   		var birthDay							 = "<c:out value='${user.birthday}'/>";
   		
-  		window.onload = function () { 						
+  		window.onload = function () { 				
+			document.getElementById("deptName").value  = deptName;  			
+	  		document.getElementById("deptID").value    = deptId; 
+  			
   			var toYear  = new Date().getFullYear();
 			var sYear   = parseInt(toYear-70);
 			var eYear   = parseInt(toYear+10);
@@ -33,16 +36,14 @@
 		    $("#txtBirthday").datepicker("option", "dateFormat", "yy-mm-dd");			
 			
 			if (mode != "add") {
+				console.log("Here!");
 				$("#txtBirthday").datepicker("setDate", birthDay);
-				var deptId   = "<c:out value='${user.departmentid}'/>";
-				var deptName = "<c:out value='${user.departmentname}'/>";
-				document.getElementById("deptName").value  = deptName;  			
-	  			document.getElementById("deptID").value    = deptId; 
+
+				document.getElementById("deptName").value  = "<c:out value='${user.departmentid}'/>";			
+	  			document.getElementById("deptID").value    = "<c:out value='${user.departmentname}'/>";
 			}
-			else {
-				document.getElementById("deptName").value  = deptName;  			
-	  			document.getElementById("deptID").value    = deptId; 
-			}
+
+			
   		}  	
   		
   		function checkRequirement() {

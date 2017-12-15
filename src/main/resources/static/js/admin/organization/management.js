@@ -417,3 +417,33 @@
 		
 		divPopUpShow(400, 400, "/admin/moveUser?userId=" + currentUserId);
 	}
+	
+	function delUser() {
+		if (!currentClickedItem && !document.getElementById(currentClickedItem)){
+			alert("Please select a user!");
+			return;
+		}
+		
+		var result = confirm("Do you want to delete this user?");
+		
+		if (result == true) {
+			var currentUserId = currentClickedItem.split("-")[0];		
+
+			$.ajax({			
+				type: "POST",
+				url: "/admin/deleteUser",
+				data: {
+					"userId" : currentUserId					
+				},
+				dataType: "JSON",
+				async: true,
+				success: function(result) {												
+					alert("Delete user successful!");
+				},
+				error: function (xhr, status, e){
+					alert("Cannot delete this user!");
+				}
+			});	
+		}	
+	}
+	

@@ -82,10 +82,11 @@ public class AdminOrganController {
 		}
 		
 		//Get all company		
-		List<SimpleDepartment> simpleCompanyList = deptService.getAllSimpleSubDepts("self", tenantId);
+		List<SimpleDepartment> simpleCompanyList = deptService.getAllSimpleSubDepts("self", tenantId);	
 		
 		for (SimpleDepartment company: simpleCompanyList) {
 			if (company.getCompanyid().equals(userCompId)) {
+				logger.debug("CompanyID: " + company.getCompanyid() + " || deptPath: " + deptPath);
 				getAllSubDepts2(company, tenantId, deptPath, 1);
 			}
 			else {
@@ -221,11 +222,12 @@ public class AdminOrganController {
 			dept.setSubDept(listSubSimpleDepts);
 			dept.setHasSubDept(1);
 			
-			for (SimpleDepartment subdept: listSubSimpleDepts) {		
+			for (SimpleDepartment subdept: listSubSimpleDepts) {				
 				List<SimpleDepartment> subSimpleDepts = deptService.getAllSimpleSubDepts(subdept.getDepartmentid(), tenantId);
 				if (subSimpleDepts.size() > 0) {
-					subdept.setHasSubDept(1);		
-					if (subdept.getDepartmentid().equals(deptPath[order])) {
+					subdept.setHasSubDept(1);	
+					
+					if (order < deptPath.length && subdept.getDepartmentid().equals(deptPath[order])) {						
 						getAllSubDepts2(subdept, tenantId, deptPath, order + 1);
 					}
 				}
@@ -278,7 +280,10 @@ public class AdminOrganController {
 		String deptName = request.getParameter("deptName") != null ? request.getParameter("deptName") : "";
 		String userId   = request.getParameter("userId")   != null ? request.getParameter("userId")   : "";
 		
+		logger.debug("BAONK DEPTID: " + deptId);
+		
 		if (!deptId.equals("")) {
+			logger.debug("Haizz");
 			User user = new User();
 			model.addAttribute("user", user);
 			model.addAttribute("deptID", deptId);
@@ -344,6 +349,34 @@ public class AdminOrganController {
 		logger.debug("-----------------------Save moved User end-----------------------------!");
 		return "admin/organ/moveUser";
 	}	
+	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Map the delete user request of administrator privilege users.
+	 ****   	 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value="/admin/deleteUser", method = RequestMethod.POST)
+	@ResponseBody
+	public String deleteUser(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException{	
+		logger.debug("----------------------Delete user is running-----------------------!");	
+		User loginUser	= commonUtil.getUserInfo(loginCookie);		
+		int tenantId 	= loginUser.getTenantid();
+		String userId   = request.getParameter("userId") != null ? request.getParameter("userId") : "";		
+		
+		User deleteUser = userService.findUserByUseridAndTenantid(userId, tenantId);		
+		try {
+			userService.deleteUser(deleteUser);
+			logger.debug("-----------------------Delete user end-----------------------------!");
+			return "OK";
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		} 
+		
+		logger.debug("-----------------------Delete user end-----------------------------!");	
+		return "FAIL";
+	}
 	
 	/*******************************************************************************************************************************
 	 ****	 
