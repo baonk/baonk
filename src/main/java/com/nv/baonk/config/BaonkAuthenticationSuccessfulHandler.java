@@ -23,8 +23,7 @@ public class BaonkAuthenticationSuccessfulHandler extends SimpleUrlAuthenticatio
 	public final Integer SESSION_TIMEOUT_IN_SECONDS = 60 * 30;
 	
 	@Autowired
-	private SecurityConfigBaonk securityConfBaonk;
-	
+	private SecurityConfigBaonk securityConfBaonk;	
 	@Autowired
 	private UserService userService;
 
@@ -35,18 +34,18 @@ public class BaonkAuthenticationSuccessfulHandler extends SimpleUrlAuthenticatio
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 		logger.debug("--------Running in Authentication Successful Handler!--------");
+		
 		String serverName 	= request.getServerName();
 		String userID 	  	= authentication.getName();
 		int tenantId 		= userService.getTenantId(serverName);			
 		User authUser 		= userService.findUserByUseridAndTenantid(userID, tenantId);		
-		String userPassword = authUser.getPassword();
-		//String url 			= "";
+		String userPassword = authUser.getPassword();	
 		
 		logger.debug("Check authUser: " + userID + " || TenantId : " + tenantId);
 				
-		//Write the cookie
-		String userInfo = serverName + "+" + userID + "+" + userPassword + "+"  + tenantId;
-		String loginCookie = "";
+		//Create login cookie
+		String userInfo     = serverName + "+" + userID + "+" + userPassword + "+"  + tenantId;
+		String loginCookie  = "";
 		
 		try {
 			loginCookie = securityConfBaonk.encryptAES(userInfo);
@@ -66,36 +65,11 @@ public class BaonkAuthenticationSuccessfulHandler extends SimpleUrlAuthenticatio
 		String previous_page = (String) session.getAttribute("prior_url");	  		
         
         if (previous_page != null && !previous_page.endsWith("/login")) {
-        		response.sendRedirect(previous_page);
+        	response.sendRedirect(previous_page);
         }
         else {
         	response.sendRedirect("home");
         }
-
-		
-		
-		
-		/*if (session != null) {
-			url = (String)request.getSession().getAttribute("previous_page");
-		}	
-		
-		logger.debug("URL CHECK1: " + url);
-    	
-		if (url != null && !url.equals("") && !url.endsWith("/login")) {		
-			if (url.endsWith("/admin")) {
-				url = "/admin/organization";
-			}
-			else if (url.endsWith("/home")) {
-				url = "/mainMenu";
-			}
-			
-			logger.debug("URL CHECK2: " + url);
-			session.removeAttribute("previous_page");
-			response.sendRedirect(url);  
-		}
-		else {			
-			response.sendRedirect("home");  
-		}  	 	*/
     	  	  	
     	logger.debug("------------Authentication Successful Handler ended!----------");
 	}

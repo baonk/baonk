@@ -65,28 +65,19 @@ public class CommonUtil {
 	@Autowired
 	private UserService userService;
 	
-	/*
-	@Resource(name="EzOrganService")
-	private EzOrganService ezOrganService;	
-
-	
-	/* File separator 공통 함수 */
-	public String separator = "/";
-	
-	public final String CRLF = "\r\n";
-	
+	/* File separator setting*/
+	public String separator  		   = "/";	
+	public final String CRLF 		   = "\r\n";	
 	private static final Logger logger = LoggerFactory.getLogger(CommonUtil.class);
 	
 	public User getUserInfo(String loginCookie) {
-		try {
-			//logger.debug("LoginCookie in CommonUtil: " + loginCookie);			
-			String decData = securityConfBaonk.decryptAES(loginCookie);			
-			String[] decDataArray = decData.split("\\+");			
-			
-			String serverName = decDataArray[0];
-			String userID = decDataArray[1];
-			String userPassword = decDataArray[2];
-			int tenantId = Integer.parseInt(decDataArray[3]);
+		try {					
+			String decData 		  = securityConfBaonk.decryptAES(loginCookie);			
+			String[] decDataArray = decData.split("\\+");						
+			String serverName 	  = decDataArray[0];
+			String userID 		  = decDataArray[1];
+			String userPassword   = decDataArray[2];
+			int tenantId 		  = Integer.parseInt(decDataArray[3]);
 			
 			logger.debug("Server Name: " + serverName + " || User ID: " + userID + " || User Password: " + userPassword + " || Tenant ID: " + tenantId);
 
@@ -283,7 +274,7 @@ public class CommonUtil {
 	public boolean isLoginCookieExists(HttpServletRequest request, HttpServletResponse response) {
         boolean isCookie = false;     
         Cookie[] cookies = request.getCookies();
-         session time을 위한 처리 주석 
+         
         //HttpSession session = request.getSession(false);
         
         //if (session != null) {
@@ -368,9 +359,7 @@ public class CommonUtil {
 			return null;
 		}
 	}
-	
-	// 객체의 필드 목록을 XML 형식으로 반환한다.
-	// 필드명을 태그명으로 필드값을 태그 사이의 값으로 구성한다.
+
 	public String getQueryResult(Object vo) throws Exception {
 		StringBuilder stb = new StringBuilder();		
 		
@@ -397,10 +386,6 @@ public class CommonUtil {
 
 		return stb.toString();
 	}
-	
-	
-	 * 행이 여러 개일 때 여러 행이 포함된 XML String 생성
-	 * xmlTag: "<DATA>" 또는 다름 Tag
 	 
 	public String getQueryResult(List<Object> vo, String xmlTag) throws Exception{
 		StringBuilder stb = new StringBuilder();		
@@ -535,16 +520,7 @@ public class CommonUtil {
 	public String getUploadPath(String property, int tenantId) {
 		return separator + "fileroot" + separator + tenantId + config.getProperty(property);
 	}
-	
-	*//**
-	 * <pre>
-	 * timeZoneToUTC가 true면 TimeZone Date 문자열을 UTC타임 Date 문자열로 바꿔서 반환한다.
-	 * timeZoneToUTC가 false면 UTC타임 Date 문자열을 TimeZone Date 문자열로 바꿔서 반환한다.
-	 * - dateStr 형식 : yyyy-MM-dd HH:mm:ss, yyyy-MM-dd HH:mm, yyyy-MM-dd
-	 * 				   yyyy/MM/dd HH:mm:ss, yyyy/MM/dd HH:mm, yyyy/MM/dd, yyMMdd
-	 * - offset 형식 : ex) 235|+09:00
-	 * </pre>
-	 *//*
+
 	public String getDateStringInUTC(String dateStr, String offset, boolean timeZoneToUTC) {
 //		logger.debug("dateStr=" + dateStr + ", offset=" + offset + ", timeZoneToUTC=" + timeZoneToUTC);
 		
@@ -611,13 +587,7 @@ public class CommonUtil {
 //		logger.debug("resultDateStr=" + resultDateStr);
 		return resultDateStr;
 	}
-	
-	*//**
-	 * 현재시간 UTC로 가져오기
-	 * @param format 공백이면 기본 "yyyy-MM-dd HH:mm:ss" 형식
-	 * @return 포맷팅된 UTC 현재시간 가져옴
-	 * @throws Exception
-	 *//*
+
 	public String getTodayUTCTime(String format) throws Exception {
 		logger.debug("getTodayUTCTime started");
 		
@@ -643,10 +613,7 @@ public class CommonUtil {
 		
 		return today;
 	}
-	
-	*//**
-	 * offset 시간을 분으로 변환하는 함수	 
-	 *//*
+
 	public String getMinuteUTC(String offSet) throws Exception {
 		logger.debug("getMinuteUTC started");
 		
@@ -749,7 +716,6 @@ public class CommonUtil {
          return retFormat;
 	}
 
- baonk added
 	public String getPackageType(int tenantId) throws Exception {
 		String packageType = "standard";
 		
@@ -792,14 +758,14 @@ public class CommonUtil {
     }*/
 	
 	public void writeUploadedFile(MultipartFile file, String newName, String stordFilePath) throws Exception {
-		InputStream stream = null;
-		OutputStream bos = null;
-		String stordFilePathReal = (stordFilePath==null?"":stordFilePath);
-		int BUFF_SIZE = 4096;
+		InputStream stream 		 = null;
+		OutputStream bos 		 = null;
+		String stordFilePathReal = (stordFilePath == null ? "":stordFilePath);
+		int BUFF_SIZE 			 = 4096;
 		
 		try {
-		    stream = file.getInputStream();
-		    File cFile = new File(stordFilePathReal);
+		    stream 		= file.getInputStream();
+		    File cFile  = new File(stordFilePathReal);
 	
 		    if (!cFile.isDirectory()) {
 				boolean _flag = cFile.mkdirs();
@@ -808,37 +774,41 @@ public class CommonUtil {
 				}
 		    }
 	
-		    bos = new FileOutputStream(stordFilePathReal + File.separator + newName);
-	
+		    bos 		  = new FileOutputStream(stordFilePathReal + File.separator + newName);	
 		    int bytesRead = 0;
 		    byte[] buffer = new byte[BUFF_SIZE];
 	
 		    while ((bytesRead = stream.read(buffer, 0, BUFF_SIZE)) != -1) {
 		    	bos.write(buffer, 0, bytesRead);
 		    }
-		} catch (FileNotFoundException fnfe) {
+		} 
+		catch (FileNotFoundException fnfe) {
 			logger.debug("fnfe: {}", fnfe);
-		} catch (IOException ioe) {
+		} 
+		catch (IOException ioe) {
 			logger.debug("ioe: {}", ioe);
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			logger.debug("e: {}", e);
-		} finally {
+		} 
+		finally {
 		    if (bos != null) {
 				try {
 				    bos.close();
-				} catch (Exception ignore) {
+				} 
+				catch (Exception ignore) {
 					logger.debug("IGNORED: {}", ignore.getMessage());
 				}
 		    }
 		    if (stream != null) {
 				try {
 				    stream.close();
-				} catch (Exception ignore) {
+				} 
+				catch (Exception ignore) {
 					logger.debug("IGNORED: {}", ignore.getMessage());
 				}
 		    }
 		}
     }
-
 	
 }

@@ -51,19 +51,19 @@ public class LoginController {
 
 	@RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
 	public String login(Model model, HttpServletRequest request, HttpSession session){		
-		String error = "";
+		String error    = "";
 		String username = "";		
 		
-		if(session != null) {
+		if (session != null) {
 			SavedRequest savedRequest = (SavedRequest) session.getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+			
 	        if (savedRequest != null) {
 	           String redirectUrl = savedRequest.getRedirectUrl();
-	           session.setAttribute("prior_url", redirectUrl);
-	           logger.debug("Check Prior url: " + redirectUrl);
+	           session.setAttribute("prior_url", redirectUrl);	           
 	        }
 		}
 		
-		if(request.getParameter("username") != null) {
+		if (request.getParameter("username") != null) {
 			username = request.getParameter("username");
 		}		
 		
@@ -92,12 +92,11 @@ public class LoginController {
 	@RequestMapping(value="/topMenu", method = RequestMethod.GET)
 	public String topMenu(Model model, HttpServletRequest request){	
 		//Get tenant Id from serverName
-		String serverName = request.getServerName();
-		int tenantId = userRepository.getTenantId(serverName);		
-		int isAdmin = 0;
-		
+		String serverName   = request.getServerName();
+		int tenantId 	    = userRepository.getTenantId(serverName);		
+		int isAdmin 	    = 0;		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.findUserByUseridAndTenantid(auth.getName(), tenantId);
+		User user 			= userService.findUserByUseridAndTenantid(auth.getName(), tenantId);
 		
 		for (Role role: user.getRoles()) {
 			if(role.getRolename().equals("ADMIN")) {
@@ -122,13 +121,8 @@ public class LoginController {
 	
 	@RequestMapping(value="/uploadMenu", method = RequestMethod.GET)
 	public String uploadMenu(Model model){	
-/*		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.findUserByEmail(auth.getName());
-		model.addAttribute("userName", user.getUsername());
-		model.addAttribute("email", user.getEmail());	*/	
 		return "uploadMenu";
-	}	
-	
+	}		
 	
 	@RequestMapping(value = "/uploadFile", produces = "text/plain; charset=utf-8")
 	@ResponseBody
@@ -137,17 +131,17 @@ public class LoginController {
 		List<MultipartFile> multiFile = request.getFiles("fileToUpload"); 
 		int cnt = multiFile.size();
 		
-		String realPath = request.getServletContext().getRealPath("");
-		String[] pFileName = new String[cnt];
-        Long[] fileSize = new Long[cnt];        
+		String realPath    	  = request.getServletContext().getRealPath("");
+		String[] pFileName 	  = new String[cnt];
+        Long[] fileSize 	  = new Long[cnt];        
         String[] resultUpload = new String[cnt];
-        String[] sGUID = new String[cnt];
-        String[] pUploadSN = new String[cnt];      
+        String[] sGUID 		  = new String[cnt];
+        String[] pUploadSN    = new String[cnt];      
 
         for (int i = 0; i < cnt; i++) {
             resultUpload[i] = "false";
-            sGUID[i] = UUID.randomUUID().toString();
-            pUploadSN[i] = sGUID[i];
+            sGUID[i]        = UUID.randomUUID().toString();
+            pUploadSN[i]    = sGUID[i];
         }
 
         if (!multiFile.get(0).getOriginalFilename().isEmpty() && !multiFile.get(0).getOriginalFilename().equals("")) {        	
@@ -162,13 +156,14 @@ public class LoginController {
             }
         }
 
-        for (int i = 0; i < cnt; i++) {
+        /*for (int i = 0; i < cnt; i++) {
             pFileName[i] = pFileName[i].replace("+", "%2b");
             pFileName[i] = pFileName[i].replace(";", "%3b");
-        }           
+        }    */       
         
         String pDirPath = "/file/";
-        pDirPath = realPath + pDirPath;
+        pDirPath        = realPath + pDirPath;
+        
         logger.debug("pDirPath: " + pDirPath);
         
         if (!pDirPath.substring(pDirPath.length() - 1).equals("/")) {
@@ -185,8 +180,8 @@ public class LoginController {
         strXML.append("<ROOT><NODES>");
         
         for (int i = 0; i < cnt; i++) {        	
-        	fileSize[i] = multiFile.get(i).getSize();
-            String extend = pFileName[i].substring(pFileName[i].lastIndexOf(".") + 1);
+        	fileSize[i]        = multiFile.get(i).getSize();
+            String extend      = pFileName[i].substring(pFileName[i].lastIndexOf(".") + 1);
             String newFileName = pUploadSN[i] + "." + extend;
             
 			writeUploadedFile(multiFile.get(i), newFileName, pDirPath + "uploadFile");
@@ -196,8 +191,7 @@ public class LoginController {
             
         }
         strXML.append("</NODES></ROOT>");
-       
-        logger.debug(strXML.toString());
+
         logger.debug("Upload file finishes!");        
         return strXML.toString();
     }
@@ -207,7 +201,7 @@ public class LoginController {
 	public String deleteFile(String loginCookie, HttpServletRequest req) throws Exception {
 		logger.debug("Delete file is running!");		
 		String fileName = "";
-		String strXML = "";
+		String strXML   = "";
 		
 		if (req.getParameter("fileToDelete") != null) {
 			fileName = req.getParameter("fileToDelete").split("/")[0];
@@ -215,7 +209,7 @@ public class LoginController {
 		
 		String realPath = req.getServletContext().getRealPath("");
 		String pDirPath = "/file/";
-		pDirPath = realPath + pDirPath;
+		pDirPath 		= realPath + pDirPath;
 		
 		if (!pDirPath.substring(pDirPath.length() - 1).equals("/")) {
         	pDirPath = pDirPath + "/";
@@ -247,8 +241,8 @@ public class LoginController {
 		logger.debug("Download attach is running!");
 		
 		String folderPath = request.getParameter("folderPath");
-		String fileName = request.getParameter("filename");
-		File file = null;
+		String fileName   = request.getParameter("filename");
+		File file 		  = null;
 		logger.debug("FolderPath:" + folderPath + ", fileName:" + fileName);
 		
 		if (folderPath == null || fileName == null || folderPath.equals("") || fileName.equals("")) {			
@@ -259,14 +253,14 @@ public class LoginController {
         //Get absolute path of the application       
         String realPath = request.getServletContext().getRealPath("");
         String pDirPath = "/file/";
-        pDirPath = realPath + pDirPath;
+        pDirPath        = realPath + pDirPath;
         
         if (!pDirPath.substring(pDirPath.length() - 1).equals("/")) {
         	pDirPath = pDirPath + "/";
         }
        
         String fullPath = pDirPath + "uploadFile" + "/" + folderPath;    
-        file = new File(fullPath);
+        file 			= new File(fullPath);
         
 		if (file == null || !file.exists()) {			
 			logger.debug("Folder not found. folderPath=" + folderPath);
@@ -335,10 +329,10 @@ public class LoginController {
 	}
 	
 	private void writeUploadedFile(MultipartFile file, String newName, String stordFilePath) throws Exception {
-		InputStream stream = null;
-		OutputStream bos = null;
-		String stordFilePathReal = (stordFilePath==null?"":stordFilePath);
-		int BUFF_SIZE = 4096;
+		InputStream stream 		 = null;
+		OutputStream bos 		 = null;
+		String stordFilePathReal = (stordFilePath == null ? "" : stordFilePath);
+		int BUFF_SIZE			 = 4096;
 		
 		try {
 		    stream = file.getInputStream();
@@ -359,13 +353,17 @@ public class LoginController {
 		    while ((bytesRead = stream.read(buffer, 0, BUFF_SIZE)) != -1) {
 		    	bos.write(buffer, 0, bytesRead);
 		    }
-		} catch (FileNotFoundException fnfe) {
+		} 
+		catch (FileNotFoundException fnfe) {
 			logger.debug("fnfe: {}", fnfe);
-		} catch (IOException ioe) {
+		} 
+		catch (IOException ioe) {
 			logger.debug("ioe: {}", ioe);
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			logger.debug("e: {}", e);
-		} finally {
+		} 
+		finally {
 		    if (bos != null) {
 				try {
 				    bos.close();

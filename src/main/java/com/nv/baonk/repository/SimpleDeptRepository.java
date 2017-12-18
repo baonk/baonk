@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import com.nv.baonk.vo.SimpleDepartment;
 
-
 @Repository("simpleDeptRepository")
 public interface SimpleDeptRepository{
 	@Query(name = "Test.SimpleDepartment")

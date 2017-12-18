@@ -10,7 +10,7 @@ import com.nv.baonk.vo.User;
 
 @Repository("userRepository")
 public interface UserRepository extends JpaRepository<User, Long> {
-	public static final String getTenantId = "SELECT TENANT_ID FROM SERVER WHERE SERVER_NAME = ?1";
+	public static final String getTenantId 				  = "SELECT TENANT_ID FROM SERVER WHERE SERVER_NAME = ?1";
 	public static final String getListUsersByDeptAndOther = "SELECT * FROM USER WHERE (DEPARTMENTID = ?1 OR OTHER_POSITION = ?1) AND TENANTID = ?2";
 	
 	@Query(value = getTenantId, nativeQuery = true)

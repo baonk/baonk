@@ -16,24 +16,25 @@ import com.nv.baonk.vo.User;
 @Controller
 public class AdminLoginController {
 	@Autowired
-	private UserService userService;
-	
+	private UserService userService;	
 	private final Logger logger = LoggerFactory.getLogger(AdminLoginController.class);
 	
 	@RequestMapping(value="/admin", method = RequestMethod.GET)
 	public String adminPage(Model model, HttpServletRequest request){
 		logger.debug("-------------------Run in adminPage--------------------");
+		
 		//Get tenant Id from serverName
 		String serverName = request.getServerName();
-		int tenantId = userService.getTenantId(serverName);	
+		int tenantId      = userService.getTenantId(serverName);	
 		
 		logger.debug("Server Name: " + serverName + " || Tenant ID: " + tenantId);
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.findUserByUseridAndTenantid(auth.getName(), tenantId);
+		User user           = userService.findUserByUseridAndTenantid(auth.getName(), tenantId);
 
 		model.addAttribute("userName", user.getUserid());
 		model.addAttribute("email", user.getEmail());	
+		
 		logger.debug("--------------------adminPage end----------------------");
 		return "admin/admin";
 	}
@@ -41,17 +42,19 @@ public class AdminLoginController {
 	@RequestMapping(value="/admin/topMenu", method = RequestMethod.GET)
 	public String adminTopMenu(Model model, HttpServletRequest request){	
 		logger.debug("-----------------Run in adminTopMenu------------------");
+		
 		//Get tenant Id from serverName
-		String serverName = request.getServerName();
-		int tenantId = userService.getTenantId(serverName);	
+		String serverName   = request.getServerName();
+		int tenantId        = userService.getTenantId(serverName);	
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.findUserByUseridAndTenantid(auth.getName(), tenantId);
+		User user           = userService.findUserByUseridAndTenantid(auth.getName(), tenantId);
 		
 		if (user == null) {
 			return "access-denied";
 		}
 		
 		model.addAttribute("userName", user.getUserid());
+		
 		logger.debug("-------------------adminTopMenu end-------------------");
 		return "admin/adminTopMenu";
 	}		

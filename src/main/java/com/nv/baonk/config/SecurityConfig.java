@@ -26,25 +26,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value("${roles-query}")
 	private String roleQuery;*/
 	@Autowired
-	private UsernameStoringUrlAuthenticationFailureHandler authenticationFailureHandler;
-	
+	private UsernameStoringUrlAuthenticationFailureHandler authenticationFailureHandler;	
 	@Autowired
-	private BaonkAuthenticationSuccessfulHandler authenticationSuccessfulHandler;
-	
+	private BaonkAuthenticationSuccessfulHandler authenticationSuccessfulHandler;	
 	@Autowired
-	private BaonkLogoutSuccessfulHandler logoutSuccessfulHandler;
-	
+	private BaonkLogoutSuccessfulHandler logoutSuccessfulHandler;	
 	@Autowired 
-	private UserService userService;
-	
+	private UserService userService;	
 	@Autowired
 	private HttpServletRequest httpRequest;
-	
-/*	@Autowired
-	private HttpServletResponse httpResponse;
-	
-	@Autowired
-	private SecurityConfigBaonk securityConfBaonk;*/
 	
     @Override
     public UserDetailsService userDetailsServiceBean() throws Exception {

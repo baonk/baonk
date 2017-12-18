@@ -33,18 +33,19 @@ public class MandatoryUserDetailsService implements UserDetailsService{
 		try {
 			//Get tenant Id from serverName
 			String serverName = httpRequest.getServerName();						
-			int tenantId = userService.getTenantId(serverName);		
+			int tenantId      = userService.getTenantId(serverName);				
+			User user 		  = userService.findUserByUseridAndTenantid(userID, tenantId);
 			
-			User user = userService.findUserByUseridAndTenantid(userID, tenantId);
 			if (user == null) {
 				logger.debug("User not found with the provided userId");
 				return null;
 			}
+			
 			logger.debug("UserId: " + userID + ", tenantId: " + tenantId);
 			
 			//Get User Role Id
 			List<Integer> listRoleIDs = userService.getRoleId(userID, tenantId);
-			Set<Role> userRoles = new HashSet<Role>();
+			Set<Role> userRoles       = new HashSet<Role>();
 			
 			for(Integer integer: listRoleIDs) {
 				Role role = userService.findByRoleid(integer);

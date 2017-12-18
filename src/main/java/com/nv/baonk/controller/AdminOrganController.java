@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -41,11 +40,9 @@ import com.nv.baonk.vo.User;
 @Controller
 public class AdminOrganController {	
 	@Autowired
-	private CommonUtil commonUtil;
-	
+	private CommonUtil commonUtil;	
 	@Autowired
-	private DepartmentService deptService;
-	
+	private DepartmentService deptService;	
 	@Autowired
 	private UserService userService;
 	
@@ -59,15 +56,15 @@ public class AdminOrganController {
 	
 	@RequestMapping(value="/admin/organ/organRight", method = RequestMethod.GET)
 	public String mainMenu(@CookieValue("loginCookie")String loginCookie, Model model, HttpServletRequest request) throws JsonProcessingException {
-		ObjectMapper om = new ObjectMapper();
-		int checkAdmin = 0;
-		User user = commonUtil.getUserInfo(loginCookie);
+		ObjectMapper om    = new ObjectMapper();
+		int checkAdmin     = 0;
+		User user          = commonUtil.getUserInfo(loginCookie);
 		Set<Role> roleList = user.getRoles();
-		int tenantId = user.getTenantid();
-		String userDeptId = user.getDepartmentid();
-		String userCompId = user.getCompanyid();
-		Department dept = deptService.findByDepartmentidAndTenantid(userDeptId, tenantId);
-		String[] deptPath = dept.getDepartmentpath().split("::");
+		int tenantId       = user.getTenantid();
+		String userDeptId  = user.getDepartmentid();
+		String userCompId  = user.getCompanyid();
+		Department dept    = deptService.findByDepartmentidAndTenantid(userDeptId, tenantId);
+		String[] deptPath  = dept.getDepartmentpath().split("::");
 		
 		//Check user role
 		for (Role role: roleList) {
@@ -111,15 +108,15 @@ public class AdminOrganController {
 	@ResponseBody
 	public String getSimpleSubDept(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request) throws JsonProcessingException {
 		logger.debug("======================getSimpleSubDept start======================");
-		ObjectMapper om = new ObjectMapper();
-		User user = commonUtil.getUserInfo(loginCookie);
-		int tenantId = user.getTenantid();
-		String deptID = request.getParameter("deptID");
 		
-		SimpleDepartment dept = deptService.getSimpleDeptList(deptID, tenantId);
+		ObjectMapper om       = new ObjectMapper();
+		User user 			  = commonUtil.getUserInfo(loginCookie);
+		int tenantId 		  = user.getTenantid();
+		String deptID 		  = request.getParameter("deptID");		
+		SimpleDepartment dept = deptService.getSimpleDeptList(deptID, tenantId);	
+		
 		getAllSubDepts(dept, tenantId, 1);	
-		
-		logger.debug("CHECK: " + om.writeValueAsString(dept));
+
 		logger.debug("======================getSimpleSubDept end======================");
 		return om.writeValueAsString(dept);	 		
 	}	
@@ -135,20 +132,22 @@ public class AdminOrganController {
 	public String getDetailInfo(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request) throws JsonProcessingException {
 		logger.debug("======================getDetailInfo start======================");
 		ObjectMapper om = new ObjectMapper();
-		User user = commonUtil.getUserInfo(loginCookie);
-		int tenantId = user.getTenantid();
-		String deptID = request.getParameter("deptID");
-		String mode = request.getParameter("optionVal");
+		User user 		= commonUtil.getUserInfo(loginCookie);
+		int tenantId 	= user.getTenantid();
+		String deptID 	= request.getParameter("deptID");
+		String mode 	= request.getParameter("optionVal");
 		FailObject fail = new FailObject();
 		
-		logger.debug("Check mode: " + mode + " || DeptID: " + deptID);
+		//logger.debug("Check mode: " + mode + " || DeptID: " + deptID);
 		
 		if (mode.equals("muser")) {
 			List<User> listUser = userService.findUsersInAdminMode(deptID, tenantId);
+			
 			if (listUser.isEmpty()) {
 				logger.debug("======================getDetailInfo end======================");
 				return om.writeValueAsString(fail);
-			}			
+			}	
+			
 			logger.debug("======================getDetailInfo end======================");			
 			return om.writeValueAsString(listUser);
 		}
@@ -157,12 +156,14 @@ public class AdminOrganController {
 			if (listSimpleDept.isEmpty()) {
 				logger.debug("======================getDetailInfo end======================");
 				return om.writeValueAsString(fail);
-			}			
+			}	
+			
 			logger.debug("======================getDetailInfo end======================");			
 			return om.writeValueAsString(listSimpleDept);
 		}	
 		else {
 			Department dept = deptService.findByDepartmentidAndTenantid(deptID, tenantId);
+			
 			if (dept.getParentdept().equals("self")) {
 				SimpleDepartment company = deptService.getSimpleDeptList(deptID, tenantId);
 				logger.debug("======================getDetailInfo end======================");				
@@ -280,10 +281,7 @@ public class AdminOrganController {
 		String deptName = request.getParameter("deptName") != null ? request.getParameter("deptName") : "";
 		String userId   = request.getParameter("userId")   != null ? request.getParameter("userId")   : "";
 		
-		logger.debug("BAONK DEPTID: " + deptId);
-		
-		if (!deptId.equals("")) {
-			logger.debug("Haizz");
+		if (!deptId.equals("")) {			
 			User user = new User();
 			model.addAttribute("user", user);
 			model.addAttribute("deptID", deptId);
@@ -309,12 +307,11 @@ public class AdminOrganController {
 	@RequestMapping(value="/admin/moveUser", method = RequestMethod.GET)
 	public String moveUser(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, Model model) throws JsonProcessingException{	
 		logger.debug("----------------------Move user is running-----------------------!");
-		ObjectMapper om = new ObjectMapper();
-		User loginUser	= commonUtil.getUserInfo(loginCookie);		
-		int tenantId = loginUser.getTenantid();
-		String userId   = request.getParameter("userId")   != null ? request.getParameter("userId")   : "";
-		
-		User clickedUser = userService.findUserByUseridAndTenantid(userId, tenantId);		
+		ObjectMapper om		  = new ObjectMapper();
+		User loginUser		  = commonUtil.getUserInfo(loginCookie);		
+		int tenantId 		  = loginUser.getTenantid();
+		String userId   	  = request.getParameter("userId") != null ? request.getParameter("userId") : "";		
+		User clickedUser 	  = userService.findUserByUseridAndTenantid(userId, tenantId);		
 		SimpleDepartment dept = deptService.getSimpleDeptList(clickedUser.getCompanyid(), tenantId);
 		
 		getAllSubDepts(dept, tenantId, 1);
@@ -334,14 +331,15 @@ public class AdminOrganController {
 	
 	@RequestMapping(value="/admin/saveMovedUser", method = RequestMethod.POST)
 	public void saveMovedUser(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException{	
-		logger.debug("----------------------Save moved user is running-----------------------!");	
-		User loginUser	= commonUtil.getUserInfo(loginCookie);		
-		int tenantId = loginUser.getTenantid();
-		String userId      = request.getParameter("userId")   	!= null ? request.getParameter("userId")      : "";
-		String newDeptId   = request.getParameter("newDeptId")  != null ? request.getParameter("newDeptId")   : "";
+		logger.debug("----------------------Save moved user is running-----------------------!");
 		
-		User movedUser = userService.findUserByUseridAndTenantid(userId, tenantId);		
+		User loginUser	   = commonUtil.getUserInfo(loginCookie);		
+		int tenantId 	   = loginUser.getTenantid();
+		String userId      = request.getParameter("userId")   	!= null ? request.getParameter("userId")      : "";
+		String newDeptId   = request.getParameter("newDeptId")  != null ? request.getParameter("newDeptId")   : "";		
+		User movedUser     = userService.findUserByUseridAndTenantid(userId, tenantId);		
 		Department newDept = deptService.findByDepartmentidAndTenantid(newDeptId, tenantId);
+		
 		movedUser.setDepartmentid(newDept.getDepartmentid());
 		movedUser.setDepartmentname(newDept.getDepartmentname());		
 		userService.updateUser(movedUser);
@@ -358,11 +356,12 @@ public class AdminOrganController {
 	@RequestMapping(value="/admin/deleteUser", method = RequestMethod.POST)	
 	public void deleteUser(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException{	
 		logger.debug("----------------------Delete user is running-----------------------!");	
+		
 		User loginUser	= commonUtil.getUserInfo(loginCookie);		
 		int tenantId 	= loginUser.getTenantid();
-		String userId   = request.getParameter("userId") != null ? request.getParameter("userId") : "";		
-		
+		String userId   = request.getParameter("userId") != null ? request.getParameter("userId") : "";			
 		User deleteUser = userService.findUserByUseridAndTenantid(userId, tenantId);		
+		
 		try {
 			userService.deleteUser(deleteUser);			
 		}
@@ -384,11 +383,10 @@ public class AdminOrganController {
 	public ValidateResponseObject createNewUser(HttpServletRequest request, @CookieValue("loginCookie")String loginCookie, @Valid User user, BindingResult bindingResult, Model model) throws JsonProcessingException {
 		logger.debug("-------------------createNewUser is running---------------------!");
 		
-		User currentUser = commonUtil.getUserInfo(loginCookie);
-		int tenantId = currentUser.getTenantid();		
-		ValidateResponseObject response = new ValidateResponseObject();
-		
-		User userExists = userService.findUserByUseridAndTenantid(user.getUserid(), tenantId);
+		User currentUser 				= commonUtil.getUserInfo(loginCookie);
+		int tenantId 					= currentUser.getTenantid();		
+		ValidateResponseObject response = new ValidateResponseObject();		
+		User userExists 				= userService.findUserByUseridAndTenantid(user.getUserid(), tenantId);
 		
 		if (userExists != null) {		
 			logger.debug("User Id existed!");
@@ -407,9 +405,10 @@ public class AdminOrganController {
 	         response.setErrorMessages(errors);			
 		}
 		else {
-			String deptID = user.getDepartmentid();
-			Department dept = deptService.findByDepartmentidAndTenantid(deptID, tenantId);
-			Department company = deptService.findByDepartmentidAndTenantid(dept.getCompanyId(), tenantId);
+			String deptID 		= user.getDepartmentid();
+			Department dept 	= deptService.findByDepartmentidAndTenantid(deptID, tenantId);
+			Department company  = deptService.findByDepartmentidAndTenantid(dept.getCompanyId(), tenantId);
+			
 			user.setTenantid(tenantId);
 			user.setCompanyid(company.getCompanyId());
 			user.setCompanyname(company.getCompanyName());					
@@ -442,11 +441,10 @@ public class AdminOrganController {
 	public ValidateResponseObject updateUser(HttpServletRequest request, @CookieValue("loginCookie")String loginCookie, @Valid User user, BindingResult bindingResult, Model model) throws JsonProcessingException {
 		logger.debug("-------------------createNewUser is running---------------------!");
 		
-		User currentUser = commonUtil.getUserInfo(loginCookie);
-		int tenantId = currentUser.getTenantid();		
-		ValidateResponseObject response = new ValidateResponseObject();
-		
-		User userExists = userService.findUserByUseridAndTenantid(user.getUserid(), tenantId);
+		User currentUser				= commonUtil.getUserInfo(loginCookie);
+		int tenantId 					= currentUser.getTenantid();		
+		ValidateResponseObject response = new ValidateResponseObject();		
+		User userExists 				= userService.findUserByUseridAndTenantid(user.getUserid(), tenantId);
 		
 		if (userExists == null) {		
 			logger.debug("Error: user not found!");
@@ -537,7 +535,7 @@ public class AdminOrganController {
         
         String extend 	   = pFileName.substring(pFileName.lastIndexOf(".") + 1);
         String newFileName = pUploadSN + "." + extend;         
-        String finalPath = "/file/uploadFile/" + newFileName;
+        String finalPath   = "/file/uploadFile/" + newFileName;
 
         commonUtil.writeUploadedFile(multiFile.get(0), newFileName, pDirPath + "uploadFile");          
         
