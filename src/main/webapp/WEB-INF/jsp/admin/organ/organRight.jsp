@@ -25,6 +25,7 @@
 	</head>
 	<body class="rightbody">
 		<h1>Company organization</h1>
+		<a class="exportBttn" style="vertical-align:middle"><span onClick="exportFile()">Export File</span></a>
 		<div style="height: 703px;">
 			<table style="margin-top:10px; width: 100%;">
 				<tr>
