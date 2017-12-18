@@ -1,10 +1,14 @@
 package com.nv.baonk.vo;
 
-public class FailObject {
+public class ResponseObject {
 	private String result;
+		
+	public ResponseObject() {
+		
+	}
 	
-	public FailObject() {
-		this.result = "Error";
+	public ResponseObject(String result) {
+		this.result = result;
 	}
 
 	public String getResult() {

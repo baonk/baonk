@@ -32,11 +32,6 @@
 			<div style="display:block; float:left;"><span class="welcome">Welcome ${userName}</span></div>
 			<c:if test="${role == 'ADMIN' }">
 				<div style="display:block; float:left;"><span class="welcome" id="admin" onclick="adminPage();">Administrator</span></div>			
-			</c:if>		
- 			<c:if test="${role != 'ADMIN' }">
-				<script type="text/javascript">
-					document.getElementById("topmenu").style.width = "190px";
-				</script>		
 			</c:if>	
 			<div class ="logout" onclick="logout();">Logout</div>	
 		</div>	

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,7 +32,7 @@ import com.nv.baonk.common.CommonUtil;
 import com.nv.baonk.service.DepartmentService;
 import com.nv.baonk.service.UserService;
 import com.nv.baonk.vo.Department;
-import com.nv.baonk.vo.FailObject;
+import com.nv.baonk.vo.ResponseObject;
 import com.nv.baonk.vo.Role;
 import com.nv.baonk.vo.SimpleDepartment;
 import com.nv.baonk.vo.ValidateResponseObject;
@@ -45,6 +46,8 @@ public class AdminOrganController {
 	private DepartmentService deptService;	
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private BCryptPasswordEncoder BCryptPass;
 	
 	private final Logger logger = LoggerFactory.getLogger(AdminOrganController.class);
 	
@@ -136,7 +139,7 @@ public class AdminOrganController {
 		int tenantId 	= user.getTenantid();
 		String deptID 	= request.getParameter("deptID");
 		String mode 	= request.getParameter("optionVal");
-		FailObject fail = new FailObject();
+		ResponseObject fail = new ResponseObject("Error");
 		
 		//logger.debug("Check mode: " + mode + " || DeptID: " + deptID);
 		
@@ -345,6 +348,66 @@ public class AdminOrganController {
 		userService.updateUser(movedUser);
 		
 		logger.debug("-----------------------Save moved User end-----------------------------!");		
+	}	
+	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Map the change user's password request of administrator privilege users.
+	 ****   	 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value="/admin/changeUserPasswd", method = RequestMethod.GET)
+	public String changeUserPasswd(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, Model model) throws JsonProcessingException{	
+		logger.debug("----------------------Change user passwd is running-----------------------!");
+		
+		String userId = request.getParameter("userId") != null ? request.getParameter("userId") : "";			
+		model.addAttribute("userID", userId);	
+		
+		logger.debug("-----------------------Change user passwd end-----------------------------!");	
+		
+		return "admin/organ/changeUserPasswd";
+	}	
+	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Map the save new user's password request of administrator privilege users.
+	 ****   	 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value="/admin/saveUserNewPassword", method = RequestMethod.POST)
+	@ResponseBody
+	public String saveNewPassword(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, Model model) throws JsonProcessingException{	
+		logger.debug("----------------------Save new user's passwd is running-----------------------!");
+		
+		ResponseObject rObj 	= new ResponseObject();
+		ObjectMapper om    		= new ObjectMapper();
+		User currentUser		= commonUtil.getUserInfo(loginCookie);
+		String userId 			= request.getParameter("userId") != null ? request.getParameter("userId") : "";
+		String newPasswd	    = request.getParameter("newPasswd");			
+		
+		if (newPasswd.length() < 5) {
+			rObj.setResult("Password must have at least 5 characters!");			
+			return om.writeValueAsString(rObj);
+		}
+		
+		User changedPassWdUser  = userService.findUserByUseridAndTenantid(userId, currentUser.getTenantid());	
+		String encodedPassword  = BCryptPass.encode(newPasswd);
+		changedPassWdUser.setPassword(encodedPassword);
+		
+		logger.debug("NEW PASSWORD: " + encodedPassword);
+		
+		try {
+			userService.updateUser(changedPassWdUser);
+			rObj.setResult("OK");		
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			rObj.setResult("FAIL");
+		}
+		
+		logger.debug("-----------------------Save new user's passwd end-----------------------------!");	
+		
+		return om.writeValueAsString(rObj);
 	}	
 	
 	/*******************************************************************************************************************************

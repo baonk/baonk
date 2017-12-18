@@ -5,13 +5,12 @@
 <html>
 	<head>
 		<title>Move User</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">		
-		<!-- <link rel="stylesheet" type="text/css" href="/css/registration.css" /> -->
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">				
 		<link rel="stylesheet" type="text/css" href="/css/general.css" />
 		<link rel="stylesheet" type="text/css" href="/css/popup.css" />	
 		<script	src="/js/jquery/jquery.min.js"></script>
 	    <script	src="/js/admin/organization/management2.js"></script>
-	    <script	src="/js/popup.js"></script>	    
+	    <script	src="/js/popup.js"></script>	        
 		<script type="text/javascript" language="javascript">
 			var listDepts  = ${listDepartment};
 			var usercompID = "<c:out value='${usercompID}'/>";

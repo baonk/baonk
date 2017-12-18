@@ -386,7 +386,7 @@
 	}
 	
 	function addUser() {
-		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)){
+		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {
 			alert("Please select a department!");
 			return;
 		}
@@ -399,7 +399,7 @@
 	
 	
 	function displayUserInfo() {		
-		if (!currentClickedItem && !document.getElementById(currentClickedItem)){
+		if (!currentClickedItem && !document.getElementById(currentClickedItem)) {
 			alert("Please select a user!");
 			return;
 		}
@@ -410,7 +410,7 @@
 	}
 	
 	function moveUser() {
-		if (!currentClickedItem && !document.getElementById(currentClickedItem)){
+		if (!currentClickedItem && !document.getElementById(currentClickedItem)) {
 			alert("Please select a user!");
 			return;
 		}
@@ -420,8 +420,19 @@
 		divPopUpShow(400, 400, "/admin/moveUser?userId=" + currentUserId);
 	}
 	
+	function changeUserPassWd() {
+		if (!currentClickedItem && !document.getElementById(currentClickedItem)) {
+			alert("Please select a user!");
+			return;
+		}
+		
+		var currentUserId = currentClickedItem.split("-")[0];		
+		
+		divPopUpShow(400, 160, "/admin/changeUserPasswd?userId=" + currentUserId);
+	}
+	
 	function delUser() {
-		if (!currentClickedItem && !document.getElementById(currentClickedItem)){
+		if (!currentClickedItem && !document.getElementById(currentClickedItem)) {
 			alert("Please select a user!");
 			return;
 		}
@@ -448,5 +459,5 @@
 				}
 			});	
 		}	
-	}
+	}	
 	

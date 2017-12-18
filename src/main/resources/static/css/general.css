@@ -285,6 +285,9 @@ table {
     margin: 8px 4px 4px 4px;
 }
 
+.changePasswdTbl {margin: 10px 5px 4px 5px; width: 390px; height: 80px; border: 1px solid #B6B6B6; border-collapse: collapse;}
+.changePasswdTbl tr {width: 390px;}
+
 .subMainTab {border-bottom: 1px solid #B6B6B6; vertical-align: middle; position: relative; height: 30px; background-color: #d9d9d9;}
 .subHeaderTab {position: absolute; display:inline; top: 7px;}
 
@@ -296,4 +299,6 @@ table {
 .subOff {color: black;}
 
 .baonBttn{ white-space:nowrap; display:inline-block; cursor: pointer;	height:25px; vertical-align:top; cursor:pointer;}
-.baonBttn span{ display:inline-block; border:1px solid #d0d0d0; border-radius:3px; padding:0px 10px; height:25px;	font:12px gulim; letter-spacing:-1; vertical-align:top;	line-height:25px;}
+.baonBttn span{ display:inline-block; border:1px solid #d0d0d0; border-radius:3px; padding:0px 10px; height:25px; font:12px gulim; letter-spacing:-1; vertical-align:top;	line-height:25px;}
+.passwdInput { width: 230px; height: 28px; padding: 0px; margin: 0px 5px 0px 5px; font-size: 12px; line-height: 28px; color: #555; background-color: #fff; background-image: none; border: 1px solid #ccc; border-radius: 3px; -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075); box-shadow: inset 0 1px 1px rgba(0,0,0,.075); -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s; -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s; transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;}
+
