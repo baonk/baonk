@@ -33,10 +33,10 @@
 		        buttonImage: "/images/calendar-month.gif",
 		        buttonImageOnly: true
 		    });
+			
 		    $("#txtBirthday").datepicker("option", "dateFormat", "yy-mm-dd");			
 			
-			if (mode != "add") {
-				console.log("Here!");
+			if (mode != "add") {				
 				$("#txtBirthday").datepicker("setDate", birthDay);
 
 				document.getElementById("deptName").value  = "<c:out value='${user.departmentid}'/>";			
@@ -140,7 +140,7 @@
 		<div class="">			
 			<form:form modelAttribute="user" action="/admin/addUser" method="post" class="form-horizontal" id="formSubmit">
 				<div class="mainTop">
-					<div id="saveBttn">
+					<div id="saveBttn" style="${mode != 'add' ? 'display: none;': ''}">
 				    	<ul>
 				            <li><span onclick="saveUser()">Save</span></li>	
 				             <li><span onclick="imageAdd()">Add Image</span></li>	
@@ -169,24 +169,24 @@
 			            </td>
 			            <th style="width: 71px; text-align:center">User ID<span style="color:red"> *</span></th>
 			            <td style="width: 220px">
-			            	<form:input type="text" path="userid" placeholder="User ID" class="baonk-control-1 baonk" maxlength="20"  id="_userID"/>
+			            	<form:input type="text" path="userid" placeholder="User ID" class="baonk-control-1 baonk" maxlength="20"  id="_userID" readonly="${mode != 'add' ? 'true': 'false'}" />
 							<lable id="userid" class="text-danger"/>			                
 			            </td>
 			            <th style="width: 71px; text-align:center">User Password<span style="color:red"> *</span></th>
 			            <td style="width: 220px;">
-			            	<form:input type="password" path="password" placeholder="Password" class="baonk-control-1 baonk" maxlength="50" id="_passWord"/>
+			            	<form:input type="password" path="password" placeholder="Password" class="baonk-control-1 baonk" maxlength="50" id="_passWord" readonly="${mode != 'add' ? 'true': 'false'}" />
 							<lable id="password" class="text-danger"/>			                
 			            </td>
 			        </tr>
 			        <tr>
 			            <th style="width: 71px; text-align:center">User Name<span style="color:red"> *</span></th>
 			            <td style="width: 220px;">		
-			            	<form:input type="text" path="username" placeholder="User Name" class="baonk-control-1 baonk" id="_userName"/>
+			            	<form:input type="text" path="username" placeholder="User Name" class="baonk-control-1 baonk" id="_userName" readonly="${mode != 'add' ? 'true': 'false'}" />
 							<lable id="username" class="text-danger"/>			            	
 			            </td>
 			            <th style="width: 71px; text-align:center">Department ID</th>
 			            <td style="width: 220px;">
-			            	<form:input type="text" id="deptName" path="departmentname" placeholder="Department Name" class="baonk-control-1 baonk" readonly="true" maxlength="50"/>
+			            	<form:input type="text" id="deptName" path="departmentname" placeholder="Department Name" class="baonk-control-1 baonk" readonly="true" maxlength="50" />
 							<form:errors path="departmentname" cssClass="text-danger"/>	
 							<form:input type="text" id="deptID" path="departmentid"  readonly="true" maxlength="50" style="display: none;"/>
 							<form:errors path="departmentid" cssClass="text-danger"/>			                
@@ -196,7 +196,7 @@
 			            <th style="width: 71px; text-align:center">Position</th>
 			            <td style="width: 220px;">
 			            	<%-- <form:input type="text" path="position" placeholder="Position" class="baonk-control-1 baonk" maxlength="50"/> --%>
-			            	<form:select path="position">
+			            	<form:select path="position" class="baonk-control-5 baonk" disabled="${mode != 'add' ? 'true': 'false'}">
 			            		<form:option value="System Developer"></form:option>
 			            		<form:option value="Manager"></form:option>
 			            		<form:option value="Web Developer"></form:option>
@@ -208,31 +208,31 @@
 			            </td>
 			            <th style="width: 71px; text-align:center">Other position</th>
 			            <td style="width: 220px;">
-			            	<form:input type="text" path="otherpos" placeholder="Other Position" class="baonk-control-1 baonk" maxlength="50"/>
+			            	<form:input type="text" path="otherpos" placeholder="Other Position" class="baonk-control-1 baonk" maxlength="50" readonly="${mode != 'add' ? 'true': 'false'}" />
 							<form:errors path="otherpos" cssClass="text-danger"/>			                
 			            </td>
 			        </tr>       
 			        <tr>
 			            <th style="width: 71px; text-align:center">Birthday<span style="color:red"> *</span></th>
 			            <td style="width: 220px;">
-			            	<form:input type="text" path="birthday" placeholder="Birthday" class="baonk-control-1 baonk" id="txtBirthday" style="text-align: center; width: 120px;"/>
+			            	<form:input type="text" path="birthday" placeholder="Birthday" class="baonk-control-1 baonk" id="txtBirthday" style="text-align: center; width: 120px;" readonly="${mode != 'add' ? 'true': 'false'}" />
 							<lable id="birthday" class="text-danger"/>			                           
 			            </td>
 			            <th style="width: 71px; text-align:center">Hobby</th>
 			            <td style="width: 220px;" >
-			            	<form:input type="text" path="hobby" placeholder="Hobby" class="baonk-control-1 baonk" />
+			            	<form:input type="text" path="hobby" placeholder="Hobby" class="baonk-control-1 baonk" readonly="${mode != 'add' ? 'true': 'false'}" />
 							<form:errors path="hobby" cssClass="text-danger"/>			                
 			            </td>
 			        </tr>    
 			       	<tr>
 			            <th style="width: 71px; text-align:center">Email<span style="color:red"> *</span></th>
 			            <td style="width: 220px;">
-			            	<form:input type="text" path="email" placeholder="Email" class="baonk-control-1 baonk" id="_email"/>
+			            	<form:input type="text" path="email" placeholder="Email" class="baonk-control-1 baonk" id="_email" readonly="${mode != 'add' ? 'true': 'false'}" />
 							<lable id="email" class="text-danger"/>			                             
 			            </td>
 			            <th style="width: 71px; text-align:center">Phone number</th>
 			            <td style="width: 220px;" >
-			            	<form:input type="text" path="phone" placeholder="Phone Number" class="baonk-control-1 baonk" maxlength="20"/>
+			            	<form:input type="text" path="phone" placeholder="Phone Number" class="baonk-control-1 baonk" maxlength="20" readonly="${mode != 'add' ? 'true': 'false'}" />
 							<form:errors path="phone" cssClass="text-danger"/>			                
 			            </td>
 			        </tr>    
@@ -248,32 +248,32 @@
 			        <tr>
 			            <th style="width: 70px; text-align:center">Home Phone</th>
 			            <td style="width: 150px">
-			               <form:input type="text" path="homephone" placeholder="Home Phone" class="baonk-control-2 baonk" maxlength="50"/>
+			               <form:input type="text" path="homephone" placeholder="Home Phone" class="baonk-control-2 baonk" maxlength="50" readonly="${mode != 'add' ? 'true': 'false'}" />
 			            </td>
 			            <th style="width: 70px; text-align:center">Fax Number</th>
 			            <td style="width: 150px">
-			                <form:input type="text" path="fax" placeholder="Fax Number" class="baonk-control-2 baonk" maxlength="50"/>
+			                <form:input type="text" path="fax" placeholder="Fax Number" class="baonk-control-2 baonk" maxlength="50" readonly="${mode != 'add' ? 'true': 'false'}" />
 			            </td>
 			            <th style="width: 70px; text-align:center">Post Code</th>
 			            <td style="width: 150px">
-			                <form:input type="text" path="postcode" placeholder="Post Code" class="baonk-control-2 baonk" maxlength="50"/>
+			                <form:input type="text" path="postcode" placeholder="Post Code" class="baonk-control-2 baonk" maxlength="50" readonly="${mode != 'add' ? 'true': 'false'}" />
 			            </td>
 			        </tr>
 			       <tr>
 			            <th style="width: 70px; text-align:center">Nick Name</th>
 			            <td style="width: 150px">
-			                <form:input type="text" path="nickname" placeholder="Nick Name" class="baonk-control-2 baonk" maxlength="50"/>
+			                <form:input type="text" path="nickname" placeholder="Nick Name" class="baonk-control-2 baonk" maxlength="50" readonly="${mode != 'add' ? 'true': 'false'}" />
 			            </td>
 			            <th style="width: 70px; text-align:center">Sex</th>
 			            <td style="width: 150px">
-			            	<form:select path="sex" class="baonk-control-4 baonk">
+			            	<form:select path="sex" class="baonk-control-4 baonk" disabled="${mode != 'add' ? 'true': 'false'}">
 			            		<form:option value="Male"></form:option>
 			            		<form:option value="Female"></form:option>
 			            	</form:select>			            	
 			            </td>
 			            <th style="width: 70px; text-align:center">Country</th>
 			            <td style="width: 150px">
-			            	<form:select path="country" class="baonk-control-4 baonk">
+			            	<form:select path="country" class="baonk-control-4 baonk" disabled="${mode != 'add' ? 'true': 'false'}">
 			            		<form:option value="VietNam"></form:option>
 			            		<form:option value="Korea"></form:option>
 			            		<form:option value="Japan"></form:option>
@@ -286,7 +286,7 @@
 			        <tr>
 			            <th style="width: 70px; text-align:center">Home Address</th>
 			            <td colspan="5">
-			                <form:input type="text" path="homeaddress" placeholder="Home Address" class="baonk-control-3 baonk" maxlength="250"/>
+			                <form:input type="text" path="homeaddress" placeholder="Home Address" class="baonk-control-3 baonk" maxlength="250" readonly="${mode != 'add' ? 'true': 'false'}" />
 			            </td>
 			        </tr>
 			    </table>  

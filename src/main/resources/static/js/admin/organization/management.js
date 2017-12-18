@@ -18,6 +18,7 @@
 			span.setAttribute("deptId", listDepts[i]["departmentid"]);
 			span.setAttribute("style", "cursor: pointer;");
 			span.setAttribute("name", listDepts[i]["departmentid"]);
+			span.setAttribute("class", "subOff");
 			span.onclick = function () {getDetailData(this);};
 			
 			divEl.appendChild(img1);
@@ -244,6 +245,7 @@
 			span.setAttribute("style", "cursor: pointer;");
 			span.setAttribute("deptId", list[i]["departmentid"]);
 			span.setAttribute("name", list[i]["departmentid"]);
+			span.setAttribute("class", "subOff");
 			span.onclick = function () {getDetailData(this);};
 			
 			divEl.appendChild(img1);
@@ -435,13 +437,14 @@
 				data: {
 					"userId" : currentUserId					
 				},
-				dataType: "JSON",
+				dataType: "text",
 				async: true,
-				success: function(result) {												
+				success : function(data, textStatus, jqXHR) {											
 					alert("Delete user successful!");
+					refreshView();
 				},
-				error: function (xhr, status, e){
-					alert("Cannot delete this user!");
+ 				error : function(jqXHR, textStatus, errorThrown) {            	    
+					alert("Cannot delete this user! Error: " + jqXHR.status + ", " + textStatus);
 				}
 			});	
 		}	

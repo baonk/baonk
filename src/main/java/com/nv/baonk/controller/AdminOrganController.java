@@ -333,7 +333,7 @@ public class AdminOrganController {
 	********************************************************************************************************************************/
 	
 	@RequestMapping(value="/admin/saveMovedUser", method = RequestMethod.POST)
-	public String saveMovedUser(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException{	
+	public void saveMovedUser(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException{	
 		logger.debug("----------------------Save moved user is running-----------------------!");	
 		User loginUser	= commonUtil.getUserInfo(loginCookie);		
 		int tenantId = loginUser.getTenantid();
@@ -346,8 +346,7 @@ public class AdminOrganController {
 		movedUser.setDepartmentname(newDept.getDepartmentname());		
 		userService.updateUser(movedUser);
 		
-		logger.debug("-----------------------Save moved User end-----------------------------!");
-		return "admin/organ/moveUser";
+		logger.debug("-----------------------Save moved User end-----------------------------!");		
 	}	
 	
 	/*******************************************************************************************************************************
@@ -356,9 +355,8 @@ public class AdminOrganController {
 	 ****   	 
 	********************************************************************************************************************************/
 	
-	@RequestMapping(value="/admin/deleteUser", method = RequestMethod.POST)
-	@ResponseBody
-	public String deleteUser(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException{	
+	@RequestMapping(value="/admin/deleteUser", method = RequestMethod.POST)	
+	public void deleteUser(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException{	
 		logger.debug("----------------------Delete user is running-----------------------!");	
 		User loginUser	= commonUtil.getUserInfo(loginCookie);		
 		int tenantId 	= loginUser.getTenantid();
@@ -366,16 +364,13 @@ public class AdminOrganController {
 		
 		User deleteUser = userService.findUserByUseridAndTenantid(userId, tenantId);		
 		try {
-			userService.deleteUser(deleteUser);
-			logger.debug("-----------------------Delete user end-----------------------------!");
-			return "OK";
+			userService.deleteUser(deleteUser);			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		} 
 		
-		logger.debug("-----------------------Delete user end-----------------------------!");	
-		return "FAIL";
+		logger.debug("-----------------------Delete user end-----------------------------!");			
 	}
 	
 	/*******************************************************************************************************************************
