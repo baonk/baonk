@@ -1,6 +1,8 @@
 package com.nv.baonk.controller;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -394,7 +396,7 @@ public class AdminOrganController {
 		String encodedPassword  = BCryptPass.encode(newPasswd);
 		changedPassWdUser.setPassword(encodedPassword);
 		
-		logger.debug("NEW PASSWORD: " + encodedPassword);
+		//logger.debug("NEW PASSWORD: " + encodedPassword);
 		
 		try {
 			userService.updateUser(changedPassWdUser);
@@ -409,6 +411,39 @@ public class AdminOrganController {
 		
 		return om.writeValueAsString(rObj);
 	}	
+	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Map the export excel file request of administrator privilege users.
+	 ****   @throws Exception 
+	 ****   	 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value="/admin/exportExcelFile", method = RequestMethod.GET)	
+	public void exportExcelFile(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, HttpServletResponse response) throws Exception{	
+		logger.debug("----------------------Export excel file is running-----------------------!");		
+		User currentUser			  = commonUtil.getUserInfo(loginCookie);		
+		String companyId 			  = request.getParameter("companyId") != null ? request.getParameter("companyId") : "";		
+		List<User> listOfUsers  	  = userService.findAllCompanyEmployees(companyId, currentUser.getTenantid());   
+		List<Department> listOfDepts  = deptService.getAllDepartmentsOfCompany(companyId, currentUser.getTenantid());
+		
+		/*Collections.sort(listOfUsers, (User user1, User user2) -> {
+        	return user1.getDepartmentid().compareTo(user2.getDepartmentid());
+		});*/
+		
+		Collections.sort(listOfUsers, Comparator.comparing(User::getDepartmentid));
+		Collections.sort(listOfDepts, Comparator.comparing(Department::getDepartmentid));
+		
+        String realPath = request.getServletContext().getRealPath("");
+        String fileName	= "exportInformation.xls";
+        String fullPath	= commonUtil.createExcelReportFile(listOfUsers, listOfDepts, realPath, fileName);        
+		
+		commonUtil.downFile(request, response, fullPath, fileName);
+		
+		logger.debug("-----------------------Export excel file end-----------------------------!");	
+
+	}	
+	
 	
 	/*******************************************************************************************************************************
 	 ****	 
@@ -561,6 +596,12 @@ public class AdminOrganController {
 		return "admin/organ/employeePicture";
 	}		
 	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Map the add user sign image upload request of administrator privilege users.
+	 ****		 
+	********************************************************************************************************************************/
+	
 	@RequestMapping(value = "/admin/organ/signImageUpload", method = RequestMethod.POST)
 	@ResponseBody
 	public String signImageUpload(HttpServletRequest req, Model model, MultipartHttpServletRequest request) throws Exception{
@@ -606,8 +647,7 @@ public class AdminOrganController {
 		logger.debug("-----------------------signImageUpload end-----------------------------!");
 		
 		return result;
-	}
-	
+	}	
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {

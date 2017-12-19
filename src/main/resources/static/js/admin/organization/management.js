@@ -461,3 +461,21 @@
 		}	
 	}	
 	
+	function exportFile() {		
+		$.ajax({			
+			type: "GET",
+			url: "/admin/exportExcelFile",
+			data: {
+				"companyId" : usercompID					
+			},
+			dataType: "text",
+			async: true,
+			success : function(data, textStatus, jqXHR) {											
+
+			},
+				error : function(jqXHR, textStatus, errorThrown) {            	    
+				alert("Error: " + jqXHR.status + ", " + textStatus);
+			}
+		});	
+	}
+	

@@ -19,8 +19,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     EntityManager em;
 	
 	@Override
-	public List<Department> getAllCompanies(String parentDept, int tenantID) {		
-		return departRepository.findByParentdeptAndTenantid(parentDept, tenantID);
+	public List<Department> getAllDepartmentsOfCompany(String companyId, int tenantID) {		
+		return departRepository.findByCompanyIdAndTenantid(companyId, tenantID);
 	}
 
 	@Override

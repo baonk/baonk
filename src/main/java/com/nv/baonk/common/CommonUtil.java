@@ -1,6 +1,8 @@
 package com.nv.baonk.common;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -38,10 +40,15 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,6 +57,7 @@ import org.xml.sax.InputSource;
 
 import com.nv.baonk.security.SecurityConfigBaonk;
 import com.nv.baonk.service.UserService;
+import com.nv.baonk.vo.Department;
 import com.nv.baonk.vo.User;
 
 
@@ -58,6 +66,7 @@ public class CommonUtil {
 	
 	public static final String PT_BASIC = "basic";
 	public static final String PT_STANDARD = "standard";
+	public static final int BUFF_SIZE = 4096;
 	
 	@Autowired
     private SecurityConfigBaonk securityConfBaonk;
@@ -88,6 +97,174 @@ public class CommonUtil {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public String getEncodedFileNameForDownload(String userAgentValue, String filename) {
+		try {
+			// in case of IE & Edge
+			// the filename needs to be UTF-8 and URL-encoded.
+			// URI class is more appropriate than URLEncoder class for this purpose.
+			if (userAgentValue.contains("Trident") || userAgentValue.contains("Edge")) {
+ 
+				filename = filename.replaceAll(":", "%3A");
+				URI uri = new URI(null, null, filename, null);
+				filename = uri.toASCIIString();				
+				filename = filename.replaceAll("%253A", "%3A");
+			}
+			// in case of Chrome, Safari
+			// the filename consists of UTF-8 encoded bytes.
+			else {
+				filename = new String(filename.getBytes("UTF-8"), "ISO-8859-1");
+			}
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+
+		return filename;
+	}
+	
+	public void downFile(HttpServletRequest request, HttpServletResponse response, String downFileName, String orgFileName) throws Exception {
+		
+		orgFileName = getEncodedFileNameForDownload(request.getHeader("User-Agent"), orgFileName);
+		
+		File file = new File(downFileName);
+
+	
+		if (!file.exists()) {
+		    throw new FileNotFoundException(downFileName);
+		}
+	
+		if (!file.isFile()) {
+		    throw new FileNotFoundException(downFileName);
+		}		
+		
+		int fSize = (int)file.length();
+		
+		if (fSize > 0) {
+		    BufferedInputStream in = null;
+	
+		    try {
+		    	in = new BufferedInputStream(new FileInputStream(file));		    	
+	    	    String mimetype = "application/octet-stream"; //"application/x-msdownload"	
+
+	    	    response.setBufferSize(BUFF_SIZE);	    	    
+				response.setContentType(mimetype);
+				response.setHeader("Content-Disposition", "attachment; filename=\"" + orgFileName + "\"");				
+				response.setContentLength(fSize);
+				
+				FileCopyUtils.copy(in, response.getOutputStream());
+		    } 
+		    finally {
+				if (in != null) {
+				    try {
+				    	in.close();
+				    } 
+				    catch (Exception ignore) {
+				    	logger.debug("IGNORED: {}", ignore.getMessage());
+				    }
+				}
+		    }
+		    response.getOutputStream().flush();
+		    response.getOutputStream().close();
+		}
+	}
+	
+	public String createExcelReportFile(List<User> listOfUsers, List<Department> listOfDepts, String realPath, String fileName) throws IOException {
+		String fullPath 		 = realPath + "/file/uploadExcelFile/" + fileName;	
+		File file 				 = new File(realPath + "/file/uploadExcelFile");
+		
+		if (file == null || !file.exists()) {			
+			file.mkdir();
+		}
+		else {
+			FileUtils.cleanDirectory(file); 
+		}	
+		
+		FileOutputStream fileOut = null;
+		
+		HSSFWorkbook  workbook 	 = new HSSFWorkbook();
+		HSSFSheet sheet1 	     = workbook.createSheet("Employee Information");	
+		HSSFSheet sheet2 	     = workbook.createSheet("Department Information");
+		
+		//Process users' information
+		Row rowhead1 		     = sheet1.createRow(0);
+		
+        rowhead1.createCell(0).setCellValue("User ID");
+        rowhead1.createCell(1).setCellValue("User Name");
+        rowhead1.createCell(2).setCellValue("Birthday");
+        rowhead1.createCell(3).setCellValue("Email");
+        rowhead1.createCell(4).setCellValue("Position");
+        rowhead1.createCell(5).setCellValue("Other position");
+        rowhead1.createCell(6).setCellValue("Telephone number");
+        rowhead1.createCell(7).setCellValue("Homephone number");
+        rowhead1.createCell(8).setCellValue("Nick Name");
+        rowhead1.createCell(9).setCellValue("Sex");        
+        rowhead1.createCell(10).setCellValue("Address");
+        rowhead1.createCell(11).setCellValue("Country");
+        rowhead1.createCell(12).setCellValue("PostCode");
+        rowhead1.createCell(13).setCellValue("Hobby");
+        rowhead1.createCell(14).setCellValue("Department ID");
+        rowhead1.createCell(15).setCellValue("Department Name");
+        rowhead1.createCell(16).setCellValue("Company ID");
+        rowhead1.createCell(17).setCellValue("Company Name");
+		
+		int i = 1;	
+		
+		for (User user : listOfUsers) {
+			Row newRow1 = sheet1.createRow(i++);
+			
+			newRow1.createCell(0).setCellValue(user.getUserid());
+			newRow1.createCell(1).setCellValue(user.getUsername());
+			newRow1.createCell(2).setCellValue(user.getBirthday());
+			newRow1.createCell(3).setCellValue(user.getEmail());
+			newRow1.createCell(4).setCellValue(user.getPosition());
+			newRow1.createCell(5).setCellValue(user.getOtherpos());
+			newRow1.createCell(6).setCellValue(user.getPhone());
+			newRow1.createCell(7).setCellValue(user.getHomephone());
+			newRow1.createCell(8).setCellValue(user.getNickname());
+			newRow1.createCell(9).setCellValue(user.getSex());        
+			newRow1.createCell(10).setCellValue(user.getHomeaddress());
+			newRow1.createCell(11).setCellValue(user.getCountry());
+			newRow1.createCell(12).setCellValue(user.getPostcode());
+			newRow1.createCell(13).setCellValue(user.getHobby());
+			newRow1.createCell(14).setCellValue(user.getDepartmentid());
+			newRow1.createCell(15).setCellValue(user.getDepartmentname());
+			newRow1.createCell(16).setCellValue(user.getCompanyid());
+			newRow1.createCell(17).setCellValue(user.getCompanyname());
+		}
+		
+		//Process departments information		
+		Row rowhead2 = sheet2.createRow(0);
+		
+        rowhead2.createCell(0).setCellValue("Department ID");
+        rowhead2.createCell(1).setCellValue("Department Name");
+        rowhead2.createCell(2).setCellValue("Department Email");
+        rowhead2.createCell(3).setCellValue("Company ID");
+        rowhead2.createCell(4).setCellValue("Company Name");     
+        
+        i = 1;
+        
+        for (Department dept : listOfDepts) {
+			Row newRow2 = sheet2.createRow(i++);
+			
+			newRow2.createCell(0).setCellValue(dept.getDepartmentid());
+			newRow2.createCell(1).setCellValue(dept.getDepartmentname());
+			newRow2.createCell(2).setCellValue(dept.getEmail());
+			newRow2.createCell(3).setCellValue(dept.getCompanyId());
+			newRow2.createCell(4).setCellValue(dept.getCompanyName());
+		}        
+		
+		try {			
+			fileOut = new FileOutputStream(fullPath);
+			workbook.write(fileOut);
+            fileOut.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			fileOut.close();
+		}
+		
+		return fullPath;
 	}
 	
 	/*public LoginSimpleVO userInfoSimple(String loginCookie) {
@@ -224,33 +401,8 @@ public class CommonUtil {
 		}catch(Exception e){
 			return null;
 		}
-	}	
-		
-	public static String getEncodedFileNameForDownload(String userAgentValue, String filename) {
-		try {
-			// in case of IE & Edge
-			// the filename needs to be UTF-8 and URL-encoded.
-			// URI class is more appropriate than URLEncoder class for this purpose.
-			if (userAgentValue.contains("Trident") || userAgentValue.contains("Edge")) {
-			    // "자동회신:"과 같이 :이 제목에 포함되어 있는 경우 메일 저장하기 시, 한글파일명 깨지는 문제가 있어
-			    // :를 %3A로 변경한 후 URI 인코딩을 수행함. 
-				filename = filename.replaceAll(":", "%3A");
-				URI uri = new URI(null, null, filename, null);
-				filename = uri.toASCIIString();
-				// %3A에서 %가 %25로 인코딩되므로 다시 %3A로 변경함.
-				filename = filename.replaceAll("%253A", "%3A");
-			}
-			// in case of Chrome, Safari
-			// the filename consists of UTF-8 encoded bytes.
-			else {
-				filename = new String(filename.getBytes("UTF-8"), "ISO-8859-1");
-			}
-		} catch (Exception e) {			
-			e.printStackTrace();
-		}
-
-		return filename;
-	}
+	}			
+	
 	
 	public static void addXUACompatibleHeaderToResponse(HttpServletRequest request, HttpServletResponse response) {
 		String browser = ClientUtil.getClientInfo(request, "browser");

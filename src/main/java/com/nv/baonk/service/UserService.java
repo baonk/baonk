@@ -14,5 +14,6 @@ public interface UserService {
 	public Role findByRoleid(int roleId);	
 	public Role findByRolename(String roleName);
 	public List<User> findUsersInAdminMode(String deptID, int tenantId);
-	public void deleteUser(User user);
+	public void deleteUser(User user);	
+	public List<User> findAllCompanyEmployees(String companyId, int tenantId);
 }

@@ -9,4 +9,5 @@ import com.nv.baonk.vo.Department;
 public interface DepartmentRepository extends JpaRepository<Department, Long> {		
 	List<Department> findByParentdeptAndTenantid(String parentDept, int tenantId);	
 	Department findByDepartmentidAndTenantid(String deptId, int tenantId);
+	List<Department> findByCompanyIdAndTenantid(String companyId, int tenantId);	
 }

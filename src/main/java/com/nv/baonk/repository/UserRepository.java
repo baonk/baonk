@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	
 	@Query(value = getListUsersByDeptAndOther, nativeQuery = true)
 	List<User> findUsersInAdminMode(String deptId, int tenantId);
+	
+	List<User> findByCompanyidAndTenantid(String companyId, int tenantId);
 }

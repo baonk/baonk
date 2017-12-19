@@ -72,4 +72,9 @@ public class UserServiceImpl implements UserService{
 		roleRepository.deleteUserRole(user.getUserid(), user.getTenantid());
 		userRepository.delete(user);
 	}
+
+	@Override
+	public List<User> findAllCompanyEmployees(String companyId, int tenantId) {		
+		return userRepository.findByCompanyidAndTenantid(companyId, tenantId);
+	}
 }
