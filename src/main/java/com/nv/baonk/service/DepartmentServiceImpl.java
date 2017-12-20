@@ -51,4 +51,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 		return departRepository.findByDepartmentidAndTenantid(deptID, tenantID);
 	}
 
+	@Override
+	public void saveDept(Department dept) {		
+		departRepository.save(dept);
+	}
+
 }

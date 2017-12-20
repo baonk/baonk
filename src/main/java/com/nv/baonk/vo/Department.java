@@ -9,6 +9,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
@@ -21,22 +22,22 @@ public class Department {
 	private String departmentid;
 	
 	@Id
-	@Column(name = "tenant_id")
-	@NotEmpty
+	@Column(name = "tenant_id")	
 	private int tenantid;
 	
 	@Column(name = "department_name")
 	@NotEmpty
 	private String departmentname;
 	
-	@Column(name = "department_path")
-	@NotEmpty
+	@Column(name = "department_path")	
 	private String departmentpath;
 	
 	@Column(name = "parent_department")	
 	private String parentdept;
 	
 	@Column(name = "email")
+	@Email(message = "*Please provide a valid email")
+	@NotEmpty(message = "*Please provide an email")
 	private String email;	
 	
 	@Transient

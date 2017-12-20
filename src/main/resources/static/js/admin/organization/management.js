@@ -43,6 +43,29 @@
 		currentElement.click();
 	}
 	
+	function reloadView(departmentid, departmentname) {
+		var currentElement  = document.getElementById(currentClickedDeptId);
+		var firtSiblingElmt = currentElement.parentElement.firstElementChild;
+		var nextSiblingElmt = firtSiblingElmt.nextSibling;
+		
+		if (firtSiblingElmt.className != "deptOn") {
+			firtSiblingElmt.className = "deptOff";
+		}
+		
+		if (nextSiblingElmt.className != "companyImg") {
+			if (nextSiblingElmt.className != "deptImg") {
+				nextSiblingElmt.className = "deptImg";
+			}
+			
+			deptOnClick(firtSiblingElmt);
+		}
+		else {
+			displayNewDept(currentElement.parentElement, departmentid, departmentname);
+		}		
+		
+		currentElement.click();
+	}
+	
 	function getDetailData(obj) {			
 		var deptId = obj.getAttribute("deptId");
 		
@@ -219,6 +242,39 @@
 		detailDeptView.appendChild(divNewUser);
 	}
 	
+	function displayNewDept(mainEl, departmentid, departmentname) {
+		var pos   = mainEl.getAttribute("order");		
+		var divEl = document.createElement("div");		
+		var img1  = document.createElement("img");			
+		var img2  = document.createElement("img");
+		var span  = document.createElement("span");
+		
+		img1.setAttribute("parent", pos);	
+		img1.setAttribute("deptId", departmentid);
+		img1.setAttribute("id", departmentid + "+" + pos);
+		img1.onclick = function () {deptOnClick(this);};
+		img1.setAttribute("class", "deptNone");
+		
+		img2.setAttribute("class", "deptImg");
+		img2.setAttribute("deptId", departmentid);
+		img2.onclick = function () {getDetailData(this);};
+		
+		span.innerHTML = departmentname;
+		span.setAttribute("style", "cursor: pointer;");
+		span.setAttribute("deptId", departmentid);
+		span.setAttribute("name", departmentid);
+		span.setAttribute("class", "subOff");
+		span.onclick = function () {getDetailData(this);};
+		
+		divEl.appendChild(img1);
+		divEl.appendChild(img2);
+		divEl.appendChild(span);					
+		divEl.setAttribute("style", "padding-top: 5px; padding-left: 15px;");	
+		divEl.setAttribute("order", pos);		
+		
+		mainEl.appendChild(divEl);
+	}
+	
 	function displaySubDept(mainDeptElm, list) {	
 		var pos = null;
 		var mainEl = null;
@@ -255,13 +311,12 @@
 			divEl.setAttribute("order", pos);
 			insertAfter(divEl, mainEl);		
 			
-			if (list[i]["hasSubDept"] == 1) {
-				//img1.setAttribute("class", "deptOff");	
-				img1.setAttribute("parent", pos);	
-				img1.setAttribute("deptId", list[i]["departmentid"]);
-				img1.setAttribute("id", list[i]["departmentid"] + "+" + pos);
-				img1.onclick = function () {deptOnClick(this);};
-				
+			img1.setAttribute("parent", pos);	
+			img1.setAttribute("deptId", list[i]["departmentid"]);
+			img1.setAttribute("id", list[i]["departmentid"] + "+" + pos);
+			img1.onclick = function () {deptOnClick(this);};
+			
+			if (list[i]["hasSubDept"] == 1) {				
 				if (list[i]["subDept"] != null && list[i]["subDept"] != "null") {
 					var uniqueId = img1.getAttribute("id");		
 					arrSubDept.push(uniqueId);
@@ -459,6 +514,18 @@
 				}
 			});	
 		}	
+	}	
+	
+	function addDept() {
+		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {
+			alert("Please select a department!");
+			return;
+		}
+		
+		var currentDept = document.getElementById(currentClickedDeptId);
+		var deptName = currentDept.innerHTML;
+		
+		divPopUpShow(742, 180, "/admin/addDepartment?pDeptId=" + currentClickedDeptId + "&pDeptName=" + deptName);	
 	}	
 	
 	function exportFile() {		
