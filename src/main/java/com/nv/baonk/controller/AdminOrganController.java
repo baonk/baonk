@@ -662,12 +662,15 @@ public class AdminOrganController {
 		int tenantId     = loginUser.getTenantid();		
 		String pDeptId   = request.getParameter("pDeptId")   != null ? request.getParameter("pDeptId")   : "";
 		String pDeptName = request.getParameter("pDeptName") != null ? request.getParameter("pDeptName") : "";	
-		Department pDept = deptService.findByDepartmentidAndTenantid(pDeptId, tenantId);
-		String compName  = pDept.getCompanyName();
-		String compID	 = pDept.getCompanyId();
+		String deptId    = request.getParameter("deptId")    != null ? request.getParameter("deptId")    : "";
 		
-		if (!pDeptId.equals("")) {			
-			Department dept = new Department();
+		
+		if (!pDeptId.equals("")) {		
+			Department pDept = deptService.findByDepartmentidAndTenantid(pDeptId, tenantId);
+			String compName  = pDept.getCompanyName();
+			String compID	 = pDept.getCompanyId();			
+			Department dept  = new Department();
+			
 			model.addAttribute("dept", dept);
 			model.addAttribute("pDeptID", pDeptId);
 			model.addAttribute("pDeptName", pDeptName);
@@ -676,9 +679,11 @@ public class AdminOrganController {
 			model.addAttribute("mode", "add");
 		}
 		else {
-/*			User vUser = userService.findUserByUseridAndTenantid(userId, tenantId);
-			model.addAttribute("user", vUser);
-			model.addAttribute("mode", "view");*/
+			Department vDept = deptService.findByDepartmentidAndTenantid(deptId, tenantId);
+			Department pDept = deptService.findByDepartmentidAndTenantid(vDept.getParentdept(), tenantId);
+			model.addAttribute("dept", vDept);
+			model.addAttribute("pDeptName", pDept.getDepartmentname());
+			model.addAttribute("mode", "view");
 		}
 		
 		logger.debug("-----------------------Add department end-----------------------------!");
@@ -705,7 +710,7 @@ public class AdminOrganController {
 			logger.debug("Dept Id existed!");
 			bindingResult.rejectValue("departmentid", "error.dept", "This deptId existed!");
 		}
-		
+				
 		if (bindingResult.hasErrors()) {		
 			logger.debug("Binding result has Error!");
 			
@@ -741,6 +746,60 @@ public class AdminOrganController {
 		
 		return response;
 	}	
+	
+	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Receive update dept information from dept input form then save updated dept information to database	 
+	 ****		 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value = "/admin/updateDept", method = RequestMethod.POST)
+	@ResponseBody
+	public ValidateResponseObject updateDept(HttpServletRequest request, @CookieValue("loginCookie")String loginCookie, @Valid Department dept, BindingResult bindingResult, Model model) throws JsonProcessingException {
+		logger.debug("-------------------update dept is running---------------------!");
+		
+		User currentUser 				= commonUtil.getUserInfo(loginCookie);
+		int tenantId 					= currentUser.getTenantid();		
+		ValidateResponseObject response = new ValidateResponseObject();		
+		Department existDept			= deptService.findByDepartmentidAndTenantid(dept.getDepartmentid(), tenantId);
+		
+		if (existDept == null) {		
+			logger.debug("Error: Department not found!");
+			bindingResult.rejectValue("departmentid", "error.dept", "Department information not found");
+		}
+		
+		if (bindingResult.hasErrors()) {		
+			logger.debug("Binding result has Error!");
+			
+			//Get error message
+	         Map<String, String> errors = bindingResult.getFieldErrors().stream().collect(
+	        		 						  Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)
+	                 					  );
+	         
+	         response.setResult(0);
+	         response.setErrorMessages(errors);			
+		}
+		else {
+			dept.setDepartmentpath(existDept.getDepartmentpath());
+			
+			logger.debug("++++++++++++++++++Check Dept Infor++++++++++++++++++!");
+			logger.debug("-----------------	Dept ID				: " + dept.getDepartmentid());
+			logger.debug("-----------------	Dept Name			: " + dept.getDepartmentname());
+			logger.debug("-----------------	Parent Dept ID		: " + dept.getParentdept());
+			logger.debug("----------------- Dept Email			: " + dept.getEmail());
+			logger.debug("----------------- Dept Path			: " + dept.getDepartmentpath());
+			logger.debug("----------------- Company ID			: " + dept.getCompanyId());
+			logger.debug("----------------- Company Name   		: " + dept.getCompanyName());
+			logger.debug("----------------- Tenant ID	    	: " + dept.getTenantid());
+			logger.debug("++++++++++++++++++Dept Infor End++++++++++++++++++++!");
+			
+			deptService.updateDept(dept);
+			response.setResult(1);					
+		}	
+		
+		return response;
+	}
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {		

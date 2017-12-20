@@ -9,5 +9,6 @@ public interface DepartmentService {
 	public SimpleDepartment getSimpleDeptList(String deptID, int tenantID);	
 	public List<SimpleDepartment> getAllSimpleSubDepts(String parentID, int tenantID);	
 	public Department findByDepartmentidAndTenantid(String deptID, int tenantID);
-	public void saveDept(Department dept);	
+	public void saveDept(Department dept);
+	public void updateDept(Department dept);	
 }

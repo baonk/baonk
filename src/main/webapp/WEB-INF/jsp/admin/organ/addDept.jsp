@@ -17,12 +17,14 @@
   		var compName  							 = "<c:out value='${compName}'/>"; 
   		var mode								 = "<c:out value='${mode}'/>"; 		
   		
-  		window.onload = function () { 				
-			document.getElementById("parentDeptName").value  = pDeptName;		
-	  		document.getElementById("parentDeptID").value    = pDeptId;
-			document.getElementById("_compID").value  		 = compId;		
-	  		document.getElementById("_compName").value    	 = compName;
-	
+  		window.onload = function () { 	
+  			document.getElementById("parentDeptName").value = pDeptName;
+  			
+  			if (mode == "add") {						
+		  		document.getElementById("parentDeptID").value    = pDeptId;
+				document.getElementById("_compID").value  		 = compId;		
+		  		document.getElementById("_compName").value    	 = compName;
+  			}	
   		}  	
   		
   		function checkRequirement() {
@@ -74,8 +76,14 @@
   		        success: function (data)
   		        { 
   		        	if (data.result == 1) {
-  	  		          	parent.reloadView(document.getElementById("_deptID").value, document.getElementById("_deptName").value);
-  	  		            parent.divPopUpHidden();
+  		        		if (mode == "add") {
+	  	  		          	parent.reloadView(document.getElementById("_deptID").value, document.getElementById("_deptName").value);
+	  	  		            parent.divPopUpHidden();
+  		        		}
+  		        		else {
+  		        			parent.reloadView2(document.getElementById("_deptName").value);
+  		        			parent.divPopUpHidden();
+  		        		}
   		        	}
   		        	else {
   		        		var list = data.errorMessages;  	
@@ -122,7 +130,7 @@
 			            </td>
 			            <th style="width: 71px; text-align:center">Department Name<span style="color:red"> *</span></th>
 			            <td style="width: 220px;">
-			            	<form:input type="text" path="departmentname" placeholder="Department Name" class="baonk-control-1 baonk" maxlength="50" id="_deptName" readonly="${mode != 'add' ? 'true': 'false'}" />
+			            	<form:input type="text" path="departmentname" placeholder="Department Name" class="baonk-control-1 baonk" maxlength="50" id="_deptName" />
 							<lable id="departmentname" class="text-danger"/>			                
 			            </td>
 			        </tr>

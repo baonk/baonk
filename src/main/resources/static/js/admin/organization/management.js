@@ -66,6 +66,11 @@
 		currentElement.click();
 	}
 	
+	function reloadView2(departmentname) {
+		var currentElement  = document.getElementById(currentClickedDeptId);		
+		currentElement.innerHTML = departmentname;
+	}
+	
 	function getDetailData(obj) {			
 		var deptId = obj.getAttribute("deptId");
 		
@@ -527,6 +532,17 @@
 		
 		divPopUpShow(742, 180, "/admin/addDepartment?pDeptId=" + currentClickedDeptId + "&pDeptName=" + deptName);	
 	}	
+	
+	function viewDept() {
+		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {
+			alert("Please select a department!");
+			return;
+		}
+		
+		var currentDept = document.getElementById(currentClickedDeptId);		
+		
+		divPopUpShow(742, 180, "/admin/addDepartment?deptId=" + currentClickedDeptId);
+	}		
 	
 	function exportFile() {		
 		$.ajax({			
