@@ -77,4 +77,9 @@ public class UserServiceImpl implements UserService{
 	public List<User> findAllCompanyEmployees(String companyId, int tenantId) {		
 		return userRepository.findByCompanyidAndTenantid(companyId, tenantId);
 	}
+
+	@Override
+	public List<User> getAllUsersOfDepartment(String deptID, int tenantId) {		
+		return userRepository.findByDepartmentidAndTenantid(deptID, tenantId);
+	}
 }

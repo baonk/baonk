@@ -6,9 +6,11 @@ import com.nv.baonk.vo.SimpleDepartment;
 
 public interface DepartmentService {
 	public List<Department> getAllDepartmentsOfCompany(String companyId, int tenantID);
+	public List<Department> getAllSubDepts(String deptID, int tenantID);
 	public SimpleDepartment getSimpleDeptList(String deptID, int tenantID);	
 	public List<SimpleDepartment> getAllSimpleSubDepts(String parentID, int tenantID);	
 	public Department findByDepartmentidAndTenantid(String deptID, int tenantID);
 	public void saveDept(Department dept);
-	public void updateDept(Department dept);	
+	public void updateDept(Department dept);
+	public void deleteDept(Department dept);	
 }

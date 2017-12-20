@@ -61,4 +61,14 @@ public class DepartmentServiceImpl implements DepartmentService {
 		departRepository.save(dept);		
 	}
 
+	@Override
+	public List<Department> getAllSubDepts(String deptID, int tenantID) {		
+		return departRepository.findByParentdeptAndTenantid(deptID, tenantID);
+	}
+
+	@Override
+	public void deleteDept(Department dept) {		
+		departRepository.delete(dept);
+	}
+
 }

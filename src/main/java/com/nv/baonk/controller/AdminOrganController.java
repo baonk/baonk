@@ -3,6 +3,7 @@ package com.nv.baonk.controller;
 import java.io.File;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -785,8 +786,8 @@ public class AdminOrganController {
 			
 			logger.debug("++++++++++++++++++Check Dept Infor++++++++++++++++++!");
 			logger.debug("-----------------	Dept ID				: " + dept.getDepartmentid());
-			logger.debug("-----------------	Dept Name			: " + dept.getDepartmentname());
-			logger.debug("-----------------	Parent Dept ID		: " + dept.getParentdept());
+			logger.debug("----------------- Dept Name			: " + dept.getDepartmentname());
+			logger.debug("----------------- Parent Dept ID		: " + dept.getParentdept());
 			logger.debug("----------------- Dept Email			: " + dept.getEmail());
 			logger.debug("----------------- Dept Path			: " + dept.getDepartmentpath());
 			logger.debug("----------------- Company ID			: " + dept.getCompanyId());
@@ -799,6 +800,75 @@ public class AdminOrganController {
 		}	
 		
 		return response;
+	}
+	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Map the delete dept request of administrator privilege users.
+	 ****   	 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value="/admin/deleteDept", method = RequestMethod.POST)	
+	@ResponseBody
+	public ValidateResponseObject deleteDept(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException{	
+		logger.debug("----------------------Delete dept is running-----------------------!");	
+		
+		User loginUser		  		= commonUtil.getUserInfo(loginCookie);
+		ValidateResponseObject resp = new ValidateResponseObject();	
+		Map<String, String> errors  = new HashMap<>();
+		int tenantId 		  		= loginUser.getTenantid();
+		String deptId   	  		= request.getParameter("deptId") != null ? request.getParameter("deptId") : "";
+		
+		boolean checkBeforeDel = hasUser(deptId, tenantId);
+		
+		if (!checkBeforeDel) {
+			try {
+				Department dept = deptService.findByDepartmentidAndTenantid(deptId, tenantId);
+				List<Department> listSubDepts = deptService.getAllSubDepts(deptId, tenantId);
+				
+				for (Department depart : listSubDepts) {
+					deptService.deleteDept(depart);
+				}
+				
+				deptService.deleteDept(dept);				
+				resp.setResult(1);	
+			} 
+			catch (Exception e) {
+				resp.setResult(0);
+				errors.put("unknown", e.getMessage());
+				resp.setErrorMessages(errors);
+			}
+		}
+		else {			
+			errors.put("hasUser", "This department has users so you cannot delete it!");
+			resp.setErrorMessages(errors);
+			resp.setResult(0);
+		}
+		
+		logger.debug("-----------------------Delete dept end-----------------------------!");	
+		
+		return resp;		
+	}
+	
+	private boolean hasUser(String deptId, int tenantId) {
+		boolean check = false;
+		List<User> listOfUsers = userService.getAllUsersOfDepartment(deptId, tenantId);
+		
+		if (listOfUsers.size() == 0) {			
+			List<Department> listSubDepts = deptService.getAllSubDepts(deptId, tenantId);
+			
+			for (Department dept : listSubDepts) {
+				if (hasUser(dept.getDepartmentid(), tenantId)) {
+					check = true;
+					break;
+				}
+			}
+		}
+		else {
+			check = true;			
+		}
+		
+		return check;
 	}
 	
 	@InitBinder

@@ -22,4 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	List<User> findUsersInAdminMode(String deptId, int tenantId);
 	
 	List<User> findByCompanyidAndTenantid(String companyId, int tenantId);
+	
+	List<User> findByDepartmentidAndTenantid(String companyId, int tenantId);
 }

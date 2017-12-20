@@ -105,7 +105,7 @@
 			    		<div id="deptOpt" style="display: none;">
 			    			<a class="imgbtn"><span onClick="viewDept()">Department Information</span></a>
 			    			<a class="imgbtn"><span onClick="addDept()">Add Department</span></a>
-			    			<a class="imgbtn" id="usermenu10"><span onClick="del_dept()">Delete Department</span></a>
+			    			<a class="imgbtn" id="usermenu10"><span onClick="delDept()">Delete Department</span></a>
 			    			<a class="imgbtn" id="usermenu8"><span onClick="mov_dept()">Move Department</span></a>
 			    		</div>
 			    		<div id="compOpt" style="display: none;">

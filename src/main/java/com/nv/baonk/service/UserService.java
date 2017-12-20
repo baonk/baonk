@@ -16,4 +16,5 @@ public interface UserService {
 	public List<User> findUsersInAdminMode(String deptID, int tenantId);
 	public void deleteUser(User user);	
 	public List<User> findAllCompanyEmployees(String companyId, int tenantId);
+	public List<User> getAllUsersOfDepartment(String deptID, int tenantId);
 }

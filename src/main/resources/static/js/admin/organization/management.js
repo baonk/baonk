@@ -4,10 +4,10 @@
 	function initData() {
 		var deptView = document.getElementById("deptView");
 		
-		for (var i = 0; i < listDepts.length; i++) {				
+		for (var i = 0; i < listDepts.length; i++) {
 			var divEl = document.createElement("div");
 			var img1 = document.createElement("img");
-			img1.setAttribute("class", "deptOn");			
+			img1.setAttribute("class", "deptOn");
 			img1.onclick = function () {companyOnClick(this);}
 			var img2 = document.createElement("img");
 			img2.setAttribute("class", "companyImg");
@@ -26,16 +26,16 @@
 			divEl.appendChild(span);
 			divEl.setAttribute("id", "company" + i);
 			divEl.setAttribute("order", i);
-			divEl.setAttribute("style", "padding-top: 5px; padding-left: 5px;");								
-			deptView.appendChild(divEl);		
+			divEl.setAttribute("style", "padding-top: 5px; padding-left: 5px;");
+			deptView.appendChild(divEl);
 			displaySubDept(divEl, listDepts[i]["subDept"]);
 			
 			
-			if (listDepts[i]["departmentid"] == usercompID) {				
+			if (listDepts[i]["departmentid"] == usercompID) {
 				var userDeptElm = document.getElementsByName(userDeptID)[0];
 				getDetailData(userDeptElm);
 			}
-		}			
+		}
 	}
 	
 	function refreshView() {
@@ -57,28 +57,39 @@
 				nextSiblingElmt.className = "deptImg";
 			}
 			
-			deptOnClick(firtSiblingElmt);
+			deptOnClick2(firtSiblingElmt, departmentid, departmentname);
 		}
 		else {
 			displayNewDept(currentElement.parentElement, departmentid, departmentname);
-		}		
+		}
 		
 		currentElement.click();
 	}
 	
 	function reloadView2(departmentname) {
-		var currentElement  = document.getElementById(currentClickedDeptId);		
+		var currentElement       = document.getElementById(currentClickedDeptId);
 		currentElement.innerHTML = departmentname;
 	}
 	
-	function getDetailData(obj) {			
+	function reloadView3() {
+		var currentElement   = document.getElementById(currentClickedDeptId);
+		var parentElmnt		 = currentElement.parentElement;
+		var divRootElmt 	 = parentElmnt.parentElement;
+		currentClickedDeptId = null;
+		divRootElmt.removeChild(parentElmnt);
+		
+		divRootElmt.children[2].click();
+		
+	}
+	
+	function getDetailData(obj) {
 		var deptId = obj.getAttribute("deptId");
 		
 		if (currentClickedDeptId != deptId) {
-			//Set previous clicked element class off 
+			//Set previous clicked element class off
 			if (currentClickedDeptId != null) {
-				var deptElemt = document.getElementById(currentClickedDeptId);			
-				deptElemt.setAttribute("class", "subOff");				
+				var deptElemt = document.getElementById(currentClickedDeptId);
+				deptElemt.setAttribute("class", "subOff");
 			}
 			
 			currentClickedDeptId = deptId;
@@ -94,7 +105,7 @@
 			}
 		}
 		
-		$.ajax({			
+		$.ajax({
 			type: "POST",
 			url: "/admin/organ/getDetailInfo",
 			data: {
@@ -103,7 +114,7 @@
 			},
 			dataType: "JSON",
 			async: true,
-			success: function(result) {												
+			success: function(result) {
 				renderData(result);
 			},
 			error: function (xhr, status, e){
@@ -395,8 +406,45 @@
 						alert("Get department data failed");
 					}
 				});	
-			}															
-		}									
+			}										
+		}
+	}		
+	
+	function deptOnClick2(obj, departmentid, departmentname) {
+		var parentElm = obj.parentElement;
+		var childs = parentElm.childNodes;
+		var position = parseInt(parentElm.getAttribute("parent"));
+		
+		obj.setAttribute("class", "deptOn");
+
+		var uniqueId = obj.getAttribute("id");
+		if (arrSubDept.indexOf(uniqueId) > -1) {
+			renderSubDept(obj, childs);
+			displayNewDept(parentElm, departmentid, departmentname);
+		}
+		else {
+			var deptId = obj.getAttribute("deptId");
+			
+			$.ajax({
+				type: "POST",
+				url: "/admin/organ/getSimpleSubDept",
+				data: {
+					"deptID": deptId
+				},
+				dataType: "JSON",
+				async: true,
+				success: function(result) {
+					var listDept = result["subDept"];
+					arrSubDept.push(uniqueId);
+					displaySubDept(obj, listDept);
+					renderSubDept(obj, childs);								
+				},
+				error: function (xhr, status, e){
+					alert("Get department data failed");
+				}
+			});	
+		}		
+											
 	}		
 	
 	function renderSubDept(obj, childList) {
@@ -434,6 +482,8 @@
 			document.getElementById("deptList").style.display = "none";
 			document.getElementById("companyList").style.display = "block";
 		}
+		
+		refreshView();
 	}
 	
 	function insertAfter(newNode, referenceNode) {
@@ -537,12 +587,59 @@
 		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {
 			alert("Please select a department!");
 			return;
-		}
-		
-		var currentDept = document.getElementById(currentClickedDeptId);		
+		}		
 		
 		divPopUpShow(742, 180, "/admin/addDepartment?deptId=" + currentClickedDeptId);
 	}		
+	
+	function delDept() {
+		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {			
+			alert("Please select a department!");
+			return;
+		}
+		else {
+			var pos = document.getElementById(currentClickedDeptId).parentElement.getAttribute("id");
+			if (pos && pos.substring(0, 7) == "company") {
+				alert("Please select a department not a company!");
+				return;
+			}
+		}
+		
+		var result1 = confirm("Do you want to delete this department?");
+		
+		if (result1 == true) {
+			$.ajax({			
+				type: "POST",
+				url: "/admin/deleteDept",
+				data: {
+					"deptId" : currentClickedDeptId				
+				},
+				dataType: "JSON",
+				async: true,
+				success : function(data) {
+					if (data.result == 1) {
+						alert("Delete department successful!");
+						reloadView3();
+  		        	}
+  		        	else {
+  		        		var list = data.errorMessages;  
+  		        		var content = list["hasUser"];
+  		        		if (!content) {
+  		        			content = list["unknown"];
+  		        			alert(content);
+  		        		}
+  		        		else {  		        			
+  		        			alert(content);
+  		        		}
+  		        	}					
+					
+				},
+ 				error : function(jqXHR, textStatus, errorThrown) {            	    
+					alert("Error: " + jqXHR.status + ", " + textStatus);
+				}
+			});	
+		}	
+	}
 	
 	function exportFile() {		
 		$.ajax({			
