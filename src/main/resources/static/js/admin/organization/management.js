@@ -737,6 +737,21 @@
 		divPopUpShow(717, 140, "/admin/addCompany");
 	}	
 	
+	function viewCompany() {
+		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {		
+			alert("Please select a company!");
+			return;
+		}
+		
+		var pos = document.getElementById(currentClickedDeptId).parentElement.getAttribute("id");
+		if (pos && pos.substring(0, 7) != "company") {
+			alert("Please select a company!");
+			return;
+		}
+		
+		divPopUpShow(717, 140, "/admin/addCompany?companyId=" + currentClickedDeptId);
+	}	
+	
 	function exportFile() {		
 		$.ajax({			
 			type: "GET",

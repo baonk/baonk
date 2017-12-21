@@ -973,7 +973,7 @@ public class AdminOrganController {
 		logger.debug("----------------------Add company is running-----------------------!");
 		User loginUser	 = commonUtil.getUserInfo(loginCookie);
 		int tenantId     = loginUser.getTenantid();		
-		String companyId = request.getParameter("companyId")    != null ? request.getParameter("companyId") : "";		
+		String companyId = request.getParameter("companyId") != null ? request.getParameter("companyId") : "";		
 		
 		if (companyId.equals("")) {					
 			//Get all company		
@@ -997,7 +997,7 @@ public class AdminOrganController {
 	
 	/*******************************************************************************************************************************
 	 ****	 
-	 **** 	Receive new dept information from dept input form then save new dept to database	 
+	 **** 	Receive new company information from company input form then save new company to database	 
 	 ****		 
 	********************************************************************************************************************************/
 	
@@ -1047,6 +1047,55 @@ public class AdminOrganController {
 		
 		return response;
 	}		
+	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Receive update company information from company input form then save updated company information to database	 
+	 ****		 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value = "/admin/updateCompany", method = RequestMethod.POST)
+	@ResponseBody
+	public ValidateResponseObject updateCompany(HttpServletRequest request, @CookieValue("loginCookie")String loginCookie, @Valid Department dept, BindingResult bindingResult, Model model) throws JsonProcessingException {
+		logger.debug("-------------------update company is running---------------------!");
+		
+		User currentUser 				= commonUtil.getUserInfo(loginCookie);
+		int tenantId 					= currentUser.getTenantid();		
+		ValidateResponseObject response = new ValidateResponseObject();		
+		Department existComp			= deptService.findByDepartmentidAndTenantid(dept.getDepartmentid(), tenantId);
+		
+		if (existComp == null) {		
+			logger.debug("Error: Company not found!");
+			bindingResult.rejectValue("departmentid", "error.dept", "Company information not found");
+		}
+		
+		if (bindingResult.hasErrors()) {		
+			logger.debug("Binding result has Error!");
+			
+			//Get error message
+	         Map<String, String> errors = bindingResult.getFieldErrors().stream().collect(
+	        		 						  Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)
+	                 					  );
+	         
+	         response.setResult(0);
+	         response.setErrorMessages(errors);			
+		}
+		else {		
+			existComp.setEmail(dept.getEmail());
+			
+			logger.debug("++++++++++++++++++Check Company Infor++++++++++++++++++!");
+			logger.debug("-----------------	Company ID				: " + existComp.getDepartmentid());
+			logger.debug("-----------------	Company Name			: " + existComp.getDepartmentname());			
+			logger.debug("----------------- Company Email			: " + existComp.getEmail());
+			logger.debug("----------------- Tenant ID	    		: " + existComp.getTenantid());
+			logger.debug("++++++++++++++++++Company Infor End++++++++++++++++++++!");
+			
+			deptService.updateDept(existComp);
+			response.setResult(1);				
+		}	
+		
+		return response;
+	}
 	
 	private boolean hasUser(String deptId, int tenantId) {
 		boolean check = false;

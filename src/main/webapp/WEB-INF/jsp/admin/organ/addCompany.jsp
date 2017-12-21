@@ -72,14 +72,14 @@
 	  	  		            parent.divPopUpHidden();
   		        		}
   		        		else {
-  		        			parent.reloadView2(document.getElementById("_deptName").value);
+  		        			parent.refreshView();
   		        			parent.divPopUpHidden();
   		        		}
   		        	}
   		        	else {
   		        		var list = data.errorMessages;  	
   		        		
-  		        		Object.keys(list).forEach(function(key) {  		        			
+  		        		Object.keys(list).forEach(function(key) {		
   		        			var element 		= document.getElementById(key);
   		        			element.innerHTML   = list[key];  		        		    
   		        		});
