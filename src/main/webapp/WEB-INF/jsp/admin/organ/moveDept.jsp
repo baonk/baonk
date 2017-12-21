@@ -39,14 +39,14 @@
 	     					newDeptId : currentClickedDeptId,
 	     					crDeptId  : deptID
 	     				} ,
-		     			success : function(data, textStatus, jqXHR) {
+		     			success : function(data) {
 							if (data.result == 1) {
 								alert('Dept has been moved');
 								parent.reloadView4(deptID, currentClickedDeptId);
 								parent.divPopUpHidden();
 		  		        	}
 		  		        	else {
-		  		        		var list = data.errorMessages;
+		  		        		var list = data.errorMessages;		  		        		
 		  		        		var content = list["reason"];
 		  		        		alert(content);
 		  		        	}

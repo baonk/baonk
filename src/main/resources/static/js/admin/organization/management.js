@@ -83,32 +83,40 @@
 	}
 	
 	function reloadView4(currentDeptId, newParentDeptId) {
-		console.log("currentDeptId: " + currentDeptId + " || newParentDeptId: " + newParentDeptId);
-		
-		var currentElement    = document.getElementById(currentDeptId);
-		var newParentElmt     = document.getElementById(newParentDeptId);
-		
+		var currentElement    = document.getElementById(currentDeptId);				
 		var currentDivElmt    = currentElement.parentElement;
 		var currParentDivElmt = currentDivElmt.parentElement;
 		
 		currParentDivElmt.removeChild(currentDivElmt);
+		if (currParentDivElmt.childNodes.length <= 3) {
+			currParentDivElmt.firstElementChild.className = "deptNone";
+		}
 		
 		$.ajax({
 			type: "POST",
 			url: "/admin/organ/getInfoAfterMoving",
 			data: {
-				"deptID"	: newParentDeptId				
+				"deptID"	: currentDeptId				
 			},
 			dataType: "JSON",
 			async: true,
-			success: function(result) {
-				console.log(result);
+			success: function(result) {			
+				currentClickedDeptId  = null;
+				var highestParentElmt = document.getElementById(result["departmentid"]).parentElement;
+				
+				while (highestParentElmt.childNodes.length > 3) {
+					highestParentElmt.removeChild(highestParentElmt.lastChild);
+				}
+				
+				displaySubDept(highestParentElmt, result["subDept"]);	
+				
+				var userDeptElm = document.getElementById(currentDeptId);
+				getDetailData(userDeptElm);
 			},
 			error: function (xhr, status, e){
 				alert("Get data failed!");
 			}
-		});	
-		
+		});		
 			
 	}
 	
@@ -339,10 +347,17 @@
 			
 			var img1 = document.createElement("img");			
 			var img2 = document.createElement("img");
+			var span = document.createElement("span");
+			
+			img1.setAttribute("parent", pos);	
+			img1.setAttribute("deptId", list[i]["departmentid"]);
+			img1.setAttribute("id", list[i]["departmentid"] + "+" + pos);		
+			img1.onclick = function () {deptOnClick(this);};
+			
 			img2.setAttribute("class", "deptImg");
 			img2.setAttribute("deptId", list[i]["departmentid"]);
 			img2.onclick = function () {getDetailData(this);};
-			var span = document.createElement("span");
+			
 			span.innerHTML = list[i]["departmentname"];
 			span.setAttribute("style", "cursor: pointer;");
 			span.setAttribute("deptId", list[i]["departmentid"]);
@@ -356,24 +371,21 @@
 			divEl.appendChild(span);					
 			divEl.setAttribute("style", "padding-top: 5px; padding-left: 15px;");	
 			divEl.setAttribute("order", pos);
-			insertAfter(divEl, mainEl);		
+			insertAfter(divEl, mainEl);
 			
-			img1.setAttribute("parent", pos);	
-			img1.setAttribute("deptId", list[i]["departmentid"]);
-			img1.setAttribute("id", list[i]["departmentid"] + "+" + pos);
-			img1.onclick = function () {deptOnClick(this);};
-			
-			if (list[i]["hasSubDept"] == 1) {				
-				if (list[i]["subDept"] != null && list[i]["subDept"] != "null") {
-					var uniqueId = img1.getAttribute("id");		
+			if (list[i]["hasSubDept"] == 1) {
+				var uniqueId = img1.getAttribute("id");					
+				if (list[i]["subDept"] != null && list[i]["subDept"] != "null") {						
 					arrSubDept.push(uniqueId);
 					img1.setAttribute("class", "deptOn");
 					displaySubDept(divEl, list[i]["subDept"]);
 				}
-				else {
-					img1.setAttribute("class", "deptOff");
-				}
-				
+				else {					
+					img1.setAttribute("class", "deptOff");		
+					while(arrSubDept.indexOf(uniqueId) > -1) {
+						arrSubDept.splice(arrSubDept.indexOf(uniqueId), 1);
+					}
+				}				
 			}
 			else {
 				img1.setAttribute("class", "deptNone");
@@ -400,7 +412,7 @@
 		
 	}		
 	
-	function deptOnClick(obj) {
+	function deptOnClick(obj) {	
 		var parentElm = obj.parentElement;
 		var position = parseInt(parentElm.getAttribute("parent"));
 		var childs = parentElm.childNodes;
@@ -411,12 +423,12 @@
 			}					
 			obj.setAttribute("class", "deptOff");
 		}
-		else {
+		else {	
 			var uniqueId = obj.getAttribute("id");					
-			if (arrSubDept.indexOf(uniqueId) > -1) {
+			if (arrSubDept.indexOf(uniqueId) > -1) {				
 				renderSubDept(obj, childs);
 			}
-			else {
+			else {				
 				var deptId = obj.getAttribute("deptId");				
 				
 				$.ajax({

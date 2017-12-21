@@ -226,7 +226,8 @@ public class AdminOrganController {
 	public void getAllSubDepts2(SimpleDepartment dept, int tenantId, String[] deptPath, int order) {
 		List<SimpleDepartment> listSubSimpleDepts = deptService.getAllSimpleSubDepts(dept.getDepartmentid(), tenantId);
 		
-		if (listSubSimpleDepts.size() > 0) {			
+		if (listSubSimpleDepts.size() > 0) {
+			logger.debug("DEPTPATH: " + deptPath + " || Deptpath[order]: " + deptPath[order - 1] + " || order: " + order);
 			dept.setSubDept(listSubSimpleDepts);
 			dept.setHasSubDept(1);
 			
@@ -901,12 +902,14 @@ public class AdminOrganController {
 		
 		if (currentDeptId.equals(newDeptId)) {
 			errors.put("reason", "Cannot move this department to its position!");
+			resp.setErrorMessages(errors);
 			resp.setResult(0);
 			return resp;
 		}
 		
 		if (listSubDepts.contains(newDept)) {
 			errors.put("reason", "Cannot move this department to its sub department!");
+			resp.setErrorMessages(errors);
 			resp.setResult(0);
 			return resp;
 		}
@@ -948,13 +951,14 @@ public class AdminOrganController {
 		String deptID 		 			   = request.getParameter("deptID");
 		Department dept 	 			   = deptService.findByDepartmentidAndTenantid(deptID, tenantId);
 		String[] deptPath     			   = dept.getDepartmentpath().split("::");		
-		SimpleDepartment highestParentDept = deptService.getSimpleDeptList(deptPath[1], tenantId);
 		
-		getAllSubDepts2(highestParentDept, tenantId, deptPath, 1);
+		logger.debug("DeptPath: " + dept.getDepartmentpath() + "deptId: " + dept.getDepartmentid());
+		
+		SimpleDepartment highestParentDept = deptService.getSimpleDeptList(deptPath[1], tenantId);		
+		getAllSubDepts2(highestParentDept, tenantId, deptPath, 2);
 
 		logger.debug("======================getSimpleSubDept end======================");
-		
-		logger.debug("BAONK CHECK: " + om.writeValueAsString(highestParentDept));
+
 		return om.writeValueAsString(highestParentDept);
 	}	
 	
