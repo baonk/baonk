@@ -960,7 +960,36 @@ public class AdminOrganController {
 		logger.debug("======================getSimpleSubDept end======================");
 
 		return om.writeValueAsString(highestParentDept);
-	}	
+	}
+	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Map the add company request of administrator privilege users.
+	 ****		 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value="/admin/addCompany", method = RequestMethod.GET)
+	public String addCompany(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, Model model){	
+		logger.debug("----------------------Add company is running-----------------------!");
+		User loginUser	 = commonUtil.getUserInfo(loginCookie);
+		int tenantId     = loginUser.getTenantid();		
+		String companyId = request.getParameter("companyId")    != null ? request.getParameter("companyId") : "";
+		
+		
+		if (companyId.equals("")) {					
+			Department dept  = new Department();			
+			model.addAttribute("dept", dept);
+			model.addAttribute("mode", "add");
+		}
+		else {
+			Department vDept = deptService.findByDepartmentidAndTenantid(companyId, tenantId);			
+			model.addAttribute("dept", vDept);			
+			model.addAttribute("mode", "view");
+		}
+		
+		logger.debug("-----------------------Add company end-----------------------------!");
+		return "admin/organ/addCompany";
+	}
 	
 	private boolean hasUser(String deptId, int tenantId) {
 		boolean check = false;

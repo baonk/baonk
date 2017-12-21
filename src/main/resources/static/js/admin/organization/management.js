@@ -699,6 +699,10 @@
 		divPopUpShow(400, 400, "/admin/moveDept?deptId=" + currentClickedDeptId);
 	}
 	
+	function addCompany() {
+		divPopUpShow(717, 140, "/admin/addCompany");
+	}	
+	
 	function exportFile() {		
 		$.ajax({			
 			type: "GET",

@@ -109,9 +109,9 @@
 			    			<a class="imgbtn" id="usermenu8"><span onClick="movDept()">Move Department</span></a>
 			    		</div>
 			    		<div id="compOpt" style="display: none;">
-			    			<a class="imgbtn"><span onClick="info_company()">Company Information</span></a>
-			    			<a class="imgbtn"><span onClick="add_company()">Add Company</span></a>
-			    			<a class="imgbtn"><span onClick="del_company()">Delete Company</span></a>
+			    			<a class="imgbtn"><span onClick="viewCompany()">Company Information</span></a>
+			    			<a class="imgbtn"><span onClick="addCompany()">Add Company</span></a>
+			    			<a class="imgbtn"><span onClick="delCompany()">Delete Company</span></a>
 			    		</div>
 			    	</th>
 			    </tr>			    

@@ -4,17 +4,13 @@
 <!DOCTYPE html>
 <html style="width:100%;">
 <head>
-	<title>Add Department</title>
+	<title>Add Company</title>
 	<link rel="stylesheet" type="text/css" href="/css/registration.css" />		
 	<link rel="stylesheet" type="text/css" href="/js/jquery/jquery-ui.css" />	
   	<script src="/js/jquery/jquery-1.12.4.js"></script> 	
   	<script	src="/js/popup.js"></script>	    
     <script src = "/js/jquery/jquery-ui.js"></script>	
   	<script type="text/javascript">
-  		var pDeptId	  							 = "<c:out value='${pDeptID}'/>";
-  		var pDeptName  							 = "<c:out value='${pDeptName}'/>";   
-  		var compId	  							 = "<c:out value='${compID}'/>";
-  		var compName  							 = "<c:out value='${compName}'/>"; 
   		var mode								 = "<c:out value='${mode}'/>"; 		
   		
   		window.onload = function () { 	
@@ -121,44 +117,26 @@
 				
 				<div class="warningText"><span style="color:red">Warning: fields contained * are required!</span></div>							
 
-				<table class="tblUserInfo" style="width: 700px;">				
+				<table class="tblUserInfo" style="width: 600px;">				
 			        <tr>
-			            <th style="width: 71px; text-align:center">Department ID<span style="color:red"> *</span></th>
+			            <th style="width: 71px; text-align:center">Company ID<span style="color:red"> *</span></th>
 			            <td style="width: 220px">
-			            	<form:input type="text" path="departmentid" placeholder="Department ID" class="baonk-control-1 baonk" maxlength="20"  id="_deptID" readonly="${mode != 'add' ? 'true': 'false'}" />
+			            	<form:input type="text" path="departmentid" placeholder="Company ID" class="baonk-control-1 baonk" maxlength="20"  id="_deptID" readonly="${mode != 'add' ? 'true': 'false'}" />
 							<lable id="departmentid" class="text-danger"/>			                
 			            </td>
-			            <th style="width: 71px; text-align:center">Department Name<span style="color:red"> *</span></th>
+			            <th style="width: 71px; text-align:center">Company Name<span style="color:red"> *</span></th>
 			            <td style="width: 220px;">
-			            	<form:input type="text" path="departmentname" placeholder="Department Name" class="baonk-control-1 baonk" maxlength="50" id="_deptName" />
-							<lable id="departmentname" class="text-danger"/>			                
-			            </td>
+			            	<form:input type="text" path="departmentname" placeholder="Company Name" class="baonk-control-1 baonk" maxlength="50" id="_deptName" readonly="${mode != 'add' ? 'true': 'false'}" />
+							<lable id="departmentname" class="text-danger"/>
+						</td>
 			        </tr>
 			        <tr>
-			            <th style="width: 71px; text-align:center">Department Email<span style="color:red"> *</span></th>
-			            <td style="width: 220px;">		
-			            	<form:input type="text" path="email" placeholder="Email" class="baonk-control-1 baonk" id="_email" />
-							<lable id="email" class="text-danger"/>			            	
+			            <th style="width: 71px; text-align:center">Company Email<span style="color:red"> *</span></th>
+			            <td style="width: 220px;" colspan="3">
+			            	<form:input type="text" path="email" placeholder="Email" class="baonk-control-1 baonk" id="_email" style="width: 559px;"/>
+							<lable id="email" class="text-danger"/>
 			            </td>
-			            <th style="width: 71px; text-align:center">Parent Department</th>
-			            <td style="width: 220px;">
-			            	<form:input type="text" id="parentDeptName" path="" placeholder="Parent Department Name" class="baonk-control-1 baonk" readonly="true" maxlength="50" />							
-							<form:input type="text" id="parentDeptID" path="parentdept" readonly="true" maxlength="50" style="display: none;"/>
-							<form:errors path="parentdept" cssClass="text-danger"/>			                
-			            </td>
-			        </tr>  
-			        <tr>
-			            <th style="width: 71px; text-align:center">Company ID</th>
-			            <td style="width: 220px">
-			            	<form:input type="text" path="companyId" placeholder="Company ID" class="baonk-control-1 baonk" maxlength="20"  id="_compID" readonly="true" />
-							<lable id="companyId" class="text-danger"/>			                
-			            </td>
-			            <th style="width: 71px; text-align:center">Company Name</span></th>
-			            <td style="width: 220px;">
-			            	<form:input type="text" path="companyName" placeholder="Company Name" class="baonk-control-1 baonk" maxlength="50" id="_compName" readonly="true" />
-							<lable id="companyName" class="text-danger"/>			                
-			            </td>
-			        </tr>  			        
+			        </tr> 			        
 			    </table>    											
 			</form:form>			
 		</div>
