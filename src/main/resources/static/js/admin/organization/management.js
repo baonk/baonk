@@ -28,8 +28,13 @@
 			divEl.setAttribute("order", i);
 			divEl.setAttribute("style", "padding-top: 5px; padding-left: 5px;");
 			deptView.appendChild(divEl);
-			displaySubDept(divEl, listDepts[i]["subDept"]);
 			
+			if (listDepts[i]["subDept"] != null && listDepts[i]["subDept"] != "null") {			
+				displaySubDept(divEl, listDepts[i]["subDept"]);
+			}
+			else {
+				img1.setAttribute("class", "deptNone");
+			}
 			
 			if (listDepts[i]["departmentid"] == usercompID) {
 				var userDeptElm = document.getElementsByName(userDeptID)[0];
@@ -49,7 +54,7 @@
 		var nextSiblingElmt = firtSiblingElmt.nextSibling;
 		
 		if (firtSiblingElmt.className != "deptOn") {
-			firtSiblingElmt.className = "deptOff";
+			firtSiblingElmt.className = "deptOn";
 		}
 		
 		if (nextSiblingElmt.className != "companyImg") {
@@ -116,8 +121,37 @@
 			error: function (xhr, status, e){
 				alert("Get data failed!");
 			}
-		});		
-			
+		});			
+	}
+	
+	function reloadView5(companyid, companyname, numberOfComp) {
+		var deptView = document.getElementById("deptView");		
+		var divEl 	 = document.createElement("div");
+		var img1 	 = document.createElement("img");
+		var img2     = document.createElement("img");
+		var span     = document.createElement("span");
+		
+		img1.setAttribute("class", "deptNone");
+		img1.onclick = function () {companyOnClick(this);}
+		
+		img2.setAttribute("class", "companyImg");
+		img2.setAttribute("deptId", companyid);
+		img2.onclick = function () {getDetailData(this);};
+		
+		span.innerHTML = companyname;
+		span.setAttribute("deptId", companyid);
+		span.setAttribute("style", "cursor: pointer;");
+		span.setAttribute("name", companyid);
+		span.setAttribute("class", "subOff");
+		span.onclick = function () {getDetailData(this);};
+		
+		divEl.appendChild(img1);
+		divEl.appendChild(img2);
+		divEl.appendChild(span);
+		divEl.setAttribute("id", "company" + numberOfComp);
+		divEl.setAttribute("order", numberOfComp);
+		divEl.setAttribute("style", "padding-top: 5px; padding-left: 5px;");
+		deptView.appendChild(divEl);
 	}
 	
 	function getDetailData(obj) {

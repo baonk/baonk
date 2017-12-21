@@ -973,13 +973,17 @@ public class AdminOrganController {
 		logger.debug("----------------------Add company is running-----------------------!");
 		User loginUser	 = commonUtil.getUserInfo(loginCookie);
 		int tenantId     = loginUser.getTenantid();		
-		String companyId = request.getParameter("companyId")    != null ? request.getParameter("companyId") : "";
-		
+		String companyId = request.getParameter("companyId")    != null ? request.getParameter("companyId") : "";		
 		
 		if (companyId.equals("")) {					
-			Department dept  = new Department();			
+			//Get all company		
+			List<SimpleDepartment> simpleCompanyList = deptService.getAllSimpleSubDepts("self", tenantId);
+			
+			Department dept  = new Department();
+			model.addAttribute("numberOfComp", simpleCompanyList.size() + 1);
 			model.addAttribute("dept", dept);
 			model.addAttribute("mode", "add");
+			
 		}
 		else {
 			Department vDept = deptService.findByDepartmentidAndTenantid(companyId, tenantId);			
@@ -990,6 +994,59 @@ public class AdminOrganController {
 		logger.debug("-----------------------Add company end-----------------------------!");
 		return "admin/organ/addCompany";
 	}
+	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Receive new dept information from dept input form then save new dept to database	 
+	 ****		 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value = "/admin/saveNewCompany", method = RequestMethod.POST)
+	@ResponseBody
+	public ValidateResponseObject saveNewComp(HttpServletRequest request, @CookieValue("loginCookie")String loginCookie, @Valid Department dept, BindingResult bindingResult, Model model) throws JsonProcessingException {
+		logger.debug("-------------------save new company is running---------------------!");
+		
+		User currentUser 				= commonUtil.getUserInfo(loginCookie);
+		int tenantId 					= currentUser.getTenantid();		
+		ValidateResponseObject response = new ValidateResponseObject();		
+		Department existComp			= deptService.findByDepartmentidAndTenantid(dept.getDepartmentid(), tenantId);
+		
+		if (existComp != null) {		
+			logger.debug("Dept Id existed!");
+			bindingResult.rejectValue("departmentid", "error.dept", "This deptId existed!");
+		}
+				
+		if (bindingResult.hasErrors()) {		
+			logger.debug("Binding result has Error!");
+			
+			//Get error message
+	         Map<String, String> errors = bindingResult.getFieldErrors().stream().collect(
+	        		 						  Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)
+	                 					  );
+	         
+	         response.setResult(0);
+	         response.setErrorMessages(errors);			
+		}
+		else {				
+			dept.setTenantid(tenantId);			
+			dept.setDepartmentpath(dept.getDepartmentid() + "::");
+			dept.setCompanyId(dept.getDepartmentid());
+			dept.setCompanyName(dept.getDepartmentname());
+			dept.setParentdept("self");
+			
+			logger.debug("++++++++++++++++++Check Company Infor++++++++++++++++++!");
+			logger.debug("-----------------	Company ID				: " + dept.getDepartmentid());
+			logger.debug("-----------------	Company Name			: " + dept.getDepartmentname());			
+			logger.debug("----------------- Company Email			: " + dept.getEmail());
+			logger.debug("----------------- Tenant ID	    	: " + dept.getTenantid());
+			logger.debug("++++++++++++++++++Company Infor End++++++++++++++++++++!");
+			
+			deptService.saveDept(dept);
+			response.setResult(1);					
+		}	
+		
+		return response;
+	}		
 	
 	private boolean hasUser(String deptId, int tenantId) {
 		boolean check = false;

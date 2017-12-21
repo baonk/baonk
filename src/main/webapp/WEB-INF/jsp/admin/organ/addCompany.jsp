@@ -11,16 +11,10 @@
   	<script	src="/js/popup.js"></script>	    
     <script src = "/js/jquery/jquery-ui.js"></script>	
   	<script type="text/javascript">
-  		var mode								 = "<c:out value='${mode}'/>"; 		
-  		
+  		var mode = "<c:out value='${mode}'/>"; 
+
   		window.onload = function () { 	
-  			document.getElementById("parentDeptName").value = pDeptName;
-  			
-  			if (mode == "add") {						
-		  		document.getElementById("parentDeptID").value    = pDeptId;
-				document.getElementById("_compID").value  		 = compId;		
-		  		document.getElementById("_compName").value    	 = compName;
-  			}	
+	
   		}  	
   		
   		function checkRequirement() {
@@ -56,10 +50,10 @@
   			var url  = null;
   			
   			if (mode != "add") {
-  				url = "/admin/updateDept";
+  				url = "/admin/updateCompany";
   			}
   			else {
-  				url = "/admin/saveNewDept";
+  				url = "/admin/saveNewCompany";
   			}
   			
   			$.ajax({
@@ -73,7 +67,8 @@
   		        { 
   		        	if (data.result == 1) {
   		        		if (mode == "add") {
-	  	  		          	parent.reloadView(document.getElementById("_deptID").value, document.getElementById("_deptName").value);
+  		        			var numberOfComp = "<c:out value='${numberOfComp}'/>";
+	  	  		          	parent.reloadView5(document.getElementById("_deptID").value, document.getElementById("_deptName").value, numberOfComp);
 	  	  		            parent.divPopUpHidden();
   		        		}
   		        		else {
