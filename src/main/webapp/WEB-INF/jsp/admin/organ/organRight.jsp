@@ -74,8 +74,8 @@
 							<option value="company_id">Company ID</option>							
 							<option value="email">Email</option>
 						</select>
-						<input id="keyword" onKeyPress="search_press()" style="width:160px; height: 20px;" />
-						<a class="imgbtn" style="vertical-align:middle"><span onClick="search_click()">Search</span></a>
+						<input id="keyword" onKeyPress="searchPress(event);" style="width:160px; height: 20px;" />
+						<a class="imgbtn" style="vertical-align:middle"><span onClick="searchClick()">Search</span></a>
 					</th>
 				</tr>
 			    <tr>

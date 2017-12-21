@@ -184,6 +184,64 @@ public class AdminOrganController {
 	}	
 	
 	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Get all the detail information when user searching
+	 ****		 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value="/admin/organ/getSearchInfo", method = RequestMethod.POST)
+	@ResponseBody
+	public String searchDetailInfo(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request) throws JsonProcessingException {
+		logger.debug("======================searchDetailInfo start======================");
+		ObjectMapper om = new ObjectMapper();
+		User user 		= commonUtil.getUserInfo(loginCookie);
+		int tenantId 	= user.getTenantid();
+		String deptID 	= request.getParameter("deptID");
+		String mode 	= request.getParameter("optionVal");
+		String sStr     = request.getParameter("searchStr");
+		String field	= request.getParameter("selectValue");
+		ResponseObject fail = new ResponseObject("Error");
+		
+		//logger.debug("Check mode: " + mode + " || DeptID: " + deptID);
+		
+		if (mode.equals("muser")) {
+			//List<User> listUser = userService.findUsersInAdminMode(deptID, tenantId);
+			List<User> listUser = userService.findUsersWithSearchOption(deptID, sStr, field, tenantId);
+			
+			if (listUser.isEmpty()) {
+				logger.debug("======================searchDetailInfo end======================");
+				return om.writeValueAsString(fail);
+			}	
+			
+			logger.debug("======================searchDetailInfo end======================");			
+			return om.writeValueAsString(listUser);
+		}
+		else if (mode.equals("mdept")) {
+			List<SimpleDepartment> listSimpleDept = deptService.getAllSimpleSubDepts(deptID, tenantId);
+			if (listSimpleDept.isEmpty()) {
+				logger.debug("======================searchDetailInfo end======================");
+				return om.writeValueAsString(fail);
+			}	
+			
+			logger.debug("======================searchDetailInfo end======================");			
+			return om.writeValueAsString(listSimpleDept);
+		}	
+		else {
+			Department dept = deptService.findByDepartmentidAndTenantid(deptID, tenantId);
+			
+			if (dept.getParentdept().equals("self")) {
+				SimpleDepartment company = deptService.getSimpleDeptList(deptID, tenantId);
+				logger.debug("======================searchDetailInfo end======================");				
+				return om.writeValueAsString(company);
+			}
+			else {				
+				logger.debug("======================searchDetailInfo end======================");
+				return om.writeValueAsString(fail);
+			}
+		}
+	}	
+	
+	/*******************************************************************************************************************************
 	 ****	Mode: 0 + Get all sub department recursively.
 	 ****		  1	+ Get only sub department of current department
 	 ****			  then stop.

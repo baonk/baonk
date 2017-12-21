@@ -823,3 +823,84 @@
 		});
 	}
 	
+	function searchPress(event) {
+		if (event.which == 13) {
+			searchClick();
+    	}
+	}
+	
+	function searchClick() {
+		var searchStr = document.getElementById("keyword").value;
+		if (!searchStr.replace(/\s+/g, '')) {
+			alert("Please input the keyword to search!");
+			document.getElementById("keyword").focus();
+			return;
+		}				
+		
+		var value 		 = document.querySelector('input[name=listOpt]:checked').value;		
+		var selectedElmt = null;
+		
+		if (value == "muser") {
+			selectedElmt = document.getElementById("search_type1");
+		}
+		else if (value == "mdept") {
+			selectedElmt = document.getElementById("search_type2");
+		}
+		else {
+			selectedElmt = document.getElementById("search_type3");
+		}
+		
+		var selectedValue = selectedElmt.options[selectedElmt.selectedIndex].value;		
+		
+		$.ajax({
+			type: "POST",
+			url: "/admin/organ/getSearchInfo",
+			data: {
+				"deptID"	  : currentClickedDeptId,
+				"optionVal"   : value,
+				"searchStr"   : searchStr,
+				"selectValue" : selectedValue
+			},
+			dataType: "JSON",
+			async: true,
+			success: function(result) {				
+				renderData(result);
+			},
+			error: function (xhr, status, e){
+				alert("Get data failed!");
+			}
+		});	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.nv.baonk.vo.Department;
 
 @Repository("departRepository")
-public interface DepartmentRepository extends JpaRepository<Department, Long> {		
+public interface DepartmentRepository extends JpaRepository<Department, Long> {
 	List<Department> findByParentdeptAndTenantid(String parentDept, int tenantId);	
 	Department findByDepartmentidAndTenantid(String deptId, int tenantId);
 	List<Department> findByCompanyIdAndTenantid(String companyId, int tenantId);	
