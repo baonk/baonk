@@ -1,6 +1,7 @@
 package com.nv.baonk.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -89,7 +90,7 @@ public class AdminOrganController {
 		
 		for (SimpleDepartment company: simpleCompanyList) {
 			if (company.getCompanyid().equals(userCompId)) {
-				logger.debug("CompanyID: " + company.getCompanyid() + " || deptPath: " + deptPath);
+				//logger.debug("CompanyID: " + company.getCompanyid() + " || deptPath: " + deptPath);
 				getAllSubDepts2(company, tenantId, deptPath, 1);
 			}
 			else {
@@ -811,10 +812,10 @@ public class AdminOrganController {
 	@RequestMapping(value="/admin/deleteDept", method = RequestMethod.POST)	
 	@ResponseBody
 	public ValidateResponseObject deleteDept(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException{	
-		logger.debug("----------------------Delete dept is running-----------------------!");	
+		logger.debug("----------------------Delete dept is running-----------------------!");
 		
 		User loginUser		  		= commonUtil.getUserInfo(loginCookie);
-		ValidateResponseObject resp = new ValidateResponseObject();	
+		ValidateResponseObject resp = new ValidateResponseObject();
 		Map<String, String> errors  = new HashMap<>();
 		int tenantId 		  		= loginUser.getTenantid();
 		String deptId   	  		= request.getParameter("deptId") != null ? request.getParameter("deptId") : "";
@@ -830,25 +831,132 @@ public class AdminOrganController {
 					deptService.deleteDept(depart);
 				}
 				
-				deptService.deleteDept(dept);				
-				resp.setResult(1);	
-			} 
+				deptService.deleteDept(dept);
+				resp.setResult(1);
+			}
 			catch (Exception e) {
 				resp.setResult(0);
 				errors.put("unknown", e.getMessage());
 				resp.setErrorMessages(errors);
 			}
 		}
-		else {			
+		else {
 			errors.put("hasUser", "This department has users so you cannot delete it!");
 			resp.setErrorMessages(errors);
 			resp.setResult(0);
 		}
 		
-		logger.debug("-----------------------Delete dept end-----------------------------!");	
+		logger.debug("-----------------------Delete dept end-----------------------------!");
 		
 		return resp;		
 	}
+		
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Map the move user request of administrator privilege users.
+	 ****   	 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value="/admin/moveDept", method = RequestMethod.GET)
+	public String moveDept(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, Model model) throws JsonProcessingException {
+		logger.debug("----------------------Move dept is running-----------------------!");
+		ObjectMapper om		  = new ObjectMapper();
+		User loginUser		  = commonUtil.getUserInfo(loginCookie);
+		int tenantId 		  = loginUser.getTenantid();
+		String deptId   	  = request.getParameter("deptId") != null ? request.getParameter("deptId") : "";
+		Department mdept	  = deptService.findByDepartmentidAndTenantid(deptId, tenantId);		
+		SimpleDepartment dept = deptService.getSimpleDeptList(mdept.getCompanyId(), tenantId);
+		
+		getAllSubDepts(dept, tenantId, 1);
+		model.addAttribute("listDepartment", om.writeValueAsString(dept));
+		model.addAttribute("usercompID", mdept.getCompanyId());
+		model.addAttribute("deptID", deptId);
+		
+		logger.debug("-----------------------Move dept end-----------------------------!");
+		return "admin/organ/moveDept";
+	}
+	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Map the save moved user request of administrator privilege users.
+	 ****   	 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value="/admin/saveMovedDept", method = RequestMethod.POST)
+	@ResponseBody
+	public ValidateResponseObject saveMovedDept(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException{	
+		logger.debug("----------------------Save moved dept is running-----------------------!");
+		
+		User loginUser	   			  = commonUtil.getUserInfo(loginCookie);		
+		int tenantId 	  			  = loginUser.getTenantid();
+		ValidateResponseObject resp   = new ValidateResponseObject();
+		Map<String, String> errors    = new HashMap<>();
+		String currentDeptId		  = request.getParameter("crDeptId")  != null ? request.getParameter("crDeptId")  : "";
+		String newDeptId   			  = request.getParameter("newDeptId") != null ? request.getParameter("newDeptId") : "";
+		Department movedDept		  = deptService.findByDepartmentidAndTenantid(currentDeptId, tenantId);
+		Department newDept 			  = deptService.findByDepartmentidAndTenantid(newDeptId, tenantId);
+		List<Department> listSubDepts = new ArrayList<Department>();
+		
+		getAllSubDepts(listSubDepts, currentDeptId, tenantId);
+		
+		if (currentDeptId.equals(newDeptId)) {
+			errors.put("reason", "Cannot move this department to its position!");
+			resp.setResult(0);
+			return resp;
+		}
+		
+		if (listSubDepts.contains(newDept)) {
+			errors.put("reason", "Cannot move this department to its sub department!");
+			resp.setResult(0);
+			return resp;
+		}
+		
+		try {
+			String deptPath = newDept.getDepartmentpath();
+			movedDept.setDepartmentpath(deptPath + "::" + movedDept.getDepartmentid());
+			movedDept.setParentdept(newDeptId);
+			deptService.updateDept(movedDept);
+			
+			movedAllSubDept(currentDeptId, movedDept.getDepartmentpath(), tenantId);			
+			
+			resp.setResult(1);
+		}
+		catch (Exception e) {
+			errors.put("reason", e.getMessage());
+			resp.setResult(0);
+		}		
+		
+		logger.debug("-----------------------Save dept User end-----------------------------!");		
+		
+		return resp;			
+	}	
+	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Get all the new sub department of a parent department when a department has been moved
+	 ****		 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value="/admin/organ/getInfoAfterMoving", method = RequestMethod.POST)
+	@ResponseBody
+	public String getNewSubDept(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request) throws JsonProcessingException {
+		logger.debug("======================getSimpleSubDept start======================");
+		
+		ObjectMapper om       			   = new ObjectMapper();
+		User user 			  			   = commonUtil.getUserInfo(loginCookie);
+		int tenantId 		  			   = user.getTenantid();
+		String deptID 		 			   = request.getParameter("deptID");
+		Department dept 	 			   = deptService.findByDepartmentidAndTenantid(deptID, tenantId);
+		String[] deptPath     			   = dept.getDepartmentpath().split("::");		
+		SimpleDepartment highestParentDept = deptService.getSimpleDeptList(deptPath[1], tenantId);
+		
+		getAllSubDepts2(highestParentDept, tenantId, deptPath, 1);
+
+		logger.debug("======================getSimpleSubDept end======================");
+		
+		logger.debug("BAONK CHECK: " + om.writeValueAsString(highestParentDept));
+		return om.writeValueAsString(highestParentDept);
+	}	
 	
 	private boolean hasUser(String deptId, int tenantId) {
 		boolean check = false;
@@ -869,6 +977,28 @@ public class AdminOrganController {
 		}
 		
 		return check;
+	}
+	
+	private void getAllSubDepts(List<Department> listSubDepts, String deptId, int tenantId) {
+		List<Department> subDeptsList = deptService.getAllSubDepts(deptId, tenantId);
+		if (subDeptsList.size() > 0) {	
+			listSubDepts.addAll(subDeptsList);
+			for (Department dept : subDeptsList) {
+				getAllSubDepts(listSubDepts, dept.getDepartmentid(), tenantId);
+			}			
+		}
+	}
+	
+	private void movedAllSubDept(String deptId, String deptpath, int tenantId) {
+		List<Department> subDeptsList = deptService.getAllSubDepts(deptId, tenantId);
+		
+		if (subDeptsList.size() > 0) {			
+			for (Department dept2 : subDeptsList) {				
+				dept2.setDepartmentpath(deptpath + "::" + dept2.getDepartmentid());
+				deptService.updateDept(dept2);
+				movedAllSubDept(dept2.getDepartmentid(), dept2.getDepartmentpath(), tenantId);
+			}			
+		}
 	}
 	
 	@InitBinder

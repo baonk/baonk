@@ -82,6 +82,36 @@
 		
 	}
 	
+	function reloadView4(currentDeptId, newParentDeptId) {
+		console.log("currentDeptId: " + currentDeptId + " || newParentDeptId: " + newParentDeptId);
+		
+		var currentElement    = document.getElementById(currentDeptId);
+		var newParentElmt     = document.getElementById(newParentDeptId);
+		
+		var currentDivElmt    = currentElement.parentElement;
+		var currParentDivElmt = currentDivElmt.parentElement;
+		
+		currParentDivElmt.removeChild(currentDivElmt);
+		
+		$.ajax({
+			type: "POST",
+			url: "/admin/organ/getInfoAfterMoving",
+			data: {
+				"deptID"	: newParentDeptId				
+			},
+			dataType: "JSON",
+			async: true,
+			success: function(result) {
+				console.log(result);
+			},
+			error: function (xhr, status, e){
+				alert("Get data failed!");
+			}
+		});	
+		
+			
+	}
+	
 	function getDetailData(obj) {
 		var deptId = obj.getAttribute("deptId");
 		
@@ -317,6 +347,7 @@
 			span.setAttribute("style", "cursor: pointer;");
 			span.setAttribute("deptId", list[i]["departmentid"]);
 			span.setAttribute("name", list[i]["departmentid"]);
+			span.setAttribute("id", list[i]["departmentid"]);
 			span.setAttribute("class", "subOff");
 			span.onclick = function () {getDetailData(this);};
 			
@@ -593,7 +624,7 @@
 	}		
 	
 	function delDept() {
-		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {			
+		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {		
 			alert("Please select a department!");
 			return;
 		}
@@ -608,11 +639,11 @@
 		var result1 = confirm("Do you want to delete this department?");
 		
 		if (result1 == true) {
-			$.ajax({			
+			$.ajax({
 				type: "POST",
 				url: "/admin/deleteDept",
 				data: {
-					"deptId" : currentClickedDeptId				
+					"deptId" : currentClickedDeptId	
 				},
 				dataType: "JSON",
 				async: true,
@@ -622,23 +653,38 @@
 						reloadView3();
   		        	}
   		        	else {
-  		        		var list = data.errorMessages;  
+  		        		var list = data.errorMessages;
   		        		var content = list["hasUser"];
   		        		if (!content) {
   		        			content = list["unknown"];
   		        			alert(content);
   		        		}
-  		        		else {  		        			
+  		        		else {
   		        			alert(content);
   		        		}
   		        	}					
-					
 				},
- 				error : function(jqXHR, textStatus, errorThrown) {            	    
+ 				error : function(jqXHR, textStatus, errorThrown) {
 					alert("Error: " + jqXHR.status + ", " + textStatus);
 				}
-			});	
-		}	
+			});
+		}
+	}
+	
+	function movDept() {
+		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {
+			alert("Please select a department!");
+			return;
+		}
+		else {
+			var pos = document.getElementById(currentClickedDeptId).parentElement.getAttribute("id");
+			if (pos && pos.substring(0, 7) == "company") {
+				alert("Please select a department not a company!");
+				return;
+			}
+		}
+		
+		divPopUpShow(400, 400, "/admin/moveDept?deptId=" + currentClickedDeptId);
 	}
 	
 	function exportFile() {		
