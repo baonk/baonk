@@ -29,7 +29,7 @@
 		<div style="height: 703px;">
 			<table style="margin-top:10px; width: 100%;">
 				<tr>
-					<th>Company management</th>
+					<th style="width: 50%;">Company management</th>
 					<th>
 						<div style="display: inline;">
 							<input type="radio" name="listOpt" id="listOpt1" value="muser" onClick="changeList(this)" checked  />
@@ -51,17 +51,28 @@
 						<a class="imgbtn" style="vertical-align:middle"><span onClick="deptsearch_click()">Dept Search</span></a>
 					</th>
 					<th>
-						<select id="search_type" style="width:100px; height: 20px; text-align: center; text-align-last: center;">
-							<option selected value="displayname" >Name</option>
-							<option value="cn" >UserID</option>
-							<option value="description" >Description</option>
-							<option value="title" >Title</option>
-							<option value="telephonenumber" >Phone</option>
-							<option value="mobile" >Mobile</option>
-							<option value="HomePhone" >HomePhone</option>
-							<option value="facsimileTelephoneNumber" >Telephone</option>
-							<option value="mail" >Email</option>
-							<option value="streetAddress" >Address</option>
+						<select id="search_type1" style="width:100px; height: 20px; text-align: center; text-align-last: center;">
+							<option selected value="name">Name</option>
+							<option value="userid">UserID</option>
+							<option value="position">Position</option>
+							<option value="email">Email</option>
+							<option value="phone_number">Phone</option>
+							<option value="homephone">HomePhone</option>
+							<option value="nickname">Nick Name</option>							
+							<option value="country">Country</option>
+							<option value="homeaddress">Address</option>
+						</select>
+						<select id="search_type2" style="width:130px; height: 20px; text-align: center; text-align-last: center; display: none;">
+							<option selected value="department_name">Department Name</option>
+							<option value="department_id">DeparmentID</option>
+							<option value="email">Email</option>
+							<option value="company_id">Company ID</option>
+							<option value="company_name">Company Name</option>
+						</select>
+						<select id="search_type3" style="width:120px; height: 20px; text-align: center; text-align-last: center; display: none;">
+							<option selected value="company_name">Company Name</option>
+							<option value="company_id">Company ID</option>							
+							<option value="email">Email</option>
 						</select>
 						<input id="keyword" onKeyPress="search_press()" style="width:160px; height: 20px;" />
 						<a class="imgbtn" style="vertical-align:middle"><span onClick="search_click()">Search</span></a>

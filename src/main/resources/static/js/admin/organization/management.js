@@ -83,6 +83,10 @@
 		currentClickedDeptId = null;
 		divRootElmt.removeChild(parentElmnt);
 		
+		if (divRootElmt.childNodes.length <= 3) {
+			divRootElmt.firstElementChild.className = "deptNone";
+		}
+		
 		divRootElmt.children[2].click();
 		
 	}
@@ -542,6 +546,9 @@
 			document.getElementById("employeeList").style.display = "block";
 			document.getElementById("deptList").style.display = "none";
 			document.getElementById("companyList").style.display = "none";
+			document.getElementById("search_type1").style.display = "";
+			document.getElementById("search_type2").style.display = "none";
+			document.getElementById("search_type3").style.display = "none";
 		}
 		else if (value == "mdept") {
 			document.getElementById("userOpt").style.display = "none";
@@ -550,6 +557,9 @@
 			document.getElementById("employeeList").style.display = "none";
 			document.getElementById("deptList").style.display = "block";
 			document.getElementById("companyList").style.display = "none";
+			document.getElementById("search_type1").style.display = "none";
+			document.getElementById("search_type2").style.display = "";
+			document.getElementById("search_type3").style.display = "none";
 		}
 		else {
 			document.getElementById("userOpt").style.display = "none";
@@ -558,6 +568,9 @@
 			document.getElementById("employeeList").style.display = "none";
 			document.getElementById("deptList").style.display = "none";
 			document.getElementById("companyList").style.display = "block";
+			document.getElementById("search_type1").style.display = "none";
+			document.getElementById("search_type2").style.display = "none";
+			document.getElementById("search_type3").style.display = "";
 		}
 		
 		refreshView();
@@ -744,7 +757,7 @@
 		}
 		
 		var pos = document.getElementById(currentClickedDeptId).parentElement.getAttribute("id");
-		if (pos && pos.substring(0, 7) != "company") {
+		if (!pos || pos.substring(0, 7) != "company") {
 			alert("Please select a company!");
 			return;
 		}
@@ -752,21 +765,61 @@
 		divPopUpShow(717, 140, "/admin/addCompany?companyId=" + currentClickedDeptId);
 	}	
 	
-	function exportFile() {		
-		$.ajax({			
+	function delCompany() {
+		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {		
+			alert("Please select a company!");
+			return;
+		}
+		
+		var pos = document.getElementById(currentClickedDeptId).parentElement.getAttribute("id");
+		if (!pos || pos.substring(0, 7) != "company") {
+			alert("Please select a company!");
+			return;
+		}
+		
+		var result = confirm("Do you want to delete this company?");
+		if (result == true) {
+			$.ajax({
+				type: "POST",
+				url: "/admin/deleteCompany",
+				data: {
+					"companyId" : currentClickedDeptId
+				},
+				dataType: "JSON",
+				async: true,
+				success : function(data) {
+					if (data.result == 1) {
+						alert("Delete company successful!");
+						reloadView3();
+  		        	}
+  		        	else {
+  		        		var list = data.errorMessages;
+  		        		var content = list["reason"];
+  		        		alert(content);
+  		        	}
+				},
+ 				error : function(jqXHR, textStatus, errorThrown) {
+					alert("Error: " + jqXHR.status + ", " + textStatus);
+				}
+			});
+		}
+	}
+	
+	function exportFile() {
+		$.ajax({
 			type: "GET",
 			url: "/admin/exportExcelFile",
 			data: {
-				"companyId" : usercompID					
+				"companyId" : usercompID
 			},
 			dataType: "text",
 			async: true,
-			success : function(data, textStatus, jqXHR) {											
+			success : function(data, textStatus, jqXHR) {
 
 			},
-				error : function(jqXHR, textStatus, errorThrown) {            	    
+				error : function(jqXHR, textStatus, errorThrown) {
 				alert("Error: " + jqXHR.status + ", " + textStatus);
 			}
-		});	
+		});
 	}
 	

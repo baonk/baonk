@@ -1097,6 +1097,48 @@ public class AdminOrganController {
 		return response;
 	}
 	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Map the delete company request of administrator privilege users.
+	 ****   	 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value="/admin/deleteCompany", method = RequestMethod.POST)	
+	@ResponseBody
+	public ValidateResponseObject deleteCompany(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException{	
+		logger.debug("----------------------Delete company is running-----------------------!");
+		
+		User loginUser		  		  = commonUtil.getUserInfo(loginCookie);
+		ValidateResponseObject resp   = new ValidateResponseObject();
+		Map<String, String> errors    = new HashMap<>();
+		int tenantId 		  		  = loginUser.getTenantid();
+		String companyId   	  		  = request.getParameter("companyId") != null ? request.getParameter("companyId") : "";		
+		List<Department> subDeptsList = deptService.getAllSubDepts(companyId, tenantId);
+		
+		
+		if (subDeptsList.size() == 0) {
+			try {
+				Department company = deptService.findByDepartmentidAndTenantid(companyId, tenantId);				
+				deptService.deleteDept(company);
+				resp.setResult(1);
+			}
+			catch (Exception e) {
+				resp.setResult(0);
+				errors.put("reason", e.getMessage());
+				resp.setErrorMessages(errors);
+			}
+		}
+		else {
+			errors.put("reason", "You cannot delete a company which has departments!");
+			resp.setErrorMessages(errors);
+			resp.setResult(0);
+		}
+		
+		logger.debug("-----------------------Delete company end-----------------------------!");
+		
+		return resp;		
+	}
+	
 	private boolean hasUser(String deptId, int tenantId) {
 		boolean check = false;
 		List<User> listOfUsers = userService.getAllUsersOfDepartment(deptId, tenantId);
