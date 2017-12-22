@@ -190,7 +190,7 @@
 			},
 			dataType: "JSON",
 			async: true,
-			success: function(result) {
+			success: function(result) {				
 				renderData(result);
 			},
 			error: function (xhr, status, e){

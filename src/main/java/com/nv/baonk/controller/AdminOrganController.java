@@ -626,6 +626,7 @@ public class AdminOrganController {
 			user.setCompanyid(userExists.getCompanyid());
 			user.setCompanyname(userExists.getCompanyname());
 			user.setRoles(userExists.getRoles());
+			user.setActive(1);
 			
 			logger.debug("++++++++++++++++++Check User Infor++++++++++++++++++!");
 			logger.debug("-----------------	User ID				: " + user.getUserid());
@@ -634,7 +635,7 @@ public class AdminOrganController {
 			logger.debug("----------------- User Department ID  : " + user.getDepartmentid());
 			logger.debug("----------------- User Company ID		: " + user.getCompanyid());
 			logger.debug("----------------- User Company Name   : " + user.getCompanyname());
-			logger.debug("----------------- User Tenant ID	    : " + user.getCompanyname());
+			logger.debug("----------------- User Tenant ID	    : " + user.getTenantid());
 			logger.debug("++++++++++++++++++User Infor End++++++++++++++++++++!");
 			
 			userService.updateUser(user);

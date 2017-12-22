@@ -5,6 +5,7 @@
 <html style="width:100%;">
 <head>
 	<title>Registration Form</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" type="text/css" href="/css/registration.css" />		
 	<link rel="stylesheet" type="text/css" href="/js/jquery/jquery-ui.css" />	
   	<script src="/js/jquery/jquery-1.12.4.js"></script> 	
@@ -39,8 +40,8 @@
 			if (mode != "add") {				
 				$("#txtBirthday").datepicker("setDate", birthDay);
 
-				document.getElementById("deptName").value  = "<c:out value='${user.departmentid}'/>";			
-	  			document.getElementById("deptID").value    = "<c:out value='${user.departmentname}'/>";
+				document.getElementById("deptName").value  = "<c:out value='${user.departmentname}'/>";
+	  			document.getElementById("deptID").value    = "<c:out value='${user.departmentid}'/>";
 			}
 
 			
@@ -184,7 +185,7 @@
 			            	<form:input type="text" path="username" placeholder="User Name" class="baonk-control-1 baonk" id="_userName" />
 							<lable id="username" class="text-danger"/>			            	
 			            </td>
-			            <th style="width: 71px; text-align:center">Department ID</th>
+			            <th style="width: 71px; text-align:center">Department Name</th>
 			            <td style="width: 220px;">
 			            	<form:input type="text" id="deptName" path="departmentname" placeholder="Department Name" class="baonk-control-1 baonk" readonly="true" maxlength="50" />
 							<form:errors path="departmentname" cssClass="text-danger"/>	

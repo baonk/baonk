@@ -90,44 +90,34 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public List<User> findUsersWithSearchOption(String deptID, String sStr, String field, int tenantId) {	
-		List<User> list= new ArrayList<>();
-		logger.debug("TEST field: " + field);
+		List<User> list= new ArrayList<>();	
 		
 		switch (field) {
-			case "name":			
-				logger.debug("1");
+			case "name":					
 				list = userRepository.searchByName(deptID, tenantId, sStr);
 				break;
-			case "userid":
-				logger.debug("2");
+			case "userid":				
 				list = userRepository.searchByUserID(deptID, tenantId, sStr);
 				break;
-			case "position":
-				logger.debug("3");
+			case "position":				
 				list = userRepository.searchByPosition(deptID, tenantId, sStr);
 				break;
-			case "email":
-				logger.debug("4");
+			case "email":			
 				list = userRepository.searchByEmail(deptID, tenantId, sStr);
 				break;
-			case "phone_number":
-				logger.debug("5");
+			case "phone_number":				
 				list = userRepository.searchByPhonenumber(deptID, tenantId, sStr);
 				break;
-			case "homephone":
-				logger.debug("6");
+			case "homephone":				
 				list = userRepository.searchByHomephone(deptID, tenantId, sStr);
 				break;
-			case "nickname":
-				logger.debug("7");
+			case "nickname":				
 				list = userRepository.searchByNickname(deptID, tenantId, sStr);
 				break;
-			case "country":
-				logger.debug("8");
+			case "country":				
 				list = userRepository.searchByCountry(deptID, tenantId, sStr);
 				break;
-			case "homeaddress":
-				logger.debug("9");
+			case "homeaddress":				
 				list = userRepository.searchByHomeAddress(deptID, tenantId, sStr);
 				break;
 			default:
