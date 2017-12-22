@@ -202,10 +202,7 @@ public class AdminOrganController {
 		String field	= request.getParameter("selectValue");
 		ResponseObject fail = new ResponseObject("Error");
 		
-		//logger.debug("Check mode: " + mode + " || DeptID: " + deptID);
-		
-		if (mode.equals("muser")) {
-			//List<User> listUser = userService.findUsersInAdminMode(deptID, tenantId);
+		if (mode.equals("muser")) {			
 			List<User> listUser = userService.findUsersWithSearchOption(deptID, sStr, field, tenantId);
 			
 			if (listUser.isEmpty()) {
@@ -217,7 +214,7 @@ public class AdminOrganController {
 			return om.writeValueAsString(listUser);
 		}
 		else if (mode.equals("mdept")) {
-			List<SimpleDepartment> listSimpleDept = deptService.getAllSimpleSubDepts(deptID, tenantId);
+			List<Department> listSimpleDept = deptService.findDeptsWithSearchOption(deptID, sStr, field, tenantId);
 			if (listSimpleDept.isEmpty()) {
 				logger.debug("======================searchDetailInfo end======================");
 				return om.writeValueAsString(fail);
@@ -227,12 +224,11 @@ public class AdminOrganController {
 			return om.writeValueAsString(listSimpleDept);
 		}	
 		else {
-			Department dept = deptService.findByDepartmentidAndTenantid(deptID, tenantId);
+			List<Department> listCompany = deptService.findCompanyWithSearchOption(sStr, field, tenantId);
 			
-			if (dept.getParentdept().equals("self")) {
-				SimpleDepartment company = deptService.getSimpleDeptList(deptID, tenantId);
-				logger.debug("======================searchDetailInfo end======================");				
-				return om.writeValueAsString(company);
+			if (listCompany != null && !listCompany.isEmpty()) {				
+				logger.debug("======================searchDetailInfo end======================");
+				return om.writeValueAsString(listCompany);
 			}
 			else {				
 				logger.debug("======================searchDetailInfo end======================");

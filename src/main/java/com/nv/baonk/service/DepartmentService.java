@@ -12,5 +12,7 @@ public interface DepartmentService {
 	public Department findByDepartmentidAndTenantid(String deptID, int tenantID);
 	public void saveDept(Department dept);
 	public void updateDept(Department dept);
-	public void deleteDept(Department dept);	
+	public void deleteDept(Department dept);
+	public List<Department> findDeptsWithSearchOption(String deptID, String sStr, String field, int tenantId);
+	public List<Department> findCompanyWithSearchOption(String sStr, String field, int tenantId);	
 }

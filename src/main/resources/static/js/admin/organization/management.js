@@ -223,8 +223,15 @@
 							addDeptNode(result[i]["departmentid"], result[i]["departmentname"], result[i]["companyname"]);
 						}
 						break;
-				case "mcomp":					
-						addCompNode(result["companyid"], result["companyname"]);						
+				case "mcomp":
+						if (result.length > 0) {							
+							for (var i = 0; i < len; i++) {
+								addCompNode(result[i]["companyId"], result[i]["companyName"]);
+							}
+						}
+						else {
+							addCompNode(result["companyid"], result["companyname"]);
+						}														
 						break;
 			}
 		}

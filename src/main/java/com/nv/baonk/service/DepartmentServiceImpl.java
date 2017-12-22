@@ -1,5 +1,6 @@
 package com.nv.baonk.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -69,6 +70,54 @@ public class DepartmentServiceImpl implements DepartmentService {
 	@Override
 	public void deleteDept(Department dept) {		
 		departRepository.delete(dept);
+	}
+
+	@Override
+	public List<Department> findDeptsWithSearchOption(String deptID, String sStr, String field, int tenantId) {		
+		List<Department> list= new ArrayList<>();	
+		
+		switch (field) {
+			case "department_name":					
+				list = departRepository.searchByDeptName(deptID, tenantId, sStr);
+				break;
+			case "department_id":				
+				list = departRepository.searchByDeptID(deptID, tenantId, sStr);
+				break;
+			case "email":				
+				list = departRepository.searchByDeptEmail(deptID, tenantId, sStr);
+				break;
+			case "company_id":			
+				list = departRepository.searchByCompanyID(deptID, tenantId, sStr);
+				break;
+			case "company_name":				
+				list = departRepository.searchByCompanyName(deptID, tenantId, sStr);
+				break;
+			default:
+				list = null;
+				break;
+		}
+		return list;
+	}
+
+	@Override
+	public List<Department> findCompanyWithSearchOption(String sStr, String field, int tenantId) {		
+		List<Department> list = null;
+		switch (field) {
+		case "company_name":					
+			list = departRepository.searchByCompanyName2(tenantId, sStr);
+			break;
+		case "company_id":				
+			list = departRepository.searchByCompanyID2(tenantId, sStr);
+			break;
+		case "email":				
+			list = departRepository.searchByCompanyEmail(tenantId, sStr);
+			break;
+		default:
+			list = null;
+			break;
+		}		
+				
+		return list;
 	}
 
 }
