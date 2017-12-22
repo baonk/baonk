@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -6,22 +7,19 @@
 <head>
 	<title>Registration Form</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<link rel="stylesheet" type="text/css" href="/css/registration.css" />		
-	<link rel="stylesheet" type="text/css" href="/js/jquery/jquery-ui.css" />	
-  	<script src="/js/jquery/jquery-1.12.4.js"></script> 	
-  	<script	src="/js/popup.js"></script>	    
-    <script src = "/js/jquery/jquery-ui.js"></script>	
+	<link rel="stylesheet" type="text/css" href="/css/registration.css" />
+	<link rel="stylesheet" type="text/css" href="/js/jquery/jquery-ui.css" />
+  	<script src="/js/jquery/jquery-1.12.4.js"></script>
+  	<script	src="/js/popup.js"></script>
+    <script src = "/js/jquery/jquery-ui.js"></script>
   	<script type="text/javascript">
   		var deptId	  							 = "<c:out value='${deptID}'/>";
-  		var deptName  							 = "<c:out value='${deptName}'/>";  
+  		var deptName  							 = "<c:out value='${deptName}'/>";
   		var personpicture_cross_dialogArguments  = new Array();
   		var mode								 = "<c:out value='${mode}'/>";
   		var birthDay							 = "<c:out value='${user.birthday}'/>";
   		
-  		window.onload = function () { 				
-			document.getElementById("deptName").value  = deptName;  			
-	  		document.getElementById("deptID").value    = deptId; 
-  			
+  		window.onload = function () {
   			var toYear  = new Date().getFullYear();
 			var sYear   = parseInt(toYear-70);
 			var eYear   = parseInt(toYear+10);
@@ -29,22 +27,21 @@
 			$("#txtBirthday").datepicker({
 		        changeMonth: true,
 		        changeYear: true,
-		        yearRange: sYear + ":" + eYear, 	             
+		        yearRange: sYear + ":" + eYear,
 		        showOn: "button",
 		        buttonImage: "/images/calendar-month.gif",
 		        buttonImageOnly: true
 		    });
 			
-		    $("#txtBirthday").datepicker("option", "dateFormat", "yy-mm-dd");			
+		    $("#txtBirthday").datepicker("option", "dateFormat", "yy-mm-dd");
 			
-			if (mode != "add") {				
+			if (mode != "add") {
 				$("#txtBirthday").datepicker("setDate", birthDay);
-
-				document.getElementById("deptName").value  = "<c:out value='${user.departmentname}'/>";
-	  			document.getElementById("deptID").value    = "<c:out value='${user.departmentid}'/>";
 			}
-
-			
+			else {
+				document.getElementById("deptName").value  = deptName;
+		  		document.getElementById("deptID").value    = deptId;
+			}
   		}  	
   		
   		function checkRequirement() {

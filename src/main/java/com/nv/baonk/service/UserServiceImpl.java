@@ -18,7 +18,7 @@ import com.nv.baonk.vo.User;
 
 @Service
 public class UserServiceImpl implements UserService{
-	private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+	//private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	
 	@Autowired
 	private RoleRepository roleRepository;
