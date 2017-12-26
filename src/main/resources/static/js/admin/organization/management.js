@@ -105,7 +105,7 @@
 			type: "POST",
 			url: "/admin/organ/getInfoAfterMoving",
 			data: {
-				"deptID"	: currentDeptId				
+				"deptID" : currentDeptId				
 			},
 			dataType: "JSON",
 			async: true,
@@ -115,6 +115,13 @@
 				
 				while (highestParentElmt.childNodes.length > 3) {
 					highestParentElmt.removeChild(highestParentElmt.lastChild);
+				}
+				
+				highestParentElmt.firstChild.className = "deptOn";
+				var highestParentId = highestParentElmt.firstChild.getAttribute("id");				
+				
+				if (arrSubDept.indexOf(highestParentId) == -1) {
+					arrSubDept.push(highestParentId);
 				}
 				
 				displaySubDept(highestParentElmt, result["subDept"]);	
@@ -172,6 +179,13 @@
 				
 				while (highestParentElmt.childNodes.length > 3) {
 					highestParentElmt.removeChild(highestParentElmt.lastChild);
+				}
+				
+				highestParentElmt.firstChild.className = "deptOn";
+				var highestParentId = highestParentElmt.firstChild.getAttribute("id");				
+				
+				if (arrSubDept.indexOf(highestParentId) == -1) {
+					arrSubDept.push(highestParentId);
 				}
 				
 				displaySubDept(highestParentElmt, result["subDept"]);
@@ -446,7 +460,7 @@
 				}
 				else {
 					img1.setAttribute("class", "deptOff");
-					while(arrSubDept.indexOf(uniqueId) > -1) {
+					while (arrSubDept.indexOf(uniqueId) > -1) {
 						arrSubDept.splice(arrSubDept.indexOf(uniqueId), 1);
 					}
 				}
@@ -480,7 +494,7 @@
 		var position = parseInt(parentElm.getAttribute("parent"));
 		var childs = parentElm.childNodes;
 		
-		if (obj.getAttribute("class") == "deptOn") {
+		if (obj.getAttribute("class") == "deptOn") {			
 			for (var i = 3; i < childs.length; i++) {
 				childs[i].style.display = "none";
 			}
@@ -488,10 +502,10 @@
 		}
 		else {
 			var uniqueId = obj.getAttribute("id");
-			if (arrSubDept.indexOf(uniqueId) > -1) {
+			if (arrSubDept.indexOf(uniqueId) > -1) {				
 				renderSubDept(obj, childs);
 			}
-			else {
+			else {				
 				var deptId = obj.getAttribute("deptId");
 				
 				$.ajax({
