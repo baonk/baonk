@@ -67,7 +67,7 @@
   			
             personpicture_cross_dialogArguments[0] = userID;
             personpicture_cross_dialogArguments[1] = photoUpload_Complete;
-            divPopUpShow(415, 273, "/admin/addUserImage");  			
+            divPopUpShow(415, 273, "/admin/addUserImage");			
   		}
   		
   		function photoUpload_Complete(ret) {  					

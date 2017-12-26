@@ -193,13 +193,13 @@ public class AdminOrganController {
 	@ResponseBody
 	public String searchDetailInfo(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request) throws JsonProcessingException {
 		logger.debug("======================searchDetailInfo start======================");
-		ObjectMapper om = new ObjectMapper();
-		User user 		= commonUtil.getUserInfo(loginCookie);
-		int tenantId 	= user.getTenantid();
-		String deptID 	= request.getParameter("deptID");
-		String mode 	= request.getParameter("optionVal");
-		String sStr     = request.getParameter("searchStr");
-		String field	= request.getParameter("selectValue");
+		ObjectMapper om 	= new ObjectMapper();
+		User user 			= commonUtil.getUserInfo(loginCookie);
+		int tenantId 		= user.getTenantid();
+		String deptID 		= request.getParameter("deptID");
+		String mode 		= request.getParameter("optionVal");
+		String sStr     	= request.getParameter("searchStr");
+		String field		= request.getParameter("selectValue");
 		ResponseObject fail = new ResponseObject("Error");
 		
 		if (mode.equals("muser")) {			
@@ -236,6 +236,53 @@ public class AdminOrganController {
 			}
 		}
 	}	
+	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Get all the detail information when user searching for departments
+	 ****		 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value="/admin/organ/getDeptSearchInfo", method = RequestMethod.POST)
+	@ResponseBody
+	public String getDeptSearchInfo(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request) throws JsonProcessingException {
+		logger.debug("======================getDeptSearchInfo start======================");
+		ObjectMapper om 	= new ObjectMapper();
+		User user 			= commonUtil.getUserInfo(loginCookie);		
+		int tenantId 		= user.getTenantid();
+		String sStr     	= request.getParameter("searchStr");	
+		ResponseObject fail = new ResponseObject("Error");		
+		
+		List<Department> listSimpleDept = deptService.getDeptsByDeptNameSearch(sStr, tenantId);
+		if (listSimpleDept.isEmpty()) {
+			logger.debug("======================getDeptSearchInfo end======================");
+			return om.writeValueAsString(fail);
+		}	
+		
+		fail.setResult(sStr);
+		logger.debug("======================getDeptSearchInfo end======================");			
+		return om.writeValueAsString(fail);
+		
+	}	
+	
+	/*******************************************************************************************************************************
+	 ****	 
+	 **** 	Get all the detail information when user searching for departments
+	 ****		 
+	********************************************************************************************************************************/
+	
+	@RequestMapping(value="/admin/organ/searchingDept")	
+	public String getSearchingDeptsInfo(@CookieValue("loginCookie")String loginCookie, HttpServletRequest request, Model model) throws JsonProcessingException {
+		User user 						= commonUtil.getUserInfo(loginCookie);		
+		int tenantId 					= user.getTenantid();
+		String sStr 					= request.getParameter("sStr");
+		List<Department> listDepts = deptService.getDeptsByDeptNameSearch(sStr, tenantId);		
+		model.addAttribute("deptList", listDepts);
+	
+		return "/admin/organ/selectDept";
+	}	
+	
+	
 	
 	/*******************************************************************************************************************************
 	 ****	Mode: 0 + Get all sub department recursively.

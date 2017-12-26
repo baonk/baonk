@@ -91,7 +91,7 @@
 		
 	}
 	
-	function reloadView4(currentDeptId, newParentDeptId) {
+	function reloadView4(currentDeptId) {
 		var currentElement    = document.getElementById(currentDeptId);				
 		var currentDivElmt    = currentElement.parentElement;
 		var currParentDivElmt = currentDivElmt.parentElement;
@@ -158,6 +158,33 @@
 		deptView.appendChild(divEl);
 	}
 	
+	function reloadView6(currentDeptId) {		
+		$.ajax({
+			type: "POST",
+			url: "/admin/organ/getInfoAfterMoving",
+			data: {
+				"deptID" : currentDeptId				
+			},
+			dataType: "JSON",
+			async: true,
+			success: function(result) {
+				var highestParentElmt = document.getElementById(result["departmentid"]).parentElement;
+				
+				while (highestParentElmt.childNodes.length > 3) {
+					highestParentElmt.removeChild(highestParentElmt.lastChild);
+				}
+				
+				displaySubDept(highestParentElmt, result["subDept"]);
+				
+				var userDeptElm = document.getElementById(currentDeptId);
+				getDetailData(userDeptElm);
+			},
+			error: function (xhr, status, e) {
+				alert("Get data failed!");
+			}
+		});
+	}
+	
 	function getDetailData(obj) {
 		var deptId = obj.getAttribute("deptId");
 		
@@ -190,26 +217,25 @@
 			},
 			dataType: "JSON",
 			async: true,
-			success: function(result) {				
+			success: function(result) {
 				renderData(result);
 			},
 			error: function (xhr, status, e){
 				alert("Get data failed!");
 			}
-		});	
-		
+		});		
 	}
 	
 	function renderData(result) {
 		var detailDeptView = document.getElementById("detailDeptView");
 		
-		if (result["result"] == "Error") {			
-			deleteOldElement(detailDeptView, 4);			
+		if (result["result"] == "Error") {
+			deleteOldElement(detailDeptView, 4);
 			document.getElementById("errorDiv").style.display = "block";
 		}
 		else {
 			document.getElementById("errorDiv").style.display = "none";
-			var len = result.length;			
+			var len = result.length;
 			deleteOldElement(detailDeptView, 4);
 			
 			switch (value) {
@@ -218,57 +244,54 @@
 							addUserNode(result[i]["userid"], result[i]["username"], result[i]["departmentname"], result[i]["position"]);
 						}
 						break;
-				case "mdept":						
+				case "mdept":
 						for (var i = 0; i < len; i++) {
 							addDeptNode(result[i]["departmentid"], result[i]["departmentname"], result[i]["companyname"]);
 						}
 						break;
 				case "mcomp":
-						if (result.length > 0) {							
+						if (len > 0) {
 							for (var i = 0; i < len; i++) {
 								addCompNode(result[i]["companyId"], result[i]["companyName"]);
 							}
 						}
 						else {
 							addCompNode(result["companyid"], result["companyname"]);
-						}														
+						}
 						break;
 			}
 		}
 	}
 	
-	function setItem(obj) {			
+	function setItem(obj) {
 		if (currentClickedItem != null) {
 			var previousItem = document.getElementById(currentClickedItem);
-			if (previousItem) {				
+			if (previousItem) {
 				previousItem.setAttribute("class", "subDisplayTab");
 			}
 		}
 		
 		obj.setAttribute("class", "subDisplayTabSelect");
-		currentClickedItem = obj.getAttribute("id");	
-		
+		currentClickedItem = obj.getAttribute("id");		
 	}
 	
-	function addCompNode(compId, companyName) {				
-		var detailDeptView = document.getElementById("detailDeptView");			
-		var divNewDepart = document.createElement("div");		
+	function addCompNode(compId, companyName) {
+		var detailDeptView = document.getElementById("detailDeptView");
+		var divNewDepart = document.createElement("div");
 		var divCompId = document.createElement("div");
-		var divCompanyName = document.createElement("div");		
+		var divCompanyName = document.createElement("div");
 		
 		divNewDepart.setAttribute("id", compId + "-item");
 		divNewDepart.onclick = function () {setItem(this);};
 		divNewDepart.setAttribute("class", "subDisplayTab");
-		divCompId.setAttribute("class", "subDisplayElmTab");		
-		divCompanyName.setAttribute("class", "subDisplayElmTab");		
-		
-		//divNewDepart.setAttribute("id", compId);		
+		divCompId.setAttribute("class", "subDisplayElmTab");
+		divCompanyName.setAttribute("class", "subDisplayElmTab");
+
 		divCompId.setAttribute("style", "left: 10%;");
 		divCompanyName.setAttribute("style", "left: 60%;");
-	
 		
 		divCompId.innerHTML = compId;
-		divCompanyName.innerHTML = companyName;	
+		divCompanyName.innerHTML = companyName;
 		
 		divNewDepart.appendChild(divCompId);
 		divNewDepart.appendChild(divCompanyName);
@@ -277,44 +300,41 @@
 	}
 	
 	function addDeptNode(deptId, deptName, companyName) {
-		var detailDeptView = document.getElementById("detailDeptView");	
+		var detailDeptView = document.getElementById("detailDeptView");
 		
-		var divNewDepart = document.createElement("div");		
+		var divNewDepart = document.createElement("div");
 		var divDepartName = document.createElement("div");
 		var divCompanyName = document.createElement("div");
 		
 		divNewDepart.setAttribute("id", deptId + "-item");
 		divNewDepart.onclick = function () {setItem(this);};
 		divNewDepart.setAttribute("class", "subDisplayTab");
-		divDepartName.setAttribute("class", "subDisplayElmTab");		
-		divCompanyName.setAttribute("class", "subDisplayElmTab");		
-		
-		//divNewDepart.setAttribute("id", deptId);		
+		divDepartName.setAttribute("class", "subDisplayElmTab");
+		divCompanyName.setAttribute("class", "subDisplayElmTab");
+
 		divDepartName.setAttribute("style", "left: 10%;");
 		divCompanyName.setAttribute("style", "left: 60%;");
-	
 		
 		divDepartName.innerHTML = deptName;
 		divCompanyName.innerHTML = companyName;
 	
-		
 		divNewDepart.appendChild(divDepartName);
 		divNewDepart.appendChild(divCompanyName);
 		
 		detailDeptView.appendChild(divNewDepart);
 	}
 	
-	function deleteOldElement(detailDeptView, start) {			
+	function deleteOldElement(detailDeptView, start) {
 		var len = detailDeptView.children.length;
-		for (var i = start; i < len; i++) {			
+		for (var i = start; i < len; i++) {
 			detailDeptView.removeChild(detailDeptView.children[start]);
 		}
 	}
 	
-	function addUserNode(userId, userName, departName, position) {		
-		var detailDeptView = document.getElementById("detailDeptView");	
+	function addUserNode(userId, userName, departName, position) {
+		var detailDeptView = document.getElementById("detailDeptView");
 		
-		var divNewUser = document.createElement("div");		
+		var divNewUser = document.createElement("div");
 		var divUserName = document.createElement("div");
 		var divDepartId = document.createElement("div");
 		var divPosition = document.createElement("div");
@@ -322,11 +342,10 @@
 		divNewUser.setAttribute("id", userId + "-item");
 		divNewUser.onclick = function () {setItem(this);};
 		divNewUser.setAttribute("class", "subDisplayTab");
-		divUserName.setAttribute("class", "subDisplayElmTab");		
+		divUserName.setAttribute("class", "subDisplayElmTab");
 		divDepartId.setAttribute("class", "subDisplayElmTab");
 		divPosition.setAttribute("class", "subDisplayElmTab");
-		
-		//divNewUser.setAttribute("id", userId);		
+
 		divUserName.setAttribute("style", "left: 10%;");
 		divDepartId.setAttribute("style", "left: 40%;");
 		divPosition.setAttribute("style", "left: 80%;");
@@ -342,13 +361,13 @@
 	}
 	
 	function displayNewDept(mainEl, departmentid, departmentname) {
-		var pos   = mainEl.getAttribute("order");		
-		var divEl = document.createElement("div");		
-		var img1  = document.createElement("img");			
+		var pos   = mainEl.getAttribute("order");
+		var divEl = document.createElement("div");
+		var img1  = document.createElement("img");
 		var img2  = document.createElement("img");
 		var span  = document.createElement("span");
 		
-		img1.setAttribute("parent", pos);	
+		img1.setAttribute("parent", pos);
 		img1.setAttribute("deptId", departmentid);
 		img1.setAttribute("id", departmentid + "+" + pos);
 		img1.onclick = function () {deptOnClick(this);};
@@ -367,36 +386,36 @@
 		
 		divEl.appendChild(img1);
 		divEl.appendChild(img2);
-		divEl.appendChild(span);					
-		divEl.setAttribute("style", "padding-top: 5px; padding-left: 15px;");	
-		divEl.setAttribute("order", pos);		
+		divEl.appendChild(span);
+		divEl.setAttribute("style", "padding-top: 5px; padding-left: 15px;");
+		divEl.setAttribute("order", pos);
 		
 		mainEl.appendChild(divEl);
 	}
 	
-	function displaySubDept(mainDeptElm, list) {	
+	function displaySubDept(mainDeptElm, list) {
 		var pos = null;
 		var mainEl = null;
 		
-		if (mainDeptElm.getAttribute("parent")) {					
+		if (mainDeptElm.getAttribute("parent")) {
 			pos = mainDeptElm.getAttribute("parent");
 			mainEl = mainDeptElm.parentElement;
 		}
 		else {
 			pos = mainDeptElm.getAttribute("order");
 			mainEl = mainDeptElm;
-		}							
+		}
 		
 		for (var i = 0; i < list.length; i++) {
 			var divEl = document.createElement("div");
 			
-			var img1 = document.createElement("img");			
+			var img1 = document.createElement("img");
 			var img2 = document.createElement("img");
 			var span = document.createElement("span");
 			
-			img1.setAttribute("parent", pos);	
+			img1.setAttribute("parent", pos);
 			img1.setAttribute("deptId", list[i]["departmentid"]);
-			img1.setAttribute("id", list[i]["departmentid"] + "+" + pos);		
+			img1.setAttribute("id", list[i]["departmentid"] + "+" + pos);
 			img1.onclick = function () {deptOnClick(this);};
 			
 			img2.setAttribute("class", "deptImg");
@@ -413,68 +432,67 @@
 			
 			divEl.appendChild(img1);
 			divEl.appendChild(img2);
-			divEl.appendChild(span);					
-			divEl.setAttribute("style", "padding-top: 5px; padding-left: 15px;");	
+			divEl.appendChild(span);
+			divEl.setAttribute("style", "padding-top: 5px; padding-left: 15px;");
 			divEl.setAttribute("order", pos);
 			insertAfter(divEl, mainEl);
 			
 			if (list[i]["hasSubDept"] == 1) {
-				var uniqueId = img1.getAttribute("id");					
-				if (list[i]["subDept"] != null && list[i]["subDept"] != "null") {						
+				var uniqueId = img1.getAttribute("id");
+				if (list[i]["subDept"] != null && list[i]["subDept"] != "null") {
 					arrSubDept.push(uniqueId);
 					img1.setAttribute("class", "deptOn");
 					displaySubDept(divEl, list[i]["subDept"]);
 				}
-				else {					
-					img1.setAttribute("class", "deptOff");		
+				else {
+					img1.setAttribute("class", "deptOff");
 					while(arrSubDept.indexOf(uniqueId) > -1) {
 						arrSubDept.splice(arrSubDept.indexOf(uniqueId), 1);
 					}
-				}				
+				}
 			}
 			else {
 				img1.setAttribute("class", "deptNone");
 			}
-		}					
+		}
 	}
 			
-	function companyOnClick(obj) {				
-		var position = parseInt(obj.parentElement.getAttribute("order"));				
+	function companyOnClick(obj) {
+		var position = parseInt(obj.parentElement.getAttribute("order"));
 		var childs = obj.parentElement.childNodes;
 		
-		if (obj.getAttribute("class") == "deptOn") {									
+		if (obj.getAttribute("class") == "deptOn") {
 			for (var i = 3; i < childs.length; i++) {
 				childs[i].style.display = "none";
-			}					
+			}
 			obj.setAttribute("class", "deptOff");
 		}
 		else {
 			for (var i = 3; i < childs.length; i++) {
 				childs[i].style.display = "";
-			}					
+			}
 			obj.setAttribute("class", "deptOn");
 		}
-		
-	}		
+	}
 	
-	function deptOnClick(obj) {	
+	function deptOnClick(obj) {
 		var parentElm = obj.parentElement;
 		var position = parseInt(parentElm.getAttribute("parent"));
 		var childs = parentElm.childNodes;
 		
-		if (obj.getAttribute("class") == "deptOn") {									
+		if (obj.getAttribute("class") == "deptOn") {
 			for (var i = 3; i < childs.length; i++) {
 				childs[i].style.display = "none";
-			}					
+			}
 			obj.setAttribute("class", "deptOff");
 		}
-		else {	
-			var uniqueId = obj.getAttribute("id");					
-			if (arrSubDept.indexOf(uniqueId) > -1) {				
+		else {
+			var uniqueId = obj.getAttribute("id");
+			if (arrSubDept.indexOf(uniqueId) > -1) {
 				renderSubDept(obj, childs);
 			}
-			else {				
-				var deptId = obj.getAttribute("deptId");				
+			else {
+				var deptId = obj.getAttribute("deptId");
 				
 				$.ajax({
 					type: "POST",
@@ -484,24 +502,24 @@
 					},
 					dataType: "JSON",
 					async: true,
-					success: function(result) {							
+					success: function(result) {
 						var listDept = result["subDept"];
 						arrSubDept.push(uniqueId);
-						displaySubDept(obj, listDept);	
-						renderSubDept(obj, childs);								
+						displaySubDept(obj, listDept);
+						renderSubDept(obj, childs);
 					},
 					error: function (xhr, status, e){
 						alert("Get department data failed");
 					}
-				});	
-			}										
+				});
+			}
 		}
-	}		
+	}
 	
 	function deptOnClick2(obj, departmentid, departmentname) {
 		var parentElm = obj.parentElement;
-		var childs = parentElm.childNodes;
-		var position = parseInt(parentElm.getAttribute("parent"));
+		var childs    = parentElm.childNodes;
+		var position  = parseInt(parentElm.getAttribute("parent"));
 		
 		obj.setAttribute("class", "deptOn");
 
@@ -525,56 +543,55 @@
 					var listDept = result["subDept"];
 					arrSubDept.push(uniqueId);
 					displaySubDept(obj, listDept);
-					renderSubDept(obj, childs);								
+					renderSubDept(obj, childs);
 				},
-				error: function (xhr, status, e){
+				error: function (xhr, status, e) {
 					alert("Get department data failed");
 				}
-			});	
-		}		
-											
-	}		
+			});
+		}
+	}
 	
 	function renderSubDept(obj, childList) {
 		for (var i = 3; i < childList.length; i++) {
 			childList[i].style.display = "";
-		}	
+		}
 		
-		obj.setAttribute("class", "deptOn");						
+		obj.setAttribute("class", "deptOn");
 	}
 	
 	function changeList(obj) {
 		value = obj.getAttribute("value");
 		
 		if (value == "muser") {
-			document.getElementById("userOpt").style.display = "block";
-			document.getElementById("deptOpt").style.display = "none";
-			document.getElementById("compOpt").style.display = "none";
+			document.getElementById("userOpt").style.display      = "block";
+			document.getElementById("deptOpt").style.display      = "none";
+			document.getElementById("compOpt").style.display      = "none";
 			document.getElementById("employeeList").style.display = "block";
-			document.getElementById("deptList").style.display = "none";
-			document.getElementById("companyList").style.display = "none";
+			document.getElementById("deptList").style.display     = "none";
+			document.getElementById("companyList").style.display  = "none";
 			document.getElementById("search_type1").style.display = "";
 			document.getElementById("search_type2").style.display = "none";
 			document.getElementById("search_type3").style.display = "none";
 		}
 		else if (value == "mdept") {
-			document.getElementById("userOpt").style.display = "none";
-			document.getElementById("deptOpt").style.display = "block";
-			document.getElementById("compOpt").style.display = "none";
+			document.getElementById("userOpt").style.display      = "none";
+			document.getElementById("deptOpt").style.display      = "block";
+			document.getElementById("compOpt").style.display      = "none";
 			document.getElementById("employeeList").style.display = "none";
-			document.getElementById("deptList").style.display = "block";
-			document.getElementById("companyList").style.display = "none";
+			document.getElementById("deptList").style.display     = "block";
+			document.getElementById("companyList").style.display  = "none";
 			document.getElementById("search_type1").style.display = "none";
 			document.getElementById("search_type2").style.display = "";
 			document.getElementById("search_type3").style.display = "none";
 		}
 		else {
-			document.getElementById("userOpt").style.display = "none";
-			document.getElementById("deptOpt").style.display = "none";
-			document.getElementById("compOpt").style.display = "block";
+			document.getElementById("userOpt").style.display      = "none";
+			document.getElementById("deptOpt").style.display      = "none";
+			document.getElementById("compOpt").style.display      = "block";
 			document.getElementById("employeeList").style.display = "none";
-			document.getElementById("deptList").style.display = "none";
-			document.getElementById("companyList").style.display = "block";
+			document.getElementById("deptList").style.display     = "none";
+			document.getElementById("companyList").style.display  = "block";
 			document.getElementById("search_type1").style.display = "none";
 			document.getElementById("search_type2").style.display = "none";
 			document.getElementById("search_type3").style.display = "";
@@ -589,7 +606,7 @@
 		}
 		else {
 			referenceNode.appendChild(newNode);
-		}	   
+		}
 	}
 	
 	function addUser() {
@@ -601,17 +618,17 @@
 		var currentDept = document.getElementById(currentClickedDeptId);
 		var deptName = currentDept.innerHTML;
 		
-		divPopUpShow(810, 400, "/admin/userRegistration?deptId=" + currentClickedDeptId + "&deptName=" + deptName);		
+		divPopUpShow(810, 400, "/admin/userRegistration?deptId=" + currentClickedDeptId + "&deptName=" + deptName);
 	}
 	
 	
-	function displayUserInfo() {		
+	function displayUserInfo() {
 		if (!currentClickedItem && !document.getElementById(currentClickedItem)) {
 			alert("Please select a user!");
 			return;
 		}
 		
-		var currentUserId = currentClickedItem.split("-")[0];		
+		var currentUserId = currentClickedItem.split("-")[0];
 		
 		divPopUpShow(810, 400, "/admin/userRegistration?userId=" + currentUserId);
 	}
@@ -622,7 +639,7 @@
 			return;
 		}
 		
-		var currentUserId = currentClickedItem.split("-")[0];		
+		var currentUserId = currentClickedItem.split("-")[0];
 		
 		divPopUpShow(400, 400, "/admin/moveUser?userId=" + currentUserId);
 	}
@@ -633,7 +650,7 @@
 			return;
 		}
 		
-		var currentUserId = currentClickedItem.split("-")[0];		
+		var currentUserId = currentClickedItem.split("-")[0];
 		
 		divPopUpShow(400, 160, "/admin/changeUserPasswd?userId=" + currentUserId);
 	}
@@ -647,26 +664,26 @@
 		var result = confirm("Do you want to delete this user?");
 		
 		if (result == true) {
-			var currentUserId = currentClickedItem.split("-")[0];		
+			var currentUserId = currentClickedItem.split("-")[0];
 
-			$.ajax({			
+			$.ajax({
 				type: "POST",
 				url: "/admin/deleteUser",
 				data: {
-					"userId" : currentUserId					
+					"userId" : currentUserId
 				},
 				dataType: "text",
 				async: true,
-				success : function(data, textStatus, jqXHR) {											
+				success : function(data, textStatus, jqXHR) {
 					alert("Delete user successful!");
 					refreshView();
 				},
- 				error : function(jqXHR, textStatus, errorThrown) {            	    
+ 				error : function(jqXHR, textStatus, errorThrown) {
 					alert("Cannot delete this user! Error: " + jqXHR.status + ", " + textStatus);
 				}
-			});	
-		}	
-	}	
+			});
+		}
+	}
 	
 	function addDept() {
 		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {
@@ -677,20 +694,20 @@
 		var currentDept = document.getElementById(currentClickedDeptId);
 		var deptName = currentDept.innerHTML;
 		
-		divPopUpShow(742, 180, "/admin/addDepartment?pDeptId=" + currentClickedDeptId + "&pDeptName=" + deptName);	
-	}	
+		divPopUpShow(742, 180, "/admin/addDepartment?pDeptId=" + currentClickedDeptId + "&pDeptName=" + deptName);
+	}
 	
 	function viewDept() {
 		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {
 			alert("Please select a department!");
 			return;
-		}		
+		}
 		
 		divPopUpShow(742, 180, "/admin/addDepartment?deptId=" + currentClickedDeptId);
-	}		
+	}
 	
 	function delDept() {
-		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {		
+		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {
 			alert("Please select a department!");
 			return;
 		}
@@ -709,7 +726,7 @@
 				type: "POST",
 				url: "/admin/deleteDept",
 				data: {
-					"deptId" : currentClickedDeptId	
+					"deptId" : currentClickedDeptId
 				},
 				dataType: "JSON",
 				async: true,
@@ -728,7 +745,7 @@
   		        		else {
   		        			alert(content);
   		        		}
-  		        	}					
+  		        	}
 				},
  				error : function(jqXHR, textStatus, errorThrown) {
 					alert("Error: " + jqXHR.status + ", " + textStatus);
@@ -755,10 +772,10 @@
 	
 	function addCompany() {
 		divPopUpShow(717, 140, "/admin/addCompany");
-	}	
+	}
 	
 	function viewCompany() {
-		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {		
+		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {
 			alert("Please select a company!");
 			return;
 		}
@@ -770,10 +787,10 @@
 		}
 		
 		divPopUpShow(717, 140, "/admin/addCompany?companyId=" + currentClickedDeptId);
-	}	
+	}
 	
 	function delCompany() {
-		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {		
+		if (!currentClickedDeptId && !document.getElementById(currentClickedDeptId)) {
 			alert("Please select a company!");
 			return;
 		}
@@ -842,9 +859,9 @@
 			alert("Please input the keyword to search!");
 			document.getElementById("keyword").focus();
 			return;
-		}				
+		}
 		
-		var value 		 = document.querySelector('input[name=listOpt]:checked').value;		
+		var value 		 = document.querySelector('input[name=listOpt]:checked').value;
 		var selectedElmt = null;
 		
 		if (value == "muser") {
@@ -857,7 +874,7 @@
 			selectedElmt = document.getElementById("search_type3");
 		}
 		
-		var selectedValue = selectedElmt.options[selectedElmt.selectedIndex].value;		
+		var selectedValue = selectedElmt.options[selectedElmt.selectedIndex].value;
 		
 		$.ajax({
 			type: "POST",
@@ -870,15 +887,55 @@
 			},
 			dataType: "JSON",
 			async: true,
-			success: function(result) {				
+			success: function(result) {
 				renderData(result);
 			},
 			error: function (xhr, status, e){
 				alert("Get data failed!");
 			}
-		});	
+		});
 	}
 	
+	function deptsearchPress() {
+		if (event.which == 13) {
+			deptsearchClick();
+    	}
+	}
+	
+	function deptsearchClick() {
+		var searchStr = document.getElementById("deptkeyword").value;
+		if (!searchStr.replace(/\s+/g, '')) {
+			alert("Please input the keyword to search!");
+			document.getElementById("deptkeyword").focus();
+			return;
+		}
+
+		$.ajax({
+			type: "POST",
+			url: "/admin/organ/getDeptSearchInfo",
+			data: {
+				"searchStr" : searchStr
+			},
+			dataType: "JSON",
+			async: true,
+			success: function(result) {
+				processResult(result);
+			},
+			error: function (xhr, status, e){
+				alert("Get data failed!");
+			}
+		});
+	}
+	
+	function processResult(result) {
+		if (result["result"] == "Error") {
+			alert("Cannot find any department with department name as your's input!");
+			return;
+		}
+		else {
+            divPopUpShow(660, 250, "/admin/organ/searchingDept?sStr=" + result["result"]);
+		}
+	}
 	
 	
 	

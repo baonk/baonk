@@ -35,4 +35,7 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 	
 	@Query(value="SELECT * FROM DEPARTMENT WHERE PARENT_DEPARTMENT = 'self' AND TENANT_ID = ?1 AND EMAIL LIKE %?2%", nativeQuery = true)
 	List<Department> searchByCompanyEmail(int tenantId, String email);
+	
+	@Query(value="SELECT * FROM DEPARTMENT WHERE DEPARTMENT_NAME LIKE %?1% AND TENANT_ID = ?2", nativeQuery = true)
+	List<Department> getDeptsBySearchingDeptName(String deptName, int tenantId);
 }

@@ -120,4 +120,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 		return list;
 	}
 
+	@Override
+	public List<Department> getDeptsByDeptNameSearch(String sStr, int tenantId) {
+		List<Department> list = null;
+		list = departRepository.getDeptsBySearchingDeptName(sStr, tenantId);
+		return list;
+	}
+
 }

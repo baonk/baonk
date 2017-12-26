@@ -42,7 +42,7 @@
 		     			success : function(data) {
 							if (data.result == 1) {
 								alert('Dept has been moved');
-								parent.reloadView4(deptID, currentClickedDeptId);
+								parent.reloadView4(deptID);
 								parent.divPopUpHidden();
 		  		        	}
 		  		        	else {

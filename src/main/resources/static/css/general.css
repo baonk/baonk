@@ -274,20 +274,17 @@ table {
 	vertical-align:top;
 }
 
-.divTable {   
-	border: 1px solid #b6b6b6; height: 550px; width: 100%;
-    font-family: Gulim, Verdana, Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    background-color: #FFFFFF;
-}
+.divTable {border: 1px solid #b6b6b6; height: 550px; width: 100%; font-family: Gulim, Verdana, Arial, Helvetica, sans-serif; font-size: 12px; background-color: #FFFFFF;}
+.divTable2 {border: 1px solid #b6b6b6; height: 315px; width: 390px; font-family: Gulim, Verdana, Arial, Helvetica, sans-serif; font-size: 12px; background-color: #FFFFFF; margin: 8px 4px 4px 4px;}
+.divTable3 {border: 1px solid #b6b6b6; height: auto; width: 620px; font-family: Gulim, Verdana, Arial, Helvetica, sans-serif; font-size: 12px; background-color: #FFFFFF; margin: 20px 20px 4px 20px;}
+.divTable3 td{text-align: center; height: 25px;}
+.divTable3 th{background-color: #f8f8f8;}
 
-.divTable2 {   
-	border: 1px solid #b6b6b6; height: 315px; width: 390px;
-    font-family: Gulim, Verdana, Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    background-color: #FFFFFF;
-    margin: 8px 4px 4px 4px;
-}
+.tableTr {cursor: pointer;}
+.tableTr:hover{background-color: #B6B6B6;}
+
+.selectTr {cursor: pointer; background-color: #99ccff;}
+
 
 .changePasswdTbl {margin: 10px 5px 4px 5px; width: 390px; height: 80px; border: 1px solid #B6B6B6; border-collapse: collapse;}
 .changePasswdTbl tr {width: 390px;}

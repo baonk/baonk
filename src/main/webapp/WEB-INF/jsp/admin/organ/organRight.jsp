@@ -47,8 +47,8 @@
 				</tr>
 				<tr>
 					<th>
-						<input id="deptkeyword" onKeyPress="deptsearch_press();" style="width: 200px; height: 20px;" />
-						<a class="imgbtn" style="vertical-align:middle"><span onClick="deptsearch_click()">Dept Search</span></a>
+						<input id="deptkeyword" onKeyPress="deptsearchPress();" style="width: 200px; height: 20px;" />
+						<a class="imgbtn" style="vertical-align:middle"><span onClick="deptsearchClick()">Dept Search</span></a>
 					</th>
 					<th>
 						<select id="search_type1" style="width:100px; height: 20px; text-align: center; text-align-last: center;">
