@@ -89,8 +89,7 @@ public class AdminOrganController {
 		List<SimpleDepartment> simpleCompanyList = deptService.getAllSimpleSubDepts("self", tenantId);	
 		
 		for (SimpleDepartment company: simpleCompanyList) {
-			if (company.getCompanyid().equals(userCompId)) {
-				//logger.debug("CompanyID: " + company.getCompanyid() + " || deptPath: " + deptPath);
+			if (company.getCompanyid().equals(userCompId)) {				
 				getAllSubDepts2(company, tenantId, deptPath, 1);
 			}
 			else {
@@ -327,8 +326,7 @@ public class AdminOrganController {
 	public void getAllSubDepts2(SimpleDepartment dept, int tenantId, String[] deptPath, int order) {
 		List<SimpleDepartment> listSubSimpleDepts = deptService.getAllSimpleSubDepts(dept.getDepartmentid(), tenantId);
 		
-		if (listSubSimpleDepts.size() > 0) {
-			logger.debug("DEPTPATH: " + deptPath + " || Deptpath[order]: " + deptPath[order - 1] + " || order: " + order);
+		if (listSubSimpleDepts.size() > 0) {			
 			dept.setSubDept(listSubSimpleDepts);
 			dept.setHasSubDept(1);
 			
@@ -1053,8 +1051,6 @@ public class AdminOrganController {
 		String deptID 		 			   = request.getParameter("deptID");
 		Department dept 	 			   = deptService.findByDepartmentidAndTenantid(deptID, tenantId);
 		String[] deptPath     			   = dept.getDepartmentpath().split("::");		
-		
-		logger.debug("DeptPath: " + dept.getDepartmentpath() + "deptId: " + dept.getDepartmentid());
 		
 		SimpleDepartment highestParentDept = deptService.getSimpleDeptList(deptPath[1], tenantId);		
 		getAllSubDepts2(highestParentDept, tenantId, deptPath, 2);
