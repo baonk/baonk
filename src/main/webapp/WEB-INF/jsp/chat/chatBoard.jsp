@@ -126,9 +126,9 @@
 				    			<textarea cols="20" rows="1" id="" oninput="auto_grow(this)" style="height: 50px; outline: none; border: none; resize: none; overflow: hidden; font-size: 12px; line-height: 15px; width: 100%; margin: 0px; padding: 16px 10px;"></textarea>
 				    		</div>
 				    		<div class="bnkCmtTool">
-				    			<div id="emoticonPanel" style="display: block; width:400px; height:356.5px; margin-top: -362px;margin-left: -39px; background-color: #fff; border:1px solid #b6b6b6; position: absolute;">
-									<div id="emoticonGroup" style="display:block;width:100%; height: 45px;background-color: #fff; border-bottom:1px solid #b6b6b6;">
-										<div style="float:left; display:block;">
+				    			<div id="emoticonPanel" style="display: block; width:400px; height:356.5px; margin-top: -357px;margin-left: -319px; background-color: #fff; border:1px solid #3399ff;; position: absolute;">
+									<div id="emoticonGroup" style="display:block;width:100%; height: 45px;background-color: #fff; border-bottom:1px solid #3399ff;;">
+										<div style="float:left; display:block; height: 45px;">
 											<img id="previousEmoticon" src="/images/previous1.png" height=40 width=30 style="padding-top: 3px; ">
 										</div>
 										<div id="_ePresentors" style="float:left; display:block; ">
@@ -143,7 +143,7 @@
 									  		 <div id="_group9" style="float:left; display: block; height:45px; width:45px; cursor: pointer; " onclick="changeStickerGroup(this);"><img src="/images/emoticon/hackerGirl.png" height=30 width=30 style="padding-top: 7px; padding-left: 7px; "></div>
 											<div id="_group10" style="float:left; display: block; height:45px; width:45px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/crayonShin.png" height=30 width=30 style="padding-top: 7px; padding-left: 7px; "></div>  -->
 										</div>
-										<div style="float: right; display:block;">
+										<div style="float: right; display:block; height: 45px;">
 											<img id="nextEmoticon" src="/images/next1.png" height=40 width=30 style="padding-top: 3px; ">
 										</div>
 									</div>	
