@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.nv.baonk.common.CommonUtil;
@@ -25,6 +26,8 @@ public class ChatController {
 	@RequestMapping("/chatBoard")
 	public String chatBoard(@CookieValue("loginCookie")String loginCookie, Model model, HttpServletRequest request) {
 		User user = commonUtil.getUserInfo(loginCookie);
+		model.addAttribute("hasChat", 0);
+		model.addAttribute("userId", user.getUserid());
 		return "/chat/chatBoard";
 	}
 }
