@@ -13,6 +13,7 @@
 	<script	src="/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/js/fileUpload.js"></script>
 	<script type="text/javascript">		
+		var clickedLiElmt = null;
 		window.onload = function() {
 			
 		}
@@ -23,6 +24,34 @@
 		
 		function adminPage() {
 			parent.open("/admin", "_self");
+		}
+		
+		function getChatBoard(obj) {			
+			var check = preProcess(obj);
+			
+			if (check == 1) {				
+				window.open("/chatBoard","mainMenu");
+			}			
+		}
+		
+		function preProcess(obj) {
+			var result = 0;
+			var objId = obj.getAttribute("id");
+			if (clickedLiElmt != null && clickedLiElmt != objId) {
+				var previousClickedLi = document.getElementById(clickedLiElmt);
+				previousClickedLi.className = "";
+				result = 1;
+			}
+			else {
+				if (clickedLiElmt == null) {
+					result = 1;
+				}
+			}
+			
+			clickedLiElmt = objId;
+			obj.className = "selectedLi";			
+			
+			return result;
 		}
 	</script>
 </head>
@@ -41,19 +70,19 @@
 				<div class="menu-wrap" style="overflow: hidden;">
 				    <nav class="menu">
 				        <ul class="clearfix" style="margin-bottom: 0px;">
-				            <li><a href="#">Home</a></li>
+				            <li><a id="home">Home</a></li>
 				            <li>
-				                <a href="#">Movies </a>
+				                <a id="movie">Movies </a>
 				 
 				                <ul class="sub-menu">
-				                    <li><a href="#">In Cinemas Now</a></li>
-				                    <li><a href="#">Coming Soon</a></li>
-				                    <li><a href="#">On DVD/Blu-ray</a></li>				                    
+				                    <li><a id="cinema">In Cinemas Now</a></li>
+				                    <li><a id="comming">Coming Soon</a></li>
+				                    <li><a id="dvd">On DVD/Blu-ray</a></li>				                    
 				                </ul>
 				            </li>
-				            <li><a href="#">T.V. Shows</a></li>
-				            <li><a href="#">Photos</a></li>
-				            <li><a href="#">Site Help</a></li>
+				            <li><a id="shows">T.V. Shows</a></li>
+				            <li><a id="photo">Photos</a></li>
+				            <li><a id="chat" onClick="getChatBoard(this);">Chat</a></li>
 				        </ul>
 				    </nav>
 				    <div id="submenu" style="height: 25px; width: 100%; background:#003369;"></div>

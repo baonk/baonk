@@ -1,0 +1,45 @@
+.baonkChat {height: 100%;}
+
+.bnkContainer {background: #3399ff; max-width: 1871px; max-height: 1000px; margin: 0 auto;}
+
+.bnk {background: #ffffff;	margin: 1px; text-align: center; line-height: 50px;}
+
+.bnkContainer {	display: flex;}
+
+.bnkLeft {min-width: 400px;	max-width: 600px; display:flex;	flex-direction: column;}
+
+.bnkRight {min-width: 400px; max-width: 600px;}
+
+.bnkCenter {flex-grow: 1; display:flex;	flex-direction: column;}
+
+.bnkChatContent {border-bottom: 1px solid #3399ff;}
+
+.chatImage {max-height: 34px; max-width: 34px; cursor: pointer;}
+
+.leftHeaderMenu {display: flex; width: 100%; height: 50px; padding: 8px; border-bottom: 1px solid #3399ff;}
+
+.centerHeaderMenu {height: 50px; padding: 8px; border-bottom: 1px solid #3399ff;}
+
+/* .settingImg {background-image: url(/images/chat/setting.png); background-repeat: no-repeat; background-size: auto; height: 40px;} */
+.txtMessage {flex-grow: 1; color: black; line-height: 34px; font-size: 14px; font-weight: bold; font-family: Helvetica Neue, Segoe UI, Helvetica, Arial, sans-serif;}
+
+.bnkContent {display:flex; padding: 5px; flex-direction: column;}
+.bnkSearch {height: 25px; display: flex; background-color: #eee}
+/* .bnkSearch::before {background-image: url(/images/chat/search.png); background-repeat: no-repeat; background-size: auto; background-position: 0 -149px; content: ''; display: inline-block; height: 16px; left: 8px; position: absolute; top: 7px; width: 16px;} */
+.bnkbttnSearch {height: 25px; border: 0; margin: 0; outline: 0; padding: 0; width: 100%; flex-grow: 1; background-color: #f6f7f9;}
+
+.message {display: flex; align-items: center; line-height: 0px;}
+.messageBody {display: flex; flex-direction: column;}
+.messageContent {padding: 0px 10px 0px 10px; border-radius: 2rem; margin-top: 2px;}
+.messageOther {flex-direction: row-reverse;}
+.messagSelfBody {background-color: #0084FF; color: #fff;}
+.messagOtherBody {background-color: #eee; color: #000;}
+.messageAvatar {height: 40px; width: 40px; border-radius: 50%;}
+.messageAvatar1{margin: 8px;}
+
+.bnkChatTool {height: 50px; display: flex;}
+
+.bnkCmtTool {width: 80px;}
+.bnkCmtInput {flex-grow: 1;};
+.bnkCmtTool li {margin:0px; list-style:none; font-family:"Times New Roman", Georgia, Serif;}
+.bnkCmtTool > ul > li{float:left; display:inline-block; position:relative; font-size:14px;}

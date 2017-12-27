@@ -82,6 +82,12 @@ iframe {height:100%; width:100%;}
     clear:both;    
 } 
 
+.selectedLi {
+	text-decoration:none;
+    color:#be5b70;
+     background:#003369;
+}
+
 /*----- Menu Outline -----*/
 .menu-wrap {
     width:100%;
