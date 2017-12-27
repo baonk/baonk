@@ -39,7 +39,7 @@
 
 .bnkChatTool {height: 50px; display: flex;}
 
-.bnkCmtTool {width: 80px;}
+.bnkCmtTool {width: 80px; position: relative;}
 .bnkCmtInput {flex-grow: 1;};
 .bnkCmtTool li {margin:0px; list-style:none; font-family:"Times New Roman", Georgia, Serif;}
 .bnkCmtTool > ul > li{float:left; display:inline-block; position:relative; font-size:14px;}

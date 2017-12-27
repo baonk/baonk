@@ -76,8 +76,8 @@
 				    			<textarea cols="20" rows="1" id="" oninput="auto_grow(this)" style="height: 50px; outline: none; border: none; resize: none; overflow: hidden; font-size: 12px; line-height: 15px; width: 100%; margin: 0px; padding: 16px 10px;"></textarea>
 				    		</div>
 				    		<div class="bnkCmtTool">
-				    			<ul style="padding-left: 0px;">
-				    				<li><div><img id="bnkEmoticon" src="/images/chat/file.ico" style="display: block; height:34px; width:34px; cursor: pointer; margin-top: 8px;" onclick=""></div></li>
+				    			<ul style="padding-left: 0px; position: absolute; bottom: -7px;">
+				    				<li><div style="border-left: 1px solid #DDD;"><img id="bnkEmoticon" src="/images/chat/upload.png" style="display: block; height: 30px; width: 35px; cursor: pointer; margin-top: 11px; padding-left: 5px;" onclick=""></div></li>
 				    				<li><div><img id="bnkEmoticon" src="/images/chat/emo3.png" style="display: block; height:40px; width:40px; cursor: pointer; margin-top: 6px;" onclick=""></div></li>				    				
 				    			</ul>
 				    		</div>
