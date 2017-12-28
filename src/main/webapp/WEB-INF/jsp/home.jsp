@@ -22,7 +22,7 @@
 		<iframe src="/topMenu"  id="topMenu"  name="topMenu"  style="noresize; margin:0px 0px 0px 0px; padding:0px 0px 0px 0px;border:none; width:100%; height:100px;"></iframe>
 	</div>				
 	<div>
-		<iframe src="/mainMenu" id="mainMenu" name="mainMenu" style="noresize; margin:0px 0px 0px 0px; padding:0px 0px 0px 0px;border:none;width:100%; height: 450px; "></iframe>
+		<iframe src="/mainMenu" id="mainMenu" name="mainMenu" style="noresize; margin:0px 0px 0px 0px; padding:0px 0px 0px 0px;border:none;width:100%; height: 850px; "></iframe>
 	</div>
 
 </body>

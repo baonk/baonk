@@ -126,29 +126,29 @@
 				    			<textarea cols="20" rows="1" id="" oninput="auto_grow(this)" style="height: 50px; outline: none; border: none; resize: none; overflow: hidden; font-size: 12px; line-height: 15px; width: 100%; margin: 0px; padding: 16px 10px;"></textarea>
 				    		</div>
 				    		<div class="bnkCmtTool">
-				    			<div id="emoticonPanel" style="display: block; width:400px; height:356.5px; margin-top: -357px;margin-left: -319px; background-color: #fff; border:1px solid #3399ff;; position: absolute;">
+				    			<div id="emoticonPanel" style="display: block; width:400px; height:350px; margin-top: -350px;margin-left: -319px; background-color: #fff; border:1px solid #3399ff;; position: absolute;">
 									<div id="emoticonGroup" style="display:block;width:100%; height: 45px;background-color: #fff; border-bottom:1px solid #3399ff;;">
 										<div style="float:left; display:block; height: 45px;">
 											<img id="previousEmoticon" src="/images/previous1.png" height=40 width=30 style="padding-top: 3px; ">
 										</div>
 										<div id="_ePresentors" style="float:left; display:block; ">
-											<div id="_group1" style="background-color: #d9d9d9; float:left; display: block; height:45px; width:45px; cursor: pointer; " onclick="changeStickerGroup(this);"><img src="/images/emoticon/hackerGirl.png" height=30 width=30 style="padding-top: 7px; padding-left: 7px; "></div>
-											<div id="_group2" style="float:left; display: block; height:45px; width:45px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/crayonShin.png" height=30 width=30 style="padding-top: 7px; padding-left: 7px; "></div>
-											<div id="_group3" style="float:left; display: block; height:45px; width:45px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/catEmoticon.png" height=30 width=30 style="padding-top: 7px; padding-left: 7px; "></div>
-											<div id="_group4" style="float:left; display: block; height:45px; width:45px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/student.png" height=30 width=30 style="padding-top: 7px; padding-left: 7px; "></div>
-											<!--<div id="_group5" style="float:left; display: block; height:45px; width:45px; cursor: pointer; " onclick="changeStickerGroup(this);"><img src="/images/emoticon/hackerGirl.png" height=30 width=30 style="padding-top: 7px; padding-left: 7px; "></div>
-											<div id="_group6" style="float:left; display: block; height:45px; width:45px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/crayonShin.png" height=30 width=30 style="padding-top: 7px; padding-left: 7px; "></div>
-											<div id="_group7" style="float:left; display: block; height:45px; width:45px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/catEmoticon.png" height=30 width=30 style="padding-top: 7px; padding-left: 7px; "></div>
-											<div id="_group8" style="float:left; display: block; height:45px; width:45px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/student.png" height=30 width=30 style="padding-top: 7px; padding-left: 7px; "></div>
-									  		 <div id="_group9" style="float:left; display: block; height:45px; width:45px; cursor: pointer; " onclick="changeStickerGroup(this);"><img src="/images/emoticon/hackerGirl.png" height=30 width=30 style="padding-top: 7px; padding-left: 7px; "></div>
-											<div id="_group10" style="float:left; display: block; height:45px; width:45px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/crayonShin.png" height=30 width=30 style="padding-top: 7px; padding-left: 7px; "></div>  -->
+											<div id="_group1" style="background-color: #d9d9d9; float:left; display: block; height:44px; width:44px; cursor: pointer; " onclick="changeStickerGroup(this);"><img src="/images/emoticon/hackerGirl.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
+											<div id="_group2" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/crayonShin.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
+											<div id="_group3" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/catEmoticon.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
+											<div id="_group4" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/student.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
+											<!--<div id="_group5" style="float:left; display: block; height:44px; width:44px; cursor: pointer; " onclick="changeStickerGroup(this);"><img src="/images/emoticon/hackerGirl.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
+											<div id="_group6" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/crayonShin.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
+											<div id="_group7" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/catEmoticon.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
+											<div id="_group8" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/student.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
+									  		 <div id="_group9" style="float:left; display: block; height:44px; width:44px; cursor: pointer; " onclick="changeStickerGroup(this);"><img src="/images/emoticon/hackerGirl.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
+											<div id="_group10" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/crayonShin.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>  -->
 										</div>
 										<div style="float: right; display:block; height: 45px;">
 											<img id="nextEmoticon" src="/images/next1.png" height=40 width=30 style="padding-top: 3px; ">
 										</div>
 									</div>	
 				    				<div id="emoticonList" style="display:inline-block;width:100%; background-color: #fff;">
-										<div id="_listG1" style="height:310px; overflow-y: auto; overflow-x: hidden; display: block;">
+										<div id="_listG1" style="height:300px; overflow-y: auto; overflow-x: hidden; display: block;">
 											<table id="_listG1Table">
 												<tr style="width:100%; height:45px;">
 													<td><div class="emoticon" style="background-image: url(/images/emoticon/girl/45.png);" onclick="displaySticker(this);"></div></td>
@@ -212,7 +212,7 @@
 												</tr>
 											</table>
 										</div>
-										<div id="_listG2" style="height:310px; overflow-y: auto; overflow-x: hidden; display: none;">
+										<div id="_listG2" style="height:300px; overflow-y: auto; overflow-x: hidden; display: none;">
 											<table id="_listG2Table">
 												<tr style="width:100%; height:45px;">
 													<td><div class="emoticon" style="background-image: url(/images/emoticon/shin/2.png);" onclick="displaySticker(this);"></div></td>
@@ -264,7 +264,7 @@
 												</tr>
 											</table>
 										</div>
-										<div id="_listG3" style="height:310px; overflow-y: auto; overflow-x: hidden; display: none;">
+										<div id="_listG3" style="height:300px; overflow-y: auto; overflow-x: hidden; display: none;">
 											<table id="_listG3Table">
 												<tr style="width:100%; height:45px;">
 													<td><div class="emoticon" style="background-image: url(/images/emoticon/cat/1.png);" onclick="displaySticker(this);"></div></td>
@@ -304,7 +304,7 @@
 												</tr>
 											</table>
 										</div>
-										<div id="_listG4" style="height:310px; overflow-y: auto; overflow-x: hidden; display: none;">
+										<div id="_listG4" style="height:300px; overflow-y: auto; overflow-x: hidden; display: none;">
 											<table id="_listG4Table">
 												<tr style="width:100%; height:45px;">
 													<td><div class="emoticon" style="background-image: url(/images/emoticon/boy/1.png);" onclick="displaySticker(this);"></div></td>

@@ -1,6 +1,6 @@
 .baonkChat {height: 100%;}
 
-.bnkContainer {background: #3399ff; max-width: 1871px; max-height: 1000px; margin: 0 auto;}
+.bnkContainer {background: #3399ff; max-height: 1000px; margin: 0 auto;}
 
 .bnk {background: #ffffff;	margin: 1px; text-align: center; line-height: 50px;}
 
@@ -61,4 +61,14 @@
 
 .emoticon:hover {
     background-size: 100px;
+}
+
+table, th, td {
+    border-collapse: collapse;
+    empty-cells: show;
+    padding: 0;
+    margin: 0;
+    font-size: 12px;
+    font-family: 'Gulim', 'arial', 'verdana';
+    line-height: 0px;
 }
