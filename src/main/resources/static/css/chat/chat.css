@@ -1,6 +1,6 @@
 .baonkChat {height: 100%;}
 
-.bnkContainer {background: #3399ff; max-height: 1000px; margin: 0 auto;}
+.bnkContainer {background: #3399ff; max-height: 1000px; margin: 0px auto; min-height: 750px;}
 
 .bnk {background: #ffffff;	margin: 1px; text-align: center; line-height: 50px;}
 
@@ -12,7 +12,7 @@
 
 .bnkCenter {flex-grow: 1; display:flex;	flex-direction: column;}
 
-.bnkChatContent {border-bottom: 1px solid #3399ff;}
+.bnkChatContent {flex-grow: 1; border-bottom: 1px solid #3399ff;}
 
 .chatImage {max-height: 34px; max-width: 34px; cursor: pointer;}
 
@@ -28,14 +28,21 @@
 /* .bnkSearch::before {background-image: url(/images/chat/search.png); background-repeat: no-repeat; background-size: auto; background-position: 0 -149px; content: ''; display: inline-block; height: 16px; left: 8px; position: absolute; top: 7px; width: 16px;} */
 .bnkbttnSearch {height: 25px; border: 0; margin: 0; outline: 0; padding: 0; width: 100%; flex-grow: 1; background-color: #f6f7f9;}
 
-.message {display: flex; align-items: center; line-height: 0px;}
-.messageBody {display: flex; flex-direction: column;}
-.messageContent {padding: 0px 10px 0px 10px; border-radius: 2rem; margin-top: 2px;}
-.messageOther {flex-direction: row-reverse;}
-.messagSelfBody {background-color: #0084FF; color: #fff;}
-.messagOtherBody {background-color: #eee; color: #000;}
-.messageAvatar {height: 40px; width: 40px; border-radius: 50%;}
-.messageAvatar1{margin: 8px;}
+.message {display: flex; line-height: 0px; border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;}
+.messageBody {margin-top: 10px;}
+.messageContent {padding: 0px 10px 0px 10px; text-align: left;}
+.messageContent p {line-height: 20px; margin: 0px; word-wrap: break-word; margin-top: 0px;margin-bottom: 0px; white-space: pre-wrap; cursor: default;}
+.messageOther {flex-direction: row-reverse; 
+	border-color: #ccc;
+    background-color: #ddd;}
+/* .messagSelfBody {background-color: #0084FF; color: #fff;}
+.messagOtherBody {background-color: #eee; color: #000;} */
+.messageAvatar {height: 60px; width: 60px; border-radius: 50%; position: absolute; top: 10px; left: 10px; cursor: pointer;}
+.messageAvatar1{position: relative; width: 80px; min-height: 80px;}
 
 .bnkChatTool {height: 50px; display: flex;}
 

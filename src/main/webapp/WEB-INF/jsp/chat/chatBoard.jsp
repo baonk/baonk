@@ -11,8 +11,11 @@
 	<link rel="stylesheet" type="text/css" href="/css/chat/chat.css" />
 	<link rel="stylesheet" href="/css/bootstrap.min.css">
 	<script	src="/js/jquery/jquery.min.js"></script>
-	<script	src="/js/bootstrap.min.js"></script>	
+	<script	src="/js/bootstrap.min.js"></script>
+	<script	src="/js/chat/chat.js"></script>
 	<script type="text/javascript">			
+		var currentUser = "<c:out value="${userId}" />";
+	
  		function auto_grow(element) {	    	
 		    element.style.height = "50px"; 			        
 		    var value = element.scrollHeight;
@@ -46,30 +49,31 @@
 				    <div class="bnk bnkCenter" style="margin-left: 0px; margin-right: 0px;">				    	
 			    		<div class="centerHeaderMenu">
 			    		</div>
-				    	<div class="bnkChatContent">
-<!-- 				    		<div class="message">
-							  <div class="messageAvatar1">
+				    	<div class="bnkChatContent" id="bnkChatTbl">
+<!--  				    		<div class="message">
+							  <div>
 							    <img class="messageAvatar" src="https://vi.gravatar.com/userimage/119146805/dcb3ad95a00ec4a4284c36d7c401a156.png">
 							  </div>
 							  <div class="messageBody">
-							  	<div class="messageContent messagSelfBody">
+							  	<div class="messageContent">
 							  		<p>Chào bạn 1, làm quen với mình nhé! :D</p>
 							  	</div>
-							    <div class="messageContent messagSelfBody">
+							    <div class="messageContent">
 							    	<p>Chào bạn 2, làm quen với mình nhé! :D</p>
 							    </div>				    
 							  </div>
 							</div>
 							<div class="message messageOther">
-							  <div class="messageAvatar1">
+							  <div>
 							    <img class="messageAvatar" src="https://vi.gravatar.com/userimage/119146805/21b7e614de27cdf36dcff3c48b15f54e.png">
 							  </div>
 							  <div class="messageBody">
-							  	<div class="messageContent messagOtherBody">
+							  	<div class="messageContent">
 							    	 <p>Hi hi <3</p>
 							     </div>
 							  </div>
 							</div> -->
+							
 							<c:choose>
 								<c:when test="${hasChat != 0}">
 									<c:set var="currCluster" value="${0}" />
@@ -116,17 +120,17 @@
 									</c:forEach>
 								</c:when>
 								<c:otherwise>
-									<div style="min-height: 500px;">No data</div>
+									<div style="min-height: 500px;" id="bnkNoData">No data</div>
 								</c:otherwise>
-							</c:choose>					
+							</c:choose>
 				    	</div>
 				    	
 				    	<div class="bnkChatTool" id="bnkChatDiv">
 				    		<div class="bnkCmtInput">
-				    			<textarea cols="20" rows="1" id="" oninput="auto_grow(this)" style="height: 50px; outline: none; border: none; resize: none; overflow: hidden; font-size: 12px; line-height: 15px; width: 100%; margin: 0px; padding: 16px 10px;"></textarea>
+				    			<textarea cols="20" rows="1" id="bnkCmtTxt" oninput="auto_grow(this)" style="height: 50px; outline: none; border: none; resize: none; overflow: hidden; font-size: 12px; line-height: 15px; width: 100%; margin: 0px; padding: 16px 10px;" onkeypress="check_key(event);"></textarea>
 				    		</div>
 				    		<div class="bnkCmtTool">
-				    			<div id="emoticonPanel" style="display: block; width:400px; height:350px; margin-top: -350px;margin-left: -319px; background-color: #fff; border:1px solid #3399ff;; position: absolute;">
+				    			<div id="emoticonPanel" style="display: none; width:400px; height:350px; margin-top: -350px;margin-left: -319px; background-color: #fff; border:1px solid #3399ff;; position: absolute;">
 									<div id="emoticonGroup" style="display:block;width:100%; height: 45px;background-color: #fff; border-bottom:1px solid #3399ff;;">
 										<div style="float:left; display:block; height: 45px;">
 											<img id="previousEmoticon" src="/images/previous1.png" height=40 width=30 style="padding-top: 3px; ">
@@ -136,11 +140,11 @@
 											<div id="_group2" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/crayonShin.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
 											<div id="_group3" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/catEmoticon.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
 											<div id="_group4" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/student.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
-											<!--<div id="_group5" style="float:left; display: block; height:44px; width:44px; cursor: pointer; " onclick="changeStickerGroup(this);"><img src="/images/emoticon/hackerGirl.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
+											<div id="_group5" style="float:left; display: block; height:44px; width:44px; cursor: pointer; " onclick="changeStickerGroup(this);"><img src="/images/emoticon/hackerGirl.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
 											<div id="_group6" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/crayonShin.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
 											<div id="_group7" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/catEmoticon.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
 											<div id="_group8" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/student.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
-									  		 <div id="_group9" style="float:left; display: block; height:44px; width:44px; cursor: pointer; " onclick="changeStickerGroup(this);"><img src="/images/emoticon/hackerGirl.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
+									  		<!--<div id="_group9" style="float:left; display: block; height:44px; width:44px; cursor: pointer; " onclick="changeStickerGroup(this);"><img src="/images/emoticon/hackerGirl.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
 											<div id="_group10" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/crayonShin.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>  -->
 										</div>
 										<div style="float: right; display:block; height: 45px;">
@@ -377,8 +381,8 @@
 									</div>
 								</div>
 				    			<ul style="padding-left: 0px; position: absolute; bottom: -7px;">
-				    				<li><div style="border-left: 1px solid #DDD;"><img id="bnkEmoticon" src="/images/chat/upload.png" style="display: block; height: 30px; width: 35px; cursor: pointer; margin-top: 11px; padding-left: 5px;" onclick=""></div></li>
-				    				<li><div><img id="bnkEmoticon" src="/images/chat/emo3.png" style="display: block; height:40px; width:40px; cursor: pointer; margin-top: 6px;" onclick=""></div></li>				    				
+				    				<li><div style="border-left: 1px solid #DDD;"><img id="bnkFile" src="/images/chat/upload.png" style="display: block; height: 30px; width: 35px; cursor: pointer; margin-top: 11px; padding-left: 5px;" onclick=""></div></li>
+				    				<li><div><img id="bnkEmoticon" src="/images/chat/emo3.png" style="display: block; height:40px; width:40px; cursor: pointer; margin-top: 6px;" onclick="addSticker()"></div></li>			    				
 				    			</ul>
 				    		</div>
 				    	</div>				    	
