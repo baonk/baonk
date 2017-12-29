@@ -12,76 +12,91 @@
     
     function sendMessage() {
     	var textValue = document.getElementById("bnkCmtTxt").value;
+		document.getElementById("bnkCmtTxt").value = "";
+		document.getElementById("bnkCmtTxt").blur();
+    	
     	if (textValue == '') {
     		return;
     	}
-    	
-    	if (lastChattedUser == null || lastChattedUser != currentUser) {    		
-    		document.getElementById("bnkCmtTxt").value = "";
+    	    	
+    	if (lastChattedUser == null || lastChattedUser != currentUser) {  		
     		showSelfChat1(textValue);    		
     	}
     	else {
-    		if (lastChattedUser == currentUser) {    			
-    			document.getElementById("bnkCmtTxt").value = "";
+    		if (lastChattedUser == currentUser) {	    			
     			showSelfChat2(textValue);
     		}
-    		else {    			
-    			document.getElementById("bnkCmtTxt").value = "";
+    		else { 			
     			showSelfChat1(textValue);
     		}
     	}
     }
     
+    function getChatTime() {		    	
+    	var strTime = new Date().toTimeString().split(" ")[0];
+    	var strDateTime = new Date().toISOString();
+    	var strDate = strDateTime.substring(0, 10);
+    	return strDate + " " + strTime;
+    }
+    
     function showSelfChat1(textValue) {
-    	var bnkChatTblElmt    = document.getElementById("bnkChatTbl");
-		var mainDivElmt       = document.createElement("div");
-		mainDivElmt.className = "message";
+    	var bnkChatTblElmt    = document.getElementById("bnkChatTbl");  	
+		var mainOlElmt        = null;		
+		var mainLiElmt        = document.createElement("li");
+		mainLiElmt.className  = "self";		
 		
 		//process user's avatar
 		var avatarDivElmt = document.createElement("div");
 		var avatarImgElmt = document.createElement("img");
-		avatarDivElmt.className = "messageAvatar1";
-		avatarImgElmt.className = "messageAvatar";
+		avatarDivElmt.className = "avatar";
+		avatarImgElmt.setAttribute('draggable', false);
 		avatarImgElmt.src 		= "https://vi.gravatar.com/userimage/119146805/dcb3ad95a00ec4a4284c36d7c401a156.png"; //tam thoi
 		avatarDivElmt.appendChild(avatarImgElmt);
 		
 		//process messageContent
-		var contentDivElmt 		  = document.createElement("div");
-		var txtDivElmt 			  = document.createElement("div");
+		var contentDivElmt 		  = document.createElement("div");		
 		var paragraphElmt 		  = document.createElement("p");
-		txtDivElmt.className 	  = "messageContent";
-		contentDivElmt.className  = "messageBody";
+		var timeElmt 			  = document.createElement("span");
+		
+		contentDivElmt.className  = "msg";
 		paragraphElmt.textContent = textValue;
-		txtDivElmt.appendChild(paragraphElmt);
-		contentDivElmt.appendChild(txtDivElmt);
+		timeElmt.textContent      = getChatTime();		
+		contentDivElmt.appendChild(paragraphElmt);
+		contentDivElmt.appendChild(timeElmt);
 		
 		//Add avatar and message content to main div
-		mainDivElmt.appendChild(avatarDivElmt);
-		mainDivElmt.appendChild(contentDivElmt);
+		mainLiElmt.appendChild(avatarDivElmt);
+		mainLiElmt.appendChild(contentDivElmt);
 		
-		if (bnkChatTblElmt.firstElementChild.getAttribute("id") == "bnkNoData") {
-			bnkChatTblElmt.removeChild(bnkChatTblElmt.firstElementChild);
-		}
-		
-		bnkChatTblElmt.appendChild(mainDivElmt);
+    	if (document.getElementById("bnkStartCon") != null) {
+    		mainOlElmt = document.getElementById("bnkStartCon");
+    		mainOlElmt.appendChild(mainLiElmt);	
+    	}
+    	else {
+    		bnkChatTblElmt.removeChild(bnkChatTblElmt.firstElementChild);
+    		mainOlElmt = document.createElement("ol");
+    		mainOlElmt.className  = "chat";
+    		mainOlElmt.setAttribute("id", "bnkStartCon");
+    		mainOlElmt.appendChild(mainLiElmt);		
+    		bnkChatTblElmt.appendChild(mainOlElmt);
+    	}		
+
 		lastChattedUser = currentUser;
     }
     
     function showSelfChat2(textValue) {
-    	var bnkChatTblElmt = document.getElementById("bnkChatTbl");
-    	var currentDivElmt = bnkChatTblElmt.lastElementChild.lastElementChild;
+    	var mainOlElmt     = document.getElementById("bnkStartCon");
+    	var currentDivElmt = mainOlElmt.lastElementChild.lastElementChild;
     	
-		//process messageContent
-		
-		var txtDivElmt 			  = document.createElement("div");
+		//process messageContent		
 		var paragraphElmt 		  = document.createElement("p");
-		txtDivElmt.className 	  = "messageContent";		
+		var timeElmt 			  = document.createElement("span");
 		paragraphElmt.textContent = textValue;
-		txtDivElmt.appendChild(paragraphElmt);		
+		timeElmt.textContent      = getChatTime();
 		
 		//Add message content to main div	
-		currentDivElmt.appendChild(txtDivElmt);
-		
+		currentDivElmt.appendChild(paragraphElmt);
+		currentDivElmt.appendChild(timeElmt);
     }
     
     function showOtherChat1() {

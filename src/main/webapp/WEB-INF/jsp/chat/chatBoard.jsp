@@ -57,8 +57,8 @@
 				    <div class="bnk bnkCenter" style="margin-left: 0px; margin-right: 0px;">				    	
 			    		<div class="centerHeaderMenu">
 			    		</div>
-				    	<div class="bnkChatContent" id="bnkChatTbl">			
-							<ol class="chat">
+				    	<div class="bnkChatContent" id="bnkChatTbl">		
+							<!-- <ol class="chat">
 							    <li class="other">
 							      <div class="avatar"><img src="https://i.imgur.com/DY6gND0.png" draggable="false"/></div>
 							      <div class="msg">
@@ -188,7 +188,59 @@
 							        <time>18:15</time>
 							      </div>
 							    </li>
-							    </ol>
+							</ol> -->
+							
+							
+							<c:choose>
+								<c:when test="${hasChat != 0}">
+									<c:set var="currCluster" value="${0}" />
+									<c:forEach var="list" items="${listMessage}" varStatus="loop">
+										<div class="${list.senderId == userId ? 'message' : 'message messageOther'}">
+											<div class="messageAvatar1">
+												<img class="messageAvatar" src="https://vi.gravatar.com/userimage/119146805/dcb3ad95a00ec4a4284c36d7c401a156.png">
+											</div>
+											<div class="messageBody">
+												<div class="${list.senderId == userId ? 'messageContent messagSelfBody' : 'messageContent messagOtherBody'}">
+													<c:choose >
+														<c:when test="${list.textMessage != ''}">
+															<p><c:out value="${list.textMessage}" /></p>
+														</c:when>
+														<c:otherwise>
+															<c:choose>
+																<c:when test="${list.stickerSrc != ''}">
+																	<img src="${list.stickerSrc}" style="height: 80px; width: 80px;">
+																</c:when>
+																<c:otherwise>
+																	<c:choose>
+																		<c:when test="${list.fileName != ''}">
+																			<img src="${list.fileSrc}" style="max-height: 500px; max-width: 500px; cursor: pointer;">
+																		</c:when>
+																		<c:otherwise>
+																			<img src="${list.fileSrc}" style="height: 60px; width: 60px; cursor: pointer;">
+																			<span _path=<c:out value="${list.filePath}"/>> 
+																				<c:out value="${list.fileName}"/>
+																			</span>
+																		</c:otherwise>
+																	</c:choose>
+																</c:otherwise>
+															</c:choose>
+														</c:otherwise>
+													</c:choose>									
+												</div>
+											</div>									
+										</div>
+										
+										
+										<c:if test="${list.clusterId > currCluster}">
+											<c:set var="currCluster" value="${list.clusterId}"/>
+										</c:if>								
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+									<div style="min-height: 500px;" id="bnkNoData">No data</div>
+								</c:otherwise>
+							</c:choose>
+																			    
 							<div class="typezone">
 								<div id="emoticonPanel" style="display: none; width:400px; height:350px; margin-top: -350px;margin-left: 0px; background-color: #fff; border:1px solid #3399ff; position: absolute;">
 									<div id="emoticonGroup" style="display:block;width:100%; height: 45px;background-color: #fff; border-bottom:1px solid #3399ff;;">
@@ -472,55 +524,7 @@
 							
 							
 							
-							<%-- <c:choose>
-								<c:when test="${hasChat != 0}">
-									<c:set var="currCluster" value="${0}" />
-									<c:forEach var="list" items="${listMessage}" varStatus="loop">
-										<div class="${list.senderId == userId ? 'message' : 'message messageOther'}">
-											<div class="messageAvatar1">
-												<img class="messageAvatar" src="https://vi.gravatar.com/userimage/119146805/dcb3ad95a00ec4a4284c36d7c401a156.png">
-											</div>
-											<div class="messageBody">
-												<div class="${list.senderId == userId ? 'messageContent messagSelfBody' : 'messageContent messagOtherBody'}">
-													<c:choose >
-														<c:when test="${list.textMessage != ''}">
-															<p><c:out value="${list.textMessage}" /></p>
-														</c:when>
-														<c:otherwise>
-															<c:choose>
-																<c:when test="${list.stickerSrc != ''}">
-																	<img src="${list.stickerSrc}" style="height: 80px; width: 80px;">
-																</c:when>
-																<c:otherwise>
-																	<c:choose>
-																		<c:when test="${list.fileName != ''}">
-																			<img src="${list.fileSrc}" style="max-height: 500px; max-width: 500px; cursor: pointer;">
-																		</c:when>
-																		<c:otherwise>
-																			<img src="${list.fileSrc}" style="height: 60px; width: 60px; cursor: pointer;">
-																			<span _path=<c:out value="${list.filePath}"/>> 
-																				<c:out value="${list.fileName}"/>
-																			</span>
-																		</c:otherwise>
-																	</c:choose>
-																</c:otherwise>
-															</c:choose>
-														</c:otherwise>
-													</c:choose>									
-												</div>
-											</div>									
-										</div>
-										
-										
-										<c:if test="${list.clusterId > currCluster}">
-											<c:set var="currCluster" value="${list.clusterId}"/>
-										</c:if>								
-									</c:forEach>
-								</c:when>
-								<c:otherwise>
-									<div style="min-height: 500px;" id="bnkNoData">No data</div>
-								</c:otherwise>
-							</c:choose> --%>
+
 				    	</div>				    	    	
 					</div>
 				    <div class="bnk bnkRight">right</div>

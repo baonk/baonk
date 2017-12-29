@@ -350,12 +350,8 @@ table, th, td {
     background: rgba(255,255,255,0);
     margin-left: 5px;
 }
-.msg p {
-    font-size: 13px;
-    margin: 0 0 2px 0;
-    color: #000;
-    transition: all .2s ease;
-}
+.msg p { font-size: 13px; margin: 0 0 2px 0; color: #000; transition: all .2s ease; word-wrap: break-word; margin-top: 0px;margin-bottom: 0px; white-space: pre-wrap; cursor: default; }
+
 .msg img {
     position: relative;
     display: block;
@@ -370,7 +366,9 @@ table, th, td {
     -ms-user-select: none;
 }
 
-.msg time {
+.msg span {
+	width: 100%;
+	text-align: right;
     font-size: 9px;
     color: rgba(0,0,0,.35);
     margin-top: 3px;
@@ -381,7 +379,7 @@ table, th, td {
     -moz-user-select: none;
     -ms-user-select: none;
 }
-.msg time:before{
+.msg span:before{
     content:"\f017";
     color: #ddd;
     font-family: FontAwesome;
