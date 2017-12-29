@@ -15,14 +15,15 @@
 	<script	src="/js/chat/chat.js"></script>
 	<script type="text/javascript">			
 		var currentUser = "<c:out value="${userId}" />";
-	
- 		function auto_grow(element) {	    	
-		    element.style.height = "50px"; 			        
-		    var value = element.scrollHeight;
-		    
-	        element.style.height = (element.scrollHeight) + "px";	              
-	        document.getElementById("bnkChatDiv").style.height = value + "px";	           	
-	    }
+	    
+	    window.onload = function () {
+			var stickerElmt = document.getElementById("bnkEmoticon");
+			stickerElmt.onclick = function() {addSticker()};
+			
+			var chatAreaElmt = document.getElementById("bnkCmtTxt");
+			chatAreaElmt.onfocus= function() {addSticker()};
+		}
+
 	</script>
 	
 </head>
@@ -49,88 +50,140 @@
 				    <div class="bnk bnkCenter" style="margin-left: 0px; margin-right: 0px;">				    	
 			    		<div class="centerHeaderMenu">
 			    		</div>
-				    	<div class="bnkChatContent" id="bnkChatTbl">
-<!--  				    		<div class="message">
-							  <div>
-							    <img class="messageAvatar" src="https://vi.gravatar.com/userimage/119146805/dcb3ad95a00ec4a4284c36d7c401a156.png">
-							  </div>
-							  <div class="messageBody">
-							  	<div class="messageContent">
-							  		<p>Chào bạn 1, làm quen với mình nhé! :D</p>
-							  	</div>
-							    <div class="messageContent">
-							    	<p>Chào bạn 2, làm quen với mình nhé! :D</p>
-							    </div>				    
-							  </div>
-							</div>
-							<div class="message messageOther">
-							  <div>
-							    <img class="messageAvatar" src="https://vi.gravatar.com/userimage/119146805/21b7e614de27cdf36dcff3c48b15f54e.png">
-							  </div>
-							  <div class="messageBody">
-							  	<div class="messageContent">
-							    	 <p>Hi hi <3</p>
-							     </div>
-							  </div>
-							</div> -->
-							
-							<c:choose>
-								<c:when test="${hasChat != 0}">
-									<c:set var="currCluster" value="${0}" />
-									<c:forEach var="list" items="${listMessage}" varStatus="loop">
-										<div class="${list.senderId == userId ? 'message' : 'message messageOther'}">
-											<div class="messageAvatar1">
-												<img class="messageAvatar" src="https://vi.gravatar.com/userimage/119146805/dcb3ad95a00ec4a4284c36d7c401a156.png">
-											</div>
-											<div class="messageBody">
-												<div class="${list.senderId == userId ? 'messageContent messagSelfBody' : 'messageContent messagOtherBody'}">
-													<c:choose >
-														<c:when test="${list.textMessage != ''}">
-															<p><c:out value="${list.textMessage}" /></p>
-														</c:when>
-														<c:otherwise>
-															<c:choose>
-																<c:when test="${list.stickerSrc != ''}">
-																	<img src="${list.stickerSrc}" style="height: 80px; width: 80px;">
-																</c:when>
-																<c:otherwise>
-																	<c:choose>
-																		<c:when test="${list.fileName != ''}">
-																			<img src="${list.fileSrc}" style="max-height: 500px; max-width: 500px; cursor: pointer;">
-																		</c:when>
-																		<c:otherwise>
-																			<img src="${list.fileSrc}" style="height: 60px; width: 60px; cursor: pointer;">
-																			<span _path=<c:out value="${list.filePath}"/>> 
-																				<c:out value="${list.fileName}"/>
-																			</span>
-																		</c:otherwise>
-																	</c:choose>
-																</c:otherwise>
-															</c:choose>
-														</c:otherwise>
-													</c:choose>									
-												</div>
-											</div>									
-										</div>
-										
-										
-										<c:if test="${list.clusterId > currCluster}">
-											<c:set var="currCluster" value="${list.clusterId}"/>
-										</c:if>								
-									</c:forEach>
-								</c:when>
-								<c:otherwise>
-									<div style="min-height: 500px;" id="bnkNoData">No data</div>
-								</c:otherwise>
-							</c:choose>
-				    	</div>
-				    	
-				    	<div class="bnkChatTool" id="bnkChatDiv">
-				    		<div class="bnkCmtInput">
-				    			<textarea cols="20" rows="1" id="bnkCmtTxt" oninput="auto_grow(this)" style="height: 50px; outline: none; border: none; resize: none; overflow: hidden; font-size: 12px; line-height: 15px; width: 100%; margin: 0px; padding: 16px 10px;" onkeypress="check_key(event);"></textarea>
-				    		</div>
-				    		<div class="bnkCmtTool">
-				    			<div id="emoticonPanel" style="display: none; width:400px; height:350px; margin-top: -350px;margin-left: -319px; background-color: #fff; border:1px solid #3399ff;; position: absolute;">
+				    	<div class="bnkChatContent" id="bnkChatTbl">			
+							<ol class="chat">
+							    <li class="other">
+							      <div class="avatar"><img src="https://i.imgur.com/DY6gND0.png" draggable="false"/></div>
+							      <div class="msg">
+							          <div class="user">Marga<span class="range admin">Admin</span></div>
+							        <p>Dude</p>
+							        <p>Want to go dinner? <emoji class="pizza"></emoji></p>
+							        <time>20:17</time>
+							      </div>
+							    </li>
+							    <li class="self">
+							      <div class="avatar"><img src="https://i.imgur.com/DY6gND0.png" draggable="false"/></div>
+							      <div class="msg">
+							        <p>Puff...</p>
+							        <p>I'm still doing the Góngora comment... <emoji class="books"></emoji></p>
+							        <p>Better other day</p>
+							        <time>20:18</time>
+							      </div>
+							    </li>
+							    <li class="other">
+							      <div class="msg">
+							          <div class="user">Brotons</div>
+							        <p>What comment about Góngora? <emoji class="suffocated"></emoji></p>
+							        <time>20:18</time>
+							      </div>
+							    </li>
+							    <li class="self">
+							      <div class="msg">
+							        <p>The comment sent Marialu</p>
+							        <p>It's for tomorrow</p>
+							        <time>20:18</time>
+							      </div>
+							    </li>
+							    <li class="other">
+							      <div class="msg">
+							          <div class="user">Brotons</div>
+							        <p><emoji class="scream"></emoji></p>
+							        <p>Hand it to me! <emoji class="please"></emoji></p>
+							        <time>20:18</time>
+							      </div>
+							    </li>
+							    <li class="self">
+							      <div class="msg">
+							        <img src="https://i.imgur.com/kUPxcsI.jpg" draggable="false"/>
+							        <time>20:19</time>
+							      </div>
+							    </li>
+							    <li class="other">
+							      <div class="msg">
+							          <div class="user">Brotons</div>
+							        <p>Thank you! <emoji class="hearth_blue"></emoji></p>
+							        <time>20:20</time>
+							      </div>
+							    </li>
+							        <div class="day">Today</div>
+							    <li class="self">
+							      <div class="msg">
+							        <p>Who wants to play Minecraft?</p>
+							        <time>18:03</time>
+							      </div>
+							    </li>
+							    <li class="other">
+							      <div class="msg">
+							          <div class="user">Charo</div>
+							        <p>Come on, I didn't play it for four months</p>
+							        <time>18:07</time>
+							      </div>
+							    </li>
+							    <li class="self">
+							      <div class="msg">
+							        <p>Ehh, the launcher crash... <emoji class="cryalot"></emoji></p>
+							        <time>18:08</time>
+							      </div>
+							    </li>
+							    <li class="other">
+							      <div class="msg">
+							          <div class="user">Charo</div>
+							        <p><emoji class="lmao"></emoji></p>
+							        <p>Sure that is the base code</p>
+							        <p>I told it to Mojang</p>
+							        <time>18:08</time>
+							      </div>
+							    </li>
+							    <li class="self">
+							      <div class="msg">
+							        <p>It's a joke</p>
+							        <p>Moai attack!</p>
+							        <p><emoji class="moai"></emoji><emoji class="moai"></emoji><emoji class="moai"></emoji><emoji class="moai"></emoji><emoji class="moai"></emoji><emoji class="moai"></emoji></p>
+							        <time>18:10</time>
+							      </div>
+							    </li>
+							    <li class="other">
+							      <div class="msg">
+							          <div class="user">Charo</div>
+							        <p>XD</p>
+							        <p><emoji class="funny"></emoji></p>
+							        <p>Heart for this awesome design!</p>
+							        <time>18:08</time>
+							      </div>
+							    </li>
+							        <p class="notification">David joined the group <time>18:09</time></p>
+							    <li class="self">
+							      <div class="msg">
+							        <p>Heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeellooooooooooooooooooooooooooooooo David <emoji class="smile"/></p>
+							        <time>18:09</time>
+							      </div>
+							    </li>
+							    <li class="other">
+							      <div class="msg">
+							          <div class="user">David</div>
+							          <p>What is that <emoji class="shit"></emoji> ?</p>
+							        <time>18:10</time>
+							      </div>
+							    </li>
+							        <p class="notification">David left the group <time>18:11</time></p>
+							    <li class="other">
+							      <div class="msg">
+							          <div class="user">Brotons</div>
+							        <p>Lol?</p>
+							        <time>18:12</time>
+							      </div>
+							    </li>
+							    <li class="other">
+							      <div class="msg">
+							          <div class="user">Marga<span class="range admin">Admin</span></div>
+							        <p>I'm boring...</p>
+							        <p>Who wants to do some logarithms? <emoji class="smile"></emoji></p>
+							        <time>18:15</time>
+							      </div>
+							    </li>
+							    </ol>
+							<div class="typezone">
+								<div id="emoticonPanel" style="display: none; width:400px; height:350px; margin-top: -350px;margin-left: 0px; background-color: #fff; border:1px solid #3399ff; position: absolute;">
 									<div id="emoticonGroup" style="display:block;width:100%; height: 45px;background-color: #fff; border-bottom:1px solid #3399ff;;">
 										<div style="float:left; display:block; height: 45px;">
 											<img id="previousEmoticon" src="/images/previous1.png" height=40 width=30 style="padding-top: 3px; ">
@@ -144,8 +197,8 @@
 											<div id="_group6" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/crayonShin.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
 											<div id="_group7" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/catEmoticon.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
 											<div id="_group8" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/student.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
-									  		<!--<div id="_group9" style="float:left; display: block; height:44px; width:44px; cursor: pointer; " onclick="changeStickerGroup(this);"><img src="/images/emoticon/hackerGirl.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
-											<div id="_group10" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/crayonShin.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>  -->
+									  		<!-- <div id="_group9" style="float:left; display: block; height:44px; width:44px; cursor: pointer; " onclick="changeStickerGroup(this);"><img src="/images/emoticon/hackerGirl.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div>
+											<div id="_group10" style="float:left; display: block; height:44px; width:44px; cursor: pointer;" onclick="changeStickerGroup(this);"><img src="/images/emoticon/crayonShin.png" height=40 width=40 style="padding-top: 2px; padding-left: 2px; "></div> --> 
 										</div>
 										<div style="float: right; display:block; height: 45px;">
 											<img id="nextEmoticon" src="/images/next1.png" height=40 width=30 style="padding-top: 3px; ">
@@ -379,13 +432,86 @@
 											</table>
 										</div>
 									</div>
-								</div>
-				    			<ul style="padding-left: 0px; position: absolute; bottom: -7px;">
-				    				<li><div style="border-left: 1px solid #DDD;"><img id="bnkFile" src="/images/chat/upload.png" style="display: block; height: 30px; width: 35px; cursor: pointer; margin-top: 11px; padding-left: 5px;" onclick=""></div></li>
-				    				<li><div><img id="bnkEmoticon" src="/images/chat/emo3.png" style="display: block; height:40px; width:40px; cursor: pointer; margin-top: 6px;" onclick="addSticker()"></div></li>			    				
-				    			</ul>
-				    		</div>
-				    	</div>				    	
+								</div>							
+								<div class="emojis" id="bnkEmoticon"></div>
+								<div class="bnkChatInput">
+									<textarea id="bnkCmtTxt" type="text" placeholder="Say something" style="overflow: hidden;"  onkeypress="check_key(event);"></textarea>									
+								</div>																
+								<div class="send"></div>								
+							</div>					
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<%-- <c:choose>
+								<c:when test="${hasChat != 0}">
+									<c:set var="currCluster" value="${0}" />
+									<c:forEach var="list" items="${listMessage}" varStatus="loop">
+										<div class="${list.senderId == userId ? 'message' : 'message messageOther'}">
+											<div class="messageAvatar1">
+												<img class="messageAvatar" src="https://vi.gravatar.com/userimage/119146805/dcb3ad95a00ec4a4284c36d7c401a156.png">
+											</div>
+											<div class="messageBody">
+												<div class="${list.senderId == userId ? 'messageContent messagSelfBody' : 'messageContent messagOtherBody'}">
+													<c:choose >
+														<c:when test="${list.textMessage != ''}">
+															<p><c:out value="${list.textMessage}" /></p>
+														</c:when>
+														<c:otherwise>
+															<c:choose>
+																<c:when test="${list.stickerSrc != ''}">
+																	<img src="${list.stickerSrc}" style="height: 80px; width: 80px;">
+																</c:when>
+																<c:otherwise>
+																	<c:choose>
+																		<c:when test="${list.fileName != ''}">
+																			<img src="${list.fileSrc}" style="max-height: 500px; max-width: 500px; cursor: pointer;">
+																		</c:when>
+																		<c:otherwise>
+																			<img src="${list.fileSrc}" style="height: 60px; width: 60px; cursor: pointer;">
+																			<span _path=<c:out value="${list.filePath}"/>> 
+																				<c:out value="${list.fileName}"/>
+																			</span>
+																		</c:otherwise>
+																	</c:choose>
+																</c:otherwise>
+															</c:choose>
+														</c:otherwise>
+													</c:choose>									
+												</div>
+											</div>									
+										</div>
+										
+										
+										<c:if test="${list.clusterId > currCluster}">
+											<c:set var="currCluster" value="${list.clusterId}"/>
+										</c:if>								
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+									<div style="min-height: 500px;" id="bnkNoData">No data</div>
+								</c:otherwise>
+							</c:choose> --%>
+				    	</div>				    	    	
 					</div>
 				    <div class="bnk bnkRight">right</div>
 				</div>		
