@@ -466,14 +466,32 @@ textarea:focus {
     height: 50px;
     background-image: url(/images/chat/emo3.png);
     background-repeat: no-repeat;
-    background-size: 34px 34px;
-    background-position: 45% 9px;
+    background-size: 45px 45px;
+    background-position: 6px 4px;
     z-index: 100;
     cursor: pointer;
 }
+
 .emojis:active {
     opacity: 0.9;
 }
+
+.bnkUploadFile {
+	display: block;
+    width: 48px;
+    height: 50px;
+    background-image: url(/images/chat/upload.png);
+    background-repeat: no-repeat;
+    background-size: 34px 34px;
+    background-position: 3px 9px;
+    z-index: 100;
+    cursor: pointer;
+}
+
+.bnkUploadFile:active {
+    opacity: 0.9;
+}
+
 .send {   
     display: block;
     width: 50px;

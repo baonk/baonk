@@ -21,8 +21,15 @@
 			stickerElmt.onclick = function() {addSticker()};
 			
 			var chatAreaElmt = document.getElementById("bnkCmtTxt");
-			chatAreaElmt.onfocus= function() {addSticker()};
+			chatAreaElmt.onfocus= function() {checkSticker()};
 		}
+	    
+	    function checkSticker() {
+	    	if (document.getElementById("emoticonPanel").style.display != "none") {
+	    		document.getElementById("emoticonPanel").style.display = "none";
+	    		document.getElementById("bnkEmoticon").style.backgroundImage = "url('/images/chat/emo3.png')";
+	    	}
+	    }
 
 	</script>
 	
@@ -434,6 +441,9 @@
 									</div>
 								</div>							
 								<div class="emojis" id="bnkEmoticon"></div>
+								<div class="bnkUploadFile" "style="border-right: 1px solid #DDD; height: 50px; width: 50px;">
+									<!-- <img id="bnkFile" src="/images/chat/upload.png" style="display: block; height: 30px; width: 35px; cursor: pointer; margin-top: 11px; padding-left: 5px;" onclick=""> -->
+								</div>
 								<div class="bnkChatInput">
 									<textarea id="bnkCmtTxt" type="text" placeholder="Say something" style="overflow: hidden;"  onkeypress="check_key(event);"></textarea>									
 								</div>																
