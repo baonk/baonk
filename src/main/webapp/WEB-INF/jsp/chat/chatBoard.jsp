@@ -58,6 +58,21 @@
 			    		<div class="centerHeaderMenu">
 			    		</div>
 				    	<div class="bnkChatContent" id="bnkChatTbl">		
+				    		
+				    		<!-- <ol class="chat">
+				    			<li class="self">
+							      <div class="avatar"><img src="https://i.imgur.com/DY6gND0.png" draggable="false"/></div>
+							      <div class="msg">
+							        <p>Puff...</p>
+							        <p>I'm still doing the Góngora comment... <emoji class="books"></emoji></p>
+							        <p>Better other day</p>
+							        <span>20:18</span>
+							        <img class="bnkSticker" src="/images/emoticon/girl/135.png"/>
+							        <p>Better other day</p>
+							      </div>
+							    </li>
+				    		</ol> -->
+				    	
 							<!-- <ol class="chat">
 							    <li class="other">
 							      <div class="avatar"><img src="https://i.imgur.com/DY6gND0.png" draggable="false"/></div>
