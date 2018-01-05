@@ -3,14 +3,18 @@ package com.nv.baonk.config;
 
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import com.nv.baonk.service.UserService;
 
@@ -76,10 +80,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				/*.logoutSuccessUrl("/").and().exceptionHandling()*/
-				.logoutSuccessHandler(logoutSuccessfulHandler)
+				.logoutSuccessHandler(logoutSuccessfulHandler)				
 				/*.accessDeniedPage("/access-denied")*/
 			.and()
-				.headers().frameOptions().sameOrigin();			
+				.headers().frameOptions().sameOrigin()
+			.and()
+			 	.sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry());	
 	}
 
 	@Override
@@ -87,4 +93,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	    web.ignoring()
 	       .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
 	}
+	
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+            return new HttpSessionEventPublisher();
+    }
+    
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
 }

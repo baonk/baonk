@@ -8,17 +8,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
 import com.nv.baonk.common.CommonUtil;
 import com.nv.baonk.repository.UserRepository;
 import com.nv.baonk.service.UserService;
@@ -36,8 +39,7 @@ import com.nv.baonk.vo.Role;
 import com.nv.baonk.vo.User;
 
 @Controller
-public class LoginController {
-	
+public class LoginController {		
 	@Autowired
 	private UserService userService;
 	
@@ -81,8 +83,15 @@ public class LoginController {
 		User userInfo = commonUtil.getUserInfo(loginCookie);
 		logger.debug("UserID: " + userInfo.getUserid() + " || Tenant ID: " + userInfo.getTenantid() + " || User password: " + userInfo.getPassword());
 		
+		//Test
+/*		List<String> loggedUserList = getUsersFromSessionRegistry();
+		for (String userId : loggedUserList) {
+			logger.debug("TESTTTTT UserID: " + userId);
+		}*/
+		//end
+		
 		return "home";
-	}	
+	}
 	
 	@RequestMapping(value="/mainMenu", method = RequestMethod.GET)
 	public String mainMenu(Model model){
@@ -379,6 +388,6 @@ public class LoginController {
 				}
 		    }
 		}
-    }
+    }	
 
 }

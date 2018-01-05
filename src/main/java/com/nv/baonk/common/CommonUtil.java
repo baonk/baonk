@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -47,6 +48,8 @@ import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -73,6 +76,9 @@ public class CommonUtil {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private SessionRegistry sessionRegistry;
 	
 	/* File separator setting*/
 	public String separator  		   = "/";	
@@ -963,4 +969,18 @@ public class CommonUtil {
 		}
     }
 	
+	public List<String> getUsersFromSessionRegistry() {
+	/*List<String> resultList = new ArrayList<String>();
+		List<Object> allPrincipals = sessionRegistry.getAllPrincipals().stream().filter(u -> !sessionRegistry.getAllSessions(u, false).isEmpty()).collect(Collectors.toList());
+		
+		for (Object principal : allPrincipals) {			
+            if (principal instanceof UserDetails) {
+                UserDetails user = (UserDetails) principal;
+                resultList.add(user.getUsername());
+            }
+        }
+		
+		return resultList;*/
+		return sessionRegistry.getAllPrincipals().stream().filter(u -> !sessionRegistry.getAllSessions(u, false).isEmpty()).filter(u -> u instanceof UserDetails).map(u -> (UserDetails)u).map(UserDetails::getUsername).collect(Collectors.toList());
+	}	
 }
