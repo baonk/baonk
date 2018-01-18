@@ -54,7 +54,7 @@
 				    		<div class="bnkHistory">
 				    			<c:forEach var="onlineList" items="${onlUserList}">
 				    				<div class="bnkChatLine">
-				    					<img src="/images/chat/conversation.png" class="chatImage" />
+				    					<img src="" class="chatImage" />
 				    					<c:out value="${onlineList.username}"/>
 				    				</div>
 				    			</c:forEach>

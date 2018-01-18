@@ -42,6 +42,14 @@
 			}
 		}
 		
+		function goHome(obj) {
+			var check = preProcess(obj);
+			
+			if (check == 1) {				
+				window.open("/mainMenu","mainMenu");
+			}
+		}		
+		
 		function preProcess(obj) {
 			var result = 0;
 			var objId = obj.getAttribute("id");
@@ -78,7 +86,7 @@
 				<div class="menu-wrap" style="overflow: hidden;">
 				    <nav class="menu">
 				        <ul class="clearfix" style="margin-bottom: 0px;">
-				            <li><a id="home">Home</a></li>
+				            <li><a id="home" onClick="goHome(this);">Home</a></li>
 				            <li>
 				                <a id="movie">Movies </a>
 				 
