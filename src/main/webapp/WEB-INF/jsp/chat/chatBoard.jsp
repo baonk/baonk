@@ -43,7 +43,7 @@
 				    <div class="bnk bnkLeft">
 				    	<div class="leftHeaderMenu">
 					    	<div class="settingImg"><img src="/images/chat/sss.png" class ="chatImage" /></div>
-					    	<div class="txtMessage">Chat history list</div>
+					    	<div class="txtMessage">Chat list</div>
 					    	<div class="editImg"><img src="/images/chat/34.png" class ="chatImage" /></div>
 				    	</div>
 				    	<div class="bnkContent">
@@ -51,7 +51,14 @@
 				    			<img src="/images/chat/search.png" style="height: 20px; width: 20px; margin: 2px;"/>
 				    			<input class="bnkbttnSearch" placeholder="Search chat history"  maxlength="50"; autocomplete="off"/>
 				    		</div>
-				    		<div class="bnkHistory"></div>
+				    		<div class="bnkHistory">
+				    			<c:forEach var="onlineList" items="${onlUserList}">
+				    				<div class="bnkChatLine">
+				    					<img src="/images/chat/conversation.png" class="chatImage" />
+				    					<c:out value="${onlineList.username}"/>
+				    				</div>
+				    			</c:forEach>
+				    		</div>
 				    	</div>	
 					</div>
 				    <div class="bnk bnkCenter" style="margin-left: 0px; margin-right: 0px;">				    	

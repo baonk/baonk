@@ -34,6 +34,14 @@
 			}			
 		}
 		
+		function getPollBoard(obj) {
+			var check = preProcess(obj);
+			
+			if (check == 1) {				
+				window.open("/pollBoard","mainMenu");
+			}
+		}
+		
 		function preProcess(obj) {
 			var result = 0;
 			var objId = obj.getAttribute("id");
@@ -49,7 +57,7 @@
 			}
 			
 			clickedLiElmt = objId;
-			obj.className = "selectedLi";			
+			obj.className = "selectedLi";
 			
 			return result;
 		}
@@ -57,7 +65,7 @@
 </head>
 
 <body>		
-	<div class="container" style="width: 100%;">
+	<div class="container" style="width: 100%; padding: 0px;">
 		<div id ="topmenu" style="float: right; margin-top: 20px; clear: both; width: auto;">
 			<div style="display:block; float:left;"><span class="welcome">Welcome ${userName}</span></div>
 			<c:if test="${role == 'ADMIN' }">
@@ -81,7 +89,7 @@
 				                </ul>
 				            </li>
 				            <li><a id="shows">T.V. Shows</a></li>
-				            <li><a id="photo">Photos</a></li>
+				            <li><a id="photo" onClick="getPollBoard(this);">Photos</a></li>
 				            <li><a id="chat" onClick="getChatBoard(this);">Chat</a></li>
 				        </ul>
 				    </nav>

@@ -44,8 +44,6 @@
     		actualUrl = bgImage.slice(bgImage.indexOf("/images/"));
     	}
     	
-    	console.log("Actual Url: " + actualUrl);
-    	
     	//Close sticker picker
     	document.getElementById("emoticonPanel").style.display = "none";
     	document.getElementById("bnkEmoticon").style.backgroundImage = "url('/images/chat/emo3.png')";

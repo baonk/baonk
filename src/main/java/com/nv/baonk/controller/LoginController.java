@@ -8,11 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -33,7 +31,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.nv.baonk.common.CommonUtil;
-import com.nv.baonk.repository.UserRepository;
 import com.nv.baonk.service.UserService;
 import com.nv.baonk.vo.Role;
 import com.nv.baonk.vo.User;
@@ -42,10 +39,7 @@ import com.nv.baonk.vo.User;
 public class LoginController {		
 	@Autowired
 	private UserService userService;
-	
-	@Autowired 
-	private UserRepository userRepository;
-	
+
 	@Autowired
 	private CommonUtil commonUtil;
 	
@@ -102,7 +96,7 @@ public class LoginController {
 	public String topMenu(Model model, HttpServletRequest request){	
 		//Get tenant Id from serverName
 		String serverName   = request.getServerName();
-		int tenantId 	    = userRepository.getTenantId(serverName);		
+		int tenantId 	    = userService.getTenantId(serverName);		
 		int isAdmin 	    = 0;		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user 			= userService.findUserByUseridAndTenantid(auth.getName(), tenantId);
@@ -388,6 +382,6 @@ public class LoginController {
 				}
 		    }
 		}
-    }	
+    }
 
 }

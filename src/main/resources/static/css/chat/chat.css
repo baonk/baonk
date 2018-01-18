@@ -28,6 +28,9 @@
 
 .bnkbttnSearch {height: 25px; border: 0; margin: 0; outline: 0; padding: 0; width: 100%; flex-grow: 1; background-color: #f6f7f9;}
 
+.bnkChatLine {}
+
+
 .emoticon {background-size: 85px; background-repeat: no-repeat; background-position: center; background-clip: border-box; transition: background-size 0.2s; -webkit-transition: background-size 0.2s; transition-timing-function: cubic-bezier(.07,1.41,.82,1.41); display: inline-block; width: 100px; height: 100px; text-decoration: none; cursor: pointer;}
 
 .emoticon:hover {background-size: 100px;}

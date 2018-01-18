@@ -82,7 +82,7 @@
 			        <th style="padding: 3px; text-align: left; font-weight: normal;vertical-align:top">
 			            <div id="deptView" class="divTable" style="overflow: auto;" ></div>
 			        </th>
-			        <th style="padding: 3px; text-align: left;vertical-align:top">			            
+			        <th style="padding: 3px; text-align: left;vertical-align:top">
 			            <div id="detailDeptView" class="divTable" style="overflow-x: hidden; overflow-y:auto; ">
 			            	<div id="employeeList" class="subMainTab">
 			            		<div style="left: 10%;" class="subHeaderTab">User Name</div>

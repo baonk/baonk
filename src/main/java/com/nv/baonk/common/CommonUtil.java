@@ -76,10 +76,7 @@ public class CommonUtil {
 	
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private SessionRegistry sessionRegistry;
-	
+
 	/* File separator setting*/
 	public String separator  		   = "/";	
 	public final String CRLF 		   = "\r\n";	
@@ -967,20 +964,6 @@ public class CommonUtil {
 				}
 		    }
 		}
-    }
-	
-	public List<String> getUsersFromSessionRegistry() {
-	/*List<String> resultList = new ArrayList<String>();
-		List<Object> allPrincipals = sessionRegistry.getAllPrincipals().stream().filter(u -> !sessionRegistry.getAllSessions(u, false).isEmpty()).collect(Collectors.toList());
-		
-		for (Object principal : allPrincipals) {			
-            if (principal instanceof UserDetails) {
-                UserDetails user = (UserDetails) principal;
-                resultList.add(user.getUsername());
-            }
-        }
-		
-		return resultList;*/
-		return sessionRegistry.getAllPrincipals().stream().filter(u -> !sessionRegistry.getAllSessions(u, false).isEmpty()).filter(u -> u instanceof UserDetails).map(u -> (UserDetails)u).map(UserDetails::getUsername).collect(Collectors.toList());
-	}	
+    }	
+
 }

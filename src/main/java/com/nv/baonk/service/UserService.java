@@ -17,5 +17,5 @@ public interface UserService {
 	public void deleteUser(User user);	
 	public List<User> findAllCompanyEmployees(String companyId, int tenantId);
 	public List<User> getAllUsersOfDepartment(String deptID, int tenantId);
-	public List<User> findUsersWithSearchOption(String deptID, String sStr, String field, int tenantId);
+	public List<User> findUsersWithSearchOption(String deptID, String sStr, String field, int tenantId);			
 }
